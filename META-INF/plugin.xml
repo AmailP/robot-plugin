@@ -41,6 +41,7 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
+      <lang.parserDefinition language="Simple" implementationClass="amailp.parser.RobotParserDefinition"/>
       <fileTypeFactory implementation="amailp.lang.RobotFileTypeFactory" />
       <toolWindow anchor="right" icon="/amailp/toolWindowRobot.png" id="Robot Framework" factoryClass="amailp.RobotToolWindowFactory" />
   </extensions>
