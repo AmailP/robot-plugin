@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RobotPlugin.iml" filepath="$PROJECT_DIR$/RobotPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lexer.iml" filepath="$PROJECT_DIR$/lexer.iml" />
     </modules>
   </component>
 </project>

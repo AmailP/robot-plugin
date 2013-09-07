@@ -1,0 +1,35 @@
+{
+  parserClass="amailp.parser.RobotParser"
+  stubParserClass="GeneratedParserUtilBase"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Robot"
+  psiImplClassSuffix="Impl"
+  psiPackage="amailp.psi"
+  psiImplPackage="amailp.psi.impl"
+
+  elementTypeHolderClass="amailp.psi.RobotTypes"
+  elementTypeClass="main.java.amailp.psi.RobotElementType"
+  tokenTypeClass="main.java.amailp.psi.RobotTokenType"
+  tokens = [
+    headerDelimiter = 'regexp:\*\*\*'
+    space = ' '
+    spaces = 'regexp:\u0020[\u0020]+'
+    word = 'regexp:[^\n\s#]*'
+    newline = 'regexp:\n'
+  ]
+}
+
+tst ::= white_line*
+
+white_line ::= spaces newline
+
+root ::= row*
+
+row ::= ( table_header | table_row ) newline
+table_header ::= headerDelimiter space phrase space headerDelimiter
+table_row ::= cell*
+cell ::= phrase spaces?
+phrase ::= word space phrase | word
+

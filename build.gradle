@@ -1,0 +1,19 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.6
+
+ideaLibs = "$projectDir/../idea/out/dist.all.ce/lib"
+
+allprojects {
+    repositories {
+        mavenCentral()
+
+        flatDir {
+            dirs "$ideaLibs"
+        }
+    }
+}
+
+dependencies {
+    compile ':openapi', ':util', ':annotations'
+}

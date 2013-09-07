@@ -35,14 +35,14 @@
   <actions>
       <group id="RobotPlugin.SampleMenu" text="_Sample Menu" description="Sample menu">
           <add-to-group group-id="MainMenu" relative-to-action="HelpMenu" anchor="before" />
-          <action id="RobotPlugin.Textboxes" class="amailp.MyAction" text="Text _Boxes" description="A test menu item" />
+          <action id="RobotPlugin.Textboxes" class="main.java.amailp.MyAction" text="Text _Boxes" description="A test menu item" />
       </group>
 
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
-      <lang.parserDefinition language="Simple" implementationClass="amailp.parser.RobotParserDefinition"/>
-      <fileTypeFactory implementation="amailp.lang.RobotFileTypeFactory" />
-      <toolWindow anchor="right" icon="/amailp/toolWindowRobot.png" id="Robot Framework" factoryClass="amailp.RobotToolWindowFactory" />
+      <lang.parserDefinition language="Simple" implementationClass="main.java.amailp.parser.RobotParserDefinition"/>
+      <fileTypeFactory implementation="main.java.amailp.lang.RobotFileTypeFactory" />
+      <toolWindow anchor="right" icon="/amailp/toolWindowRobot.png" id="Robot Framework" factoryClass="main.java.amailp.RobotToolWindowFactory" />
   </extensions>
 </idea-plugin>

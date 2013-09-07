@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+configurations {
+    flex
+}
+
+dependencies {
+    flex 'de.jflex:jflex:1.4.3'
+    compile ':openapi', ':util', ':annotations'
+}
+
+task ('generateLexerSources', type: JavaExec ) {
+    main 'JFlex.Main'
+    args '--skel', 'src/main/resources/amailp/lexer/idea-flex.skeleton', '-d', 'src/gen/java/amailp/lexer',
+            'src/main/resources/amailp/lexer/Robot.flex'
+    classpath configurations.flex
+}
+
+sourceSets {
+    gen {
+        java {
+            srcDir 'src/gen/java'
+        }
+    }
+}
+
+compileJava.dependsOn(generateLexerSources)
