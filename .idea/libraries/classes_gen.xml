@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="classes-gen">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/lexer/build/classes/gen" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
