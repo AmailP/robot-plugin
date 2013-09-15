@@ -19,7 +19,8 @@ return;
 
 LineTerminator = \n | \r | \r\n
 HeaderDelimiter = "***"
-Whitespace=[\ \t\f]
+HeaderName = [\ a-zA-Z]
+Whitespace = [\ \t\f]
 
 %%
 

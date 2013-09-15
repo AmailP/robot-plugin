@@ -6,7 +6,7 @@ configurations {
 
 repositories {
     flatDir {
-        dirs "libs"
+        dirs "$projectDir/../../idea/tools/lexer/jflex-1.4/lib"
     }
 }
 
@@ -22,6 +22,7 @@ dependencies {
     flex ':JFlex'
     genCompile project(':lang')
     testCompile sourceSets.gen.output, project(':lang'), 'junit:junit:4.11'
+    testRuntime ':trove4j'
 }
 
 task ('generateLexerSources', type: JavaExec ) {
