@@ -5,7 +5,7 @@ import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.psi.TokenType;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -27,6 +27,7 @@ public class RobotLexerTest {
         assertEquals(RobotTypes.HeaderDelimiter, robotLexer.getTokenType());
     }
 
+    @Ignore
     @Test
     public void testHeader() {
         robotLexer.start("*** HeaderName ***");
