@@ -13,35 +13,20 @@ import com.intellij.psi.TokenType;
 %unicode
 %function advance
 %type IElementType
-%eof{  return;
+%eof{
+return;
 %eof}
 
-CRLF= \n|\r|\r\n
-WHITE_SPACE=[\ \t\f]
-FIRST_VALUE_CHARACTER=[^ \n\r\f\\] | "\\"{CRLF} | "\\".
-VALUE_CHARACTER=[^\n\r\f\\] | "\\"{CRLF} | "\\".
-END_OF_LINE_COMMENT=("#"|"!")[^\r\n]*
-SEPARATOR=[:=]
-KEY_CHARACTER=[^:=\ \n\r\t\f\\] | "\\"{CRLF} | "\\".
-
-%state WAITING_VALUE
+LineTerminator = \n | \r | \r\n
+HeaderDelimiter = "***"
+Whitespace=[\ \t\f]
 
 %%
 
-<YYINITIAL> {END_OF_LINE_COMMENT}                           { yybegin(YYINITIAL); return RobotTypes.COMMENT; }
+<YYINITIAL> {LineTerminator}                           { yybegin(YYINITIAL); return RobotTypes.LineTerminator; }
 
-<YYINITIAL> {KEY_CHARACTER}+                                { yybegin(YYINITIAL); return RobotTypes.KEY; }
+<YYINITIAL> {HeaderDelimiter}                           { yybegin(YYINITIAL); return RobotTypes.HeaderDelimiter; }
 
-<YYINITIAL> {SEPARATOR}                                     { yybegin(WAITING_VALUE); return RobotTypes.SEPARATOR; }
-
-<WAITING_VALUE> {CRLF}                                     { yybegin(YYINITIAL); return RobotTypes.CRLF; }
-
-<WAITING_VALUE> {WHITE_SPACE}+                              { yybegin(WAITING_VALUE); return TokenType.WHITE_SPACE; }
-
-<WAITING_VALUE> {FIRST_VALUE_CHARACTER}{VALUE_CHARACTER}*   { yybegin(YYINITIAL); return RobotTypes.VALUE; }
-
-{CRLF}                                                     { yybegin(YYINITIAL); return RobotTypes.CRLF; }
-
-{WHITE_SPACE}+                                              { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<YYINITIAL> {Whitespace}                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 
 .                                                           { return TokenType.BAD_CHARACTER; }

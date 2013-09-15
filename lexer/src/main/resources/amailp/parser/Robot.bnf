@@ -14,20 +14,20 @@
   tokenTypeClass="main.java.amailp.psi.RobotTokenType"
   tokens = [
     headerDelimiter = 'regexp:\*\*\*'
-    space = ' '
-    spaces = 'regexp:\u0020[\u0020]+'
+    space = 'regexp:[\s&&[^\n]]'
+    spaces = 'regexp:[\s&&[^\n]][\s&&[^\n]]+'
     word = 'regexp:[^\n\s#]*'
-    newline = 'regexp:\n'
+    newlinea = 'regexp:\n'
   ]
 }
 
-tst ::= white_line*
+//tst ::= white_line*
 
-white_line ::= spaces newline
+//white_line ::= spaces newline
 
-root ::= row*
+root ::= row+
 
-row ::= ( table_header | table_row ) newline
+row ::= ( table_header | table_row ) newlinea
 table_header ::= headerDelimiter space phrase space headerDelimiter
 table_row ::= cell*
 cell ::= phrase spaces?
