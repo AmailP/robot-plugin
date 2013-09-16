@@ -4,6 +4,12 @@ sourceCompatibility = 1.6
 
 ideaLibs = "$projectDir/../idea/out/dist.all.ce/lib"
 
+if("$System.env.http_proxy") {
+    def System.setProperty('http.proxyHost', "$System.env.http_proxy".tokenize('/')[2].tokenize(':')[0])
+    System.setProperty('http.proxyPort', "$System.env.http_proxy".tokenize('/')[2].tokenize(':')[1])
+    System.setProperty('http.nonProxyHosts', 'localhost')
+}
+
 allprojects {
     repositories {
         mavenCentral()
@@ -17,3 +23,4 @@ allprojects {
 dependencies {
     compile ':openapi', ':util', ':annotations'
 }
+   
