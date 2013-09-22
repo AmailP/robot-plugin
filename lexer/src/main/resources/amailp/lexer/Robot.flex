@@ -18,16 +18,31 @@ return;
 %eof}
 
 LineTerminator = \n | \r | \r\n
+Space = "\ "
+WhitespaceChar = [\ \t\f]
+Whitespaces = {WhitespaceChar} {WhitespaceChar}+
+
 HeaderDelimiter = "***"
-HeaderName = [\ a-zA-Z]
-Whitespace = [\ \t\f]
+Header = {HeaderDelimiter} ~{HeaderDelimiter}
+
+WordChar = [a-zA-Z]
+Word = {WordChar}+
+
+Variable = "${" [a-zA-Z]+ "}"
+Escaped = "\\" [\?]
 
 %%
 
-<YYINITIAL> {LineTerminator}                           { yybegin(YYINITIAL); return RobotTypes.LineTerminator; }
+<YYINITIAL> {LineTerminator}            { yybegin(YYINITIAL); return RobotTypes.LineTerminator; }
 
-<YYINITIAL> {HeaderDelimiter}                           { yybegin(YYINITIAL); return RobotTypes.HeaderDelimiter; }
+<YYINITIAL> {Header}                    { yybegin(YYINITIAL); return RobotTypes.Header; }
 
-<YYINITIAL> {Whitespace}                                     { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<YYINITIAL> {Variable}                  { yybegin(YYINITIAL); return RobotTypes.Variable; }
 
-.                                                           { return TokenType.BAD_CHARACTER; }
+<YYINITIAL> {Word}                      { yybegin(YYINITIAL); return RobotTypes.Word; }
+
+<YYINITIAL> {Space}                      { yybegin(YYINITIAL); return RobotTypes.Space; }
+
+<YYINITIAL> {Whitespaces}               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+
+.                                       { return TokenType.BAD_CHARACTER; }

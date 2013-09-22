@@ -4,6 +4,9 @@ import com.intellij.psi.tree.IElementType;
 
 public interface RobotTypes {
     final IElementType LineTerminator = new RobotElementType("LineTerminator");
-    final IElementType HeaderDelimiter = new RobotElementType("HeaderDelimiter");
-    final IElementType HeaderName = new RobotElementType("HeaderName");
+    final IElementType Header = new RobotElementType("Header");
+    final IElementType Variable = new RobotElementType("Variable");
+    final IElementType Escaped = new RobotElementType("Escaped");
+    final IElementType Word = new RobotElementType("Word");
+    final IElementType Space = new RobotElementType("Space");
 }
