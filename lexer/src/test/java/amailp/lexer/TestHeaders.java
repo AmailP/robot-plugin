@@ -17,13 +17,13 @@ public class TestHeaders extends BaseLexerTest {
 
     @Test
     public void testHeader() {
-        robotLexer.start("*** HeaderName ***");
+        scanString("*** HeaderName ***");
         nextTokenIsType(RobotTypes.Header);
     }
 
     @Test
     public void testStrangeHeader() {
-        robotLexer.start("\n\n*** Header $trange N4m& ***  ");
+        scanString("\n\n*** Header $trange N4m& ***  ");
         nextTokenIsType(RobotTypes.LineTerminator);
         nextTokenIsType(RobotTypes.LineTerminator);
         nextTokenIsType(RobotTypes.Header);

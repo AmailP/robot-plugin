@@ -25,11 +25,13 @@ Whitespaces = {WhitespaceChar} {WhitespaceChar}+
 HeaderDelimiter = "***"
 Header = {HeaderDelimiter} ~{HeaderDelimiter}
 
-WordChar = [a-zA-Z]
+WordChar = [a-zA-Z,\.\!\?]
 Word = {WordChar}+
 
-Variable = "${" [a-zA-Z]+ "}"
-Escaped = "\\" [\?]
+TestCaseSetting = "[" {Word} "]"
+
+Variable = "${" {Word} "}"
+ListVariable = "@{" {Word} "}"
 
 %%
 
@@ -39,9 +41,13 @@ Escaped = "\\" [\?]
 
 <YYINITIAL> {Variable}                  { yybegin(YYINITIAL); return RobotTypes.Variable; }
 
+<YYINITIAL> {ListVariable}              { yybegin(YYINITIAL); return RobotTypes.ListVariable; }
+
 <YYINITIAL> {Word}                      { yybegin(YYINITIAL); return RobotTypes.Word; }
 
-<YYINITIAL> {Space}                      { yybegin(YYINITIAL); return RobotTypes.Space; }
+<YYINITIAL> {TestCaseSetting}           { yybegin(YYINITIAL); return RobotTypes.TestCaseSetting; }
+
+<YYINITIAL> {Space}                     { yybegin(YYINITIAL); return RobotTypes.Space; }
 
 <YYINITIAL> {Whitespaces}               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
 

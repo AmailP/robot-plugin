@@ -1,6 +1,5 @@
 package amailp.lexer;
 
-import amailp.psi.RobotTypes;
 import com.intellij.lexer.FlexAdapter;
 import com.intellij.lexer.Lexer;
 import com.intellij.psi.tree.IElementType;
@@ -9,11 +8,13 @@ import org.junit.Before;
 
 import java.io.StringReader;
 
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class BaseLexerTest {
 
-    protected Lexer robotLexer;
+    private Lexer robotLexer;
 
     @Before
     public void initLexer() {
@@ -22,13 +23,20 @@ public class BaseLexerTest {
 
     @After
     public void checkAllWasLexed() {
-        System.out.println(robotLexer.getBufferEnd() + " " +  robotLexer.getTokenEnd());
-        assertEquals(robotLexer.getBufferEnd(), robotLexer.getTokenEnd());
+        assertEquals("Something was left unlexed", robotLexer.getTokenStart(), robotLexer.getTokenEnd());
+    }
+
+    protected void scanString(String toBeScanned) {
+        robotLexer.start(toBeScanned);
     }
 
     protected void nextTokenIsType(IElementType type) {
-        assertEquals(robotLexer.getTokenText(), type, robotLexer.getTokenType());
-        if(robotLexer.getBufferEnd() != robotLexer.getTokenEnd())
+        assertThat(type, equalTo(robotLexer.getTokenType()));
             robotLexer.advance();
+    }
+
+    protected void nextTokenIs(String text, IElementType type) {
+        assertThat(text, equalTo(robotLexer.getTokenText()));
+        nextTokenIsType(type);
     }
 }
