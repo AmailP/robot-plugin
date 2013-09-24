@@ -2,12 +2,12 @@ package amailp.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import amailp.psi.RobotTypes;
+import amailp.psi.RobotTokenTypes;
 import com.intellij.psi.TokenType;
 
 %%
 
-%class RobotLexer
+%class _RobotLexer
 %implements FlexLexer
 %public
 %unicode
@@ -35,20 +35,20 @@ ListVariable = "@{" {Word} "}"
 
 %%
 
-<YYINITIAL> {LineTerminator}            { yybegin(YYINITIAL); return RobotTypes.LineTerminator; }
+<YYINITIAL> {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
 
-<YYINITIAL> {Header}                    { yybegin(YYINITIAL); return RobotTypes.Header; }
+<YYINITIAL> {Header}                    { yybegin(YYINITIAL); return RobotTokenTypes.Header; }
 
-<YYINITIAL> {Variable}                  { yybegin(YYINITIAL); return RobotTypes.Variable; }
+<YYINITIAL> {Variable}                  { yybegin(YYINITIAL); return RobotTokenTypes.Variable; }
 
-<YYINITIAL> {ListVariable}              { yybegin(YYINITIAL); return RobotTypes.ListVariable; }
+<YYINITIAL> {ListVariable}              { yybegin(YYINITIAL); return RobotTokenTypes.ListVariable; }
 
-<YYINITIAL> {Word}                      { yybegin(YYINITIAL); return RobotTypes.Word; }
+<YYINITIAL> {Word}                      { yybegin(YYINITIAL); return RobotTokenTypes.Word; }
 
-<YYINITIAL> {TestCaseSetting}           { yybegin(YYINITIAL); return RobotTypes.TestCaseSetting; }
+<YYINITIAL> {TestCaseSetting}           { yybegin(YYINITIAL); return RobotTokenTypes.TestCaseSetting; }
 
-<YYINITIAL> {Space}                     { yybegin(YYINITIAL); return RobotTypes.Space; }
+<YYINITIAL> {Space}                     { yybegin(YYINITIAL); return RobotTokenTypes.Space; }
 
-<YYINITIAL> {Whitespaces}               { yybegin(YYINITIAL); return TokenType.WHITE_SPACE; }
+<YYINITIAL> {Whitespaces}               { yybegin(YYINITIAL); return RobotTokenTypes.Whitespaces; }
 
-.                                       { return TokenType.BAD_CHARACTER; }
+.                                       { return RobotTokenTypes.BadCharacter; }

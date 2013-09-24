@@ -1,53 +1,69 @@
 package amailp.lexer;
 
-import amailp.psi.RobotTypes;
+import amailp.psi.RobotTokenTypes;
 import com.intellij.psi.TokenType;
 import org.junit.Test;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.nio.CharBuffer;
+import java.util.Scanner;
 
 public class RobotLexerTest extends BaseLexerTest {
 
     @Test
     public void testVariable() {
         scanString("${aVariable}");
-        nextTokenIsType(RobotTypes.Variable);
+        nextTokenIsType(RobotTokenTypes.Variable);
     }
 
     @Test
     public void testListVariable() {
         scanString("@{aListVariable}");
-        nextTokenIsType(RobotTypes.ListVariable);
+        nextTokenIsType(RobotTokenTypes.ListVariable);
     }
 
     @Test
     public void testWord() {
         scanString("ThisIsAWord");
-        nextTokenIsType(RobotTypes.Word);
+        nextTokenIsType(RobotTokenTypes.Word);
     }
 
     @Test
     public void testWordWithSymbols() {
         scanString("!IsThisAWord??.");
-        nextTokenIsType(RobotTypes.Word);
+        nextTokenIsType(RobotTokenTypes.Word);
     }
 
     @Test
     public void testCell() {
         scanString("    A cell");
-        nextTokenIsType(TokenType.WHITE_SPACE);
-        nextTokenIs("A", RobotTypes.Word);
-        nextTokenIsType(RobotTypes.Space);
-        nextTokenIs("cell", RobotTypes.Word);
+        nextTokenIsType(RobotTokenTypes.Whitespaces);
+        nextTokenIs("A", RobotTokenTypes.Word);
+        nextTokenIsType(RobotTokenTypes.Space);
+        nextTokenIs("cell", RobotTokenTypes.Word);
     }
 
     @Test
     public void testVariableCell() {
         scanString("  This ${is} cell  ");
-        nextTokenIsType(TokenType.WHITE_SPACE);
-        nextTokenIs("This", RobotTypes.Word);
-        nextTokenIsType(RobotTypes.Space);
-        nextTokenIs("${is}", RobotTypes.Variable);
-        nextTokenIsType(RobotTypes.Space);
-        nextTokenIs("cell", RobotTypes.Word);
-        nextTokenIsType(TokenType.WHITE_SPACE);
+        nextTokenIsType(RobotTokenTypes.Whitespaces);
+        nextTokenIs("This", RobotTokenTypes.Word);
+        nextTokenIsType(RobotTokenTypes.Space);
+        nextTokenIs("${is}", RobotTokenTypes.Variable);
+        nextTokenIsType(RobotTokenTypes.Space);
+        nextTokenIs("cell", RobotTokenTypes.Word);
+        nextTokenIsType(RobotTokenTypes.Whitespaces);
+    }
+
+    @Test
+    public void testAll() {
+        String s = new Scanner(this.getClass().getClassLoader().getResourceAsStream("complete.robot")).useDelimiter("\\A").next();
+        scanString(s);
+        while(robotLexer.getTokenType() != null) {
+            System.out.println(robotLexer.getTokenType() + "\t\t"+ robotLexer.getTokenText());
+            robotLexer.advance();
+        }
     }
 }
