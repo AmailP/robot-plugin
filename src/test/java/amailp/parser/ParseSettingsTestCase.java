@@ -14,7 +14,7 @@ public class ParseSettingsTestCase extends ParsingTestCase {
 
     @Override
     protected String getTestDataPath() {
-        return "../../data/parser";
+        return "../../data/amailp.parser";
     }
 
     @Override

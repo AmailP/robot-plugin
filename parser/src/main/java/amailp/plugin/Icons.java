@@ -1,4 +1,4 @@
-package plugin;
+package amailp.plugin;
 
 import com.intellij.openapi.util.IconLoader;
 

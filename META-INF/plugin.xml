@@ -1,11 +1,11 @@
-<idea-plugin version="2">
-  <id>com.yourcompany.unique.plugin.id</id>
+<idea-amailp.plugin version="2">
+  <id>com.yourcompany.unique.amailp.plugin.id</id>
   <name>Plugin display name here</name>
   <version>1.0</version>
   <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
+      Enter short description for your amailp.plugin here.<br>
       <small>most HTML tags may be used</small>
       ]]></description>
 
@@ -20,7 +20,7 @@
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
-  <!-- uncomment to enable plugin in all products
+  <!-- uncomment to enable amailp.plugin in all products
   <depends>com.intellij.modules.lang</depends>
   -->
 
@@ -41,8 +41,8 @@
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
-      <lang.parserDefinition language="Simple" implementationClass="main.java.amailp.parser.RobotParserDefinition"/>
+      <lang.parserDefinition language="Simple" implementationClass="main.java.amailp.amailp.parser.RobotParserDefinition"/>
       <fileTypeFactory implementation="main.java.amailp.lang.RobotFileTypeFactory" />
       <toolWindow anchor="right" icon="/amailp/toolWindowRobot.png" id="Robot Framework" factoryClass="main.java.amailp.RobotToolWindowFactory" />
   </extensions>
-</idea-plugin>
+</idea-amailp.plugin>

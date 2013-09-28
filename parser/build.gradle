@@ -2,5 +2,5 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 dependencies {
-    compile project(':lexer'), ':idea' // TODO idea only for plugin package, maybe move package away
+    compile project(':lexer'), ':idea' // TODO idea only for amailp.plugin package, maybe move package away
 }

@@ -1,4 +1,4 @@
-package plugin;
+package amailp.plugin;
 
 import amailp.language.RobotLanguage;
 import com.intellij.openapi.fileTypes.LanguageFileType;

@@ -1,4 +1,4 @@
-package parser;
+package amailp.parser;
 
 import amailp.language.RobotLanguage;
 import amailp.lexer.RobotLexer;
@@ -14,11 +14,11 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
-import plugin.RobotFile;
+import amailp.plugin.RobotFile;
 
 public class RobotParserDefinition implements ParserDefinition {
 //    public static final IFileElementType FILE = new IFileElementType(Language.<RobotLanguage>findInstance(RobotLanguage.class));
-    public static final IFileElementType FILE = new IFileElementType(RobotLanguage.INSTANCE);
+    public static final IFileElementType RobotFileElementType = new IFileElementType(RobotLanguage.INSTANCE);
 
     @NotNull
     @Override
@@ -51,7 +51,7 @@ public class RobotParserDefinition implements ParserDefinition {
 
     @Override
     public IFileElementType getFileNodeType() {
-        return FILE;
+        return RobotFileElementType;
     }
 
     @NotNull
