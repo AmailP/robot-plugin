@@ -1,7 +1,4 @@
-apply plugin: 'java'
 apply plugin: 'idea'
-
-sourceCompatibility = 1.6
 
 ideaLibs = "$projectDir/../idea/out/dist.all.ce/lib"
 
@@ -20,9 +17,5 @@ allprojects {
             dirs "$ideaLibs"
         }
     }
-}
-
-dependencies {
-    compile ':openapi', ':util', ':annotations'
 }
    

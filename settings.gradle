@@ -1,3 +1,3 @@
-include 'lang', 'lexer', 'amailp.parser'
+include 'lang', 'lexer', 'parser', 'plugin'
 
 

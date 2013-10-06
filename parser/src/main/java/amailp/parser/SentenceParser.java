@@ -4,10 +4,12 @@ import amailp.elements.RobotASTTypes;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.psi.tree.TokenSet;
 
-import static amailp.elements.RobotTokenTypes.*;
+import static amailp.elements.RobotTokenTypes.Space;
+import static amailp.elements.RobotTokenTypes.Variable;
+import static amailp.elements.RobotTokenTypes.Word;
 
-public class PhraseParser implements PartParser {
-    public void parse(PsiBuilder builder) {
+public class SentenceParser {
+    public static void parseSentence(PsiBuilder builder) {
         if(!phraseComponent.contains(builder.getTokenType())) {
             builder.error("Phrase expected. Found instead: " + builder.getTokenType());
             return;

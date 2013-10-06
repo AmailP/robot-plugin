@@ -1,6 +1,6 @@
 package amailp.lexer;
 
-import amailp.psi.RobotTokenTypes;
+import amailp.elements.RobotTokenTypes;
 import org.junit.Test;
 
 public class TestHeaders extends BaseLexerTest {

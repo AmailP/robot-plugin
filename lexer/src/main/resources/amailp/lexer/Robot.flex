@@ -2,8 +2,7 @@ package amailp.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import amailp.psi.RobotTokenTypes;
-import com.intellij.psi.TokenType;
+import amailp.elements.RobotTokenTypes;
 
 %%
 

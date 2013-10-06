@@ -1,13 +1,8 @@
 package amailp.lexer;
 
-import amailp.psi.RobotTokenTypes;
-import com.intellij.psi.TokenType;
+import amailp.elements.RobotTokenTypes;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.StringReader;
-import java.nio.CharBuffer;
 import java.util.Scanner;
 
 public class RobotLexerTest extends BaseLexerTest {
