@@ -3,5 +3,6 @@ apply plugin: 'idea'
 
 dependencies {
     compile project(':lexer')
-    testCompile ':junit'
+    testCompile ':junit', ':extensions'
+    testRuntime ':idea_rt', ':picocontainer', ':trove4j', ':jdom'
 }
