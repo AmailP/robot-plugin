@@ -26,26 +26,30 @@ TestCasesHeader  = "*** Test Cases ***" | "*** Test Case ***"
 KeywordsHeader  = "*** Keywords ***" | "*** Keyword ***"
 
 
-WordChar = [a-zA-Z_,\.\!\?]
+WordChar = [^\ \t\f\r\n]
 Word = {WordChar}+
 
 TestCaseSetting = "[" {Word} "]"
 
 Variable = "${" {Word} "}"
 ListVariable = "@{" {Word} "}"
+AnyChar = [^]
+
+%state LINE
 
 %%
 
-<YYINITIAL> {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
+<YYINITIAL> {AnyChar}                   { yypushback(yylength()); yybegin(LINE); }
+<LINE>      {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
 
-<YYINITIAL> {SettingsHeader}            { yybegin(YYINITIAL); return RobotTokenTypes.SettingsHeader; }
-<YYINITIAL> {TestCasesHeader}           { yybegin(YYINITIAL); return RobotTokenTypes.TestCasesHeader; }
-<YYINITIAL> {KeywordsHeader}             { yybegin(YYINITIAL); return RobotTokenTypes.KeywordsHeader; }
+<LINE>      {SettingsHeader}            { return RobotTokenTypes.SettingsHeader; }
+<LINE>      {TestCasesHeader}           { return RobotTokenTypes.TestCasesHeader; }
+<LINE>      {KeywordsHeader}            { return RobotTokenTypes.KeywordsHeader; }
 
-<YYINITIAL> {Variable}                  { yybegin(YYINITIAL); return RobotTokenTypes.Variable; }
-<YYINITIAL> {ListVariable}              { yybegin(YYINITIAL); return RobotTokenTypes.ListVariable; }
-<YYINITIAL> {Word}                      { yybegin(YYINITIAL); return RobotTokenTypes.Word; }
-<YYINITIAL> {TestCaseSetting}           { yybegin(YYINITIAL); return RobotTokenTypes.TestCaseSetting; }
-<YYINITIAL> {Space}                     { yybegin(YYINITIAL); return RobotTokenTypes.Space; }
-<YYINITIAL> {Whitespaces}               { yybegin(YYINITIAL); return RobotTokenTypes.Whitespaces; }
+<LINE>      {Variable}                  { return RobotTokenTypes.Variable; }
+<LINE>      {ListVariable}              { return RobotTokenTypes.ListVariable; }
+<LINE>      {TestCaseSetting}           { return RobotTokenTypes.TestCaseSetting; }
+<LINE>      {Word}                      { return RobotTokenTypes.Word; }
+<LINE>      {Space}                     { return RobotTokenTypes.Space; }
+<LINE>      {Whitespaces}               { return RobotTokenTypes.Whitespaces; }
 .                                       { return RobotTokenTypes.BadCharacter; }
