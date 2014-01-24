@@ -13,13 +13,18 @@ object RobotParser extends PsiParser {
 
     def parseTable() = {
       val tableMarker = mark
-      parseHeaderRow()
+      val headerType = parseHeaderRow()
       while(hasMoreTokens && !isHeader(currentType))
         parseBodyRow()
-      tableMarker.done(Table)
+      tableMarker.done(headerType match {
+        case SettingsHeader => SettingsTable
+        case TestCasesHeader => TestCasesTable
+        case KeywordsHeader => KeywordsTable
+        case VariablesHeader => VariablesTable
+      })
     }
 
-    def parseHeaderRow() = {
+    def parseHeaderRow(): IElementType = {
       val headerMark = mark
       val headerType = currentType
       if(!isHeader(headerType))
@@ -29,6 +34,7 @@ object RobotParser extends PsiParser {
 
       skipSpace()
       consumeLineTerminator()
+      headerType
     }
     
     def parseBodyRow() = {

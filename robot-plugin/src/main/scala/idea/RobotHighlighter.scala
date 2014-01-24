@@ -16,12 +16,15 @@ class RobotHighlighter extends SyntaxHighlighterBase {
   def getTokenHighlights(tokenType: IElementType): Array[TextAttributesKey] = {
     if (RobotTokenTypes.HeaderTokens.contains(tokenType))
       Array(TextAttributesKey.createTextAttributesKey("Header",
-        DefaultLanguageHighlighterColors.KEYWORD))
+        DefaultLanguageHighlighterColors.NUMBER))
     else if(tokenType == RobotTokenTypes.Variable)
       Array(TextAttributesKey.createTextAttributesKey("Variable",
         DefaultLanguageHighlighterColors.STRING))
+    else if(tokenType == RobotTokenTypes.TestCaseSetting)
+      Array(TextAttributesKey.createTextAttributesKey("TestCaseSetting",
+        DefaultLanguageHighlighterColors.INSTANCE_FIELD))
     else if(tokenType == RobotTokenTypes.BadCharacter)
-      Array(TextAttributesKey.createTextAttributesKey("Variable",
+      Array(TextAttributesKey.createTextAttributesKey("BadCharacter",
         com.intellij.openapi.editor.HighlighterColors.BAD_CHARACTER))
     else
       Array()

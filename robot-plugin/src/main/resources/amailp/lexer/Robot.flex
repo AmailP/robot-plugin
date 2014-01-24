@@ -24,6 +24,7 @@ Whitespaces = {WhitespaceChar} {WhitespaceChar}+
 SettingsHeader = "*** Settings ***" | "*** Setting ***"
 TestCasesHeader  = "*** Test Cases ***" | "*** Test Case ***"
 KeywordsHeader  = "*** Keywords ***" | "*** Keyword ***"
+VariablesHeader  = "*** Variables ***" | "*** Variable ***"
 
 
 WordChar = [^\ \t\f\r\n]
@@ -45,6 +46,7 @@ AnyChar = [^]
 <LINE>      {SettingsHeader}            { return RobotTokenTypes.SettingsHeader; }
 <LINE>      {TestCasesHeader}           { return RobotTokenTypes.TestCasesHeader; }
 <LINE>      {KeywordsHeader}            { return RobotTokenTypes.KeywordsHeader; }
+<LINE>      {VariablesHeader}           { return RobotTokenTypes.VariablesHeader; }
 
 <LINE>      {Variable}                  { return RobotTokenTypes.Variable; }
 <LINE>      {ListVariable}              { return RobotTokenTypes.ListVariable; }
