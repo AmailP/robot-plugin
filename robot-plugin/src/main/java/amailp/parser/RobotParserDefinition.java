@@ -3,7 +3,6 @@ package amailp.parser;
 import amailp.elements.RobotTokenTypes;
 import amailp.language.RobotLanguage;
 import amailp.lexer.RobotLexer;
-import amailp.psi.impl.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
@@ -17,6 +16,7 @@ import com.intellij.psi.tree.TokenSet;
 import org.jetbrains.annotations.NotNull;
 import parser.PsiElementBuilder;
 import parser.RobotParser$;
+import psi.RobotFile;
 
 public class RobotParserDefinition implements ParserDefinition {
 //    public static final IFileElementType FILE = new IFileElementType(Language.<RobotLanguage>findInstance(RobotLanguage.class));
@@ -64,7 +64,7 @@ public class RobotParserDefinition implements ParserDefinition {
 
     @Override
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return new RobotFileImpl(viewProvider);
+        return new RobotFile(viewProvider);
     }
 
     @Override
