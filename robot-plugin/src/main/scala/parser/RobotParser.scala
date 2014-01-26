@@ -29,7 +29,17 @@ object RobotParser extends PsiParser {
 
     def parseTestCases() {
       while(hasMoreTokens && !isHeader(currentType))
+        parseTestCase()
+    }
+
+    def parseTestCase() {
+      if(currentIsSpace()) error("Title expected, not space")
+      val keywordMark = mark
+      parseTitle(TestCaseTitle)
+      //        parseKeywordSettings()
+      while(currentIsSpace())
         parseBodyRow()
+      keywordMark done TestCase
     }
 
     def parseKeywords() {

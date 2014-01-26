@@ -40,7 +40,7 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <syntaxHighlighter implementationClass="idea.RobotHighlighter"/>
+        <annotator language="Robotframework" implementationClass="idea.RobotAnnotator"/>
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="idea.RobotHighlighterFactory"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.parser.RobotParserDefinition"/>
         <fileTypeFactory implementation="amailp.file.RobotFileTypeFactory" />

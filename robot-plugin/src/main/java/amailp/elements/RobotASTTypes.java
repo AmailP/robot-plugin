@@ -4,7 +4,9 @@ public interface RobotASTTypes {
     final static RobotElementType SettingsTable = new RobotElementType("SettingsTable");
     final static RobotElementType TestCasesTable = new RobotElementType("TestCasesTable");
     final static RobotElementType KeywordsTable = new RobotElementType("KeywordsTable");
+    final static RobotElementType TestCaseTitle = new RobotElementType("TestCaseTitle");
     final static RobotElementType KeywordTitle = new RobotElementType("KeywordTitle");
+    final static RobotElementType TestCase = new RobotElementType("TestCase");
     final static RobotElementType Keyword = new RobotElementType("Keyword");
     final static RobotElementType VariablesTable = new RobotElementType("VariablesTable");
     final static RobotElementType TableRow = new RobotElementType("TableRow");
