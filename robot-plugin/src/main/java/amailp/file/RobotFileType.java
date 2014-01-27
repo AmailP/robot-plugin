@@ -1,6 +1,6 @@
 package amailp.file;
 
-import amailp.language.RobotLanguage;
+import amailp.idea.RobotLanguage$;
 import com.intellij.openapi.fileTypes.LanguageFileType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +11,7 @@ public class RobotFileType extends LanguageFileType {
     public static final RobotFileType INSTANCE = new RobotFileType();
 
     private RobotFileType() {
-        super(RobotLanguage.INSTANCE);
+        super(RobotLanguage$.MODULE$);
     }
 
     @NotNull

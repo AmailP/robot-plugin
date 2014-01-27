@@ -9,19 +9,19 @@ public interface RobotTokenTypes {
 
     final IElementType BadCharacter = TokenType.BAD_CHARACTER;
 
-    final IElementType LineTerminator = new RobotElementType("LineTerminator");
+    final IElementType LineTerminator = new RobotIElementType("LineTerminator");
 
-    final IElementType SettingsHeader = new RobotElementType("SettingsHeader");
-    final IElementType TestCasesHeader = new RobotElementType("TestCasesHeader");
-    final IElementType KeywordsHeader = new RobotElementType("KeywordsHeader");
-    final IElementType VariablesHeader = new RobotElementType("VariablesHeader");
+    final IElementType SettingsHeader = new RobotIElementType("SettingsHeader");
+    final IElementType TestCasesHeader = new RobotIElementType("TestCasesHeader");
+    final IElementType KeywordsHeader = new RobotIElementType("KeywordsHeader");
+    final IElementType VariablesHeader = new RobotIElementType("VariablesHeader");
 
-    final IElementType Variable = new RobotElementType("Variable");
-    final IElementType ListVariable = new RobotElementType("ListVariable");
-    final IElementType TestCaseSetting = new RobotElementType("TestCaseSetting");
-    final IElementType Word = new RobotElementType("Word");
-    final IElementType Space = new RobotElementType("Space");
-    final IElementType Whitespaces = new RobotElementType("Whitespaces");
+    final IElementType Variable = new RobotIElementType("Variable");
+    final IElementType ListVariable = new RobotIElementType("ListVariable");
+    final IElementType TestCaseSetting = new RobotIElementType("TestCaseSetting");
+    final IElementType Word = new RobotIElementType("Word");
+    final IElementType Space = new RobotIElementType("Space");
+    final IElementType Whitespaces = new RobotIElementType("Whitespaces");
 
     final TokenSet WhitespacesTokens = TokenSet.EMPTY;
     final TokenSet CommentsTokens = TokenSet.EMPTY;

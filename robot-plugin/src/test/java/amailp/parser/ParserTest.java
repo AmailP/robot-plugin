@@ -1,6 +1,6 @@
 package amailp.parser;
 
-import amailp.language.RobotLanguage;
+import amailp.idea.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiBuilder;
@@ -11,12 +11,11 @@ import com.intellij.psi.impl.DebugUtil;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.testFramework.ParsingTestCase;
 import com.intellij.testFramework.PlatformTestCase;
-import parser.RobotParser$;
 
 public class ParserTest extends ParsingTestCase {
 
     public ParserTest() {
-        super("", "robot", new RobotParserDefinition());
+        super("", "robot", new amailp.idea.RobotParserDefinition());
         PlatformTestCase.initPlatformLangPrefix();
     }
 
@@ -27,12 +26,12 @@ public class ParserTest extends ParsingTestCase {
 
     public static void main(String[] args) throws Exception {
         new ParserTest().setUp();
-        ParserDefinition pd = new RobotParserDefinition();
+        ParserDefinition pd = new amailp.idea.RobotParserDefinition();
         String robotTestCase = StreamUtil.readText(pd.getClass().getResourceAsStream("complete.robot"), "utf-8");
         PsiBuilder builder = new PsiBuilderFactoryImpl().createBuilder(pd, pd.createLexer(null), robotTestCase);
         builder.setDebugMode(true);
         final PsiParser parser = RobotParser$.MODULE$;
-        IFileElementType fileElem = new IFileElementType(RobotLanguage.INSTANCE);
+        IFileElementType fileElem = new IFileElementType(RobotLanguage$.MODULE$);
         ASTNode root = parser.parse(fileElem, builder);
         System.out.println(DebugUtil.treeToString(root.getFirstChildNode(), true));
     }

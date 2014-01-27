@@ -5,9 +5,7 @@
       <root url="jar:///opt/local/share/scala-2.10/lib/scala-swing.jar!/" />
       <root url="jar:///opt/local/share/scala-2.10/lib/scala-actors.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="file:///opt/local/share/scala-2.10/doc/scala-devel-docs/api" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES>
       <root url="jar:///opt/local/share/scala-2.10/src/scala-library-src.jar!/" />
       <root url="jar:///opt/local/share/scala-2.10/src/scala-swing-src.jar!/" />

@@ -1,8 +1,8 @@
-package parser
+package amailp.parser
 
 import com.intellij.lang.{ASTNode, PsiBuilder, PsiParser}
 import com.intellij.psi.tree.IElementType
-import amailp.elements.{RobotTokenTypes, RobotASTTypes}
+import amailp.elements.{RobotTokenTypes}
 import RobotASTTypes._
 import RobotTokenTypes._
 

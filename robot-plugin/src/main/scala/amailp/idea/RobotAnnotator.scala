@@ -1,8 +1,8 @@
-package idea
+package amailp.idea
 
 import com.intellij.lang.annotation.{AnnotationHolder, Annotator}
 import com.intellij.psi.PsiElement
-import psi.{KeywordTitle, TestCaseTitle}
+import amailp.psi.{KeywordTitle, TestCaseTitle}
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import DefaultLanguageHighlighterColors._
 import com.intellij.openapi.editor.colors.TextAttributesKey

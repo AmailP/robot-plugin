@@ -1,4 +1,4 @@
-package idea
+package amailp.idea
 
 import com.intellij.openapi.fileTypes.{SyntaxHighlighter, SyntaxHighlighterFactory, SyntaxHighlighterBase}
 import com.intellij.lexer.Lexer
