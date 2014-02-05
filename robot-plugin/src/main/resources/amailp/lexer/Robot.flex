@@ -31,36 +31,46 @@ VariablesHeader  = "*** Variables ***" | "*** Variable ***"
 WordChar = [^\ \t\f\r\n]
 Word = {WordChar}+
 
-TestCaseSetting = "[" {Word} "]"
+TestCaseSetting = "[Documentation]"
+    | "[Tags]"
+    | "[Setup]"
+    | "[Precondition]"
+    | "[Teardown]"
+    | "[Postcondition]"
+    | "[Template]"
+    | "[Timeout]"
+    | "[Arguments]"
+    | "[Return]"
 
 Variable = "${" {Word} "}"
 ListVariable = "@{" {Word} "}"
-AnyChar = [^]
 
 %state LINE
 
 %%
 
-<YYINITIAL> {SpaceChars}* {LineTerminator}           { return RobotTokenTypes.BlankLine; }
-<YYINITIAL> {AnyChar}           { yypushback(yylength()); yybegin(LINE); }
-<LINE> {
-    {SpaceChars}+ / {Comment}   { return RobotTokenTypes.IrrelevantSpaces; }
-    {SpaceChars}+ $             { return RobotTokenTypes.IrrelevantSpaces; }
-    {Comment}                   { return RobotTokenTypes.Comment; }
+<YYINITIAL> {
+    {SpaceChars}* {LineTerminator}  { return RobotTokenTypes.BlankLine; }
 
-    {SettingsHeader}            { return RobotTokenTypes.SettingsHeader; }
-    {TestCasesHeader}           { return RobotTokenTypes.TestCasesHeader; }
-    {KeywordsHeader}            { return RobotTokenTypes.KeywordsHeader; }
-    {VariablesHeader}           { return RobotTokenTypes.VariablesHeader; }
+    <LINE> {
+        {SpaceChars}+ / {Comment}   { yybegin(LINE); return RobotTokenTypes.IrrelevantSpaces; }
+        {SpaceChars}+ $             { yybegin(LINE); return RobotTokenTypes.IrrelevantSpaces; }
+        {Comment}                   { yybegin(LINE); return RobotTokenTypes.Comment; }
 
-    {Variable}                  { return RobotTokenTypes.Variable; }
-    {ListVariable}              { return RobotTokenTypes.ListVariable; }
-    {TestCaseSetting}           { return RobotTokenTypes.TestCaseSetting; }
-    {Word}                      { return RobotTokenTypes.Word; }
-    {Space}                     { return RobotTokenTypes.Space; }
-    {Separator}                 { return RobotTokenTypes.Separator; }
-    <<EOF>>                     { return RobotTokenTypes.LineTerminator; }
-    {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
+        {SettingsHeader}            { yybegin(LINE); return RobotTokenTypes.SettingsHeader; }
+        {TestCasesHeader}           { yybegin(LINE); return RobotTokenTypes.TestCasesHeader; }
+        {KeywordsHeader}            { yybegin(LINE); return RobotTokenTypes.KeywordsHeader; }
+        {VariablesHeader}           { yybegin(LINE); return RobotTokenTypes.VariablesHeader; }
+
+        {Variable}                  { yybegin(LINE); return RobotTokenTypes.Variable; }
+        {ListVariable}              { yybegin(LINE); return RobotTokenTypes.ListVariable; }
+        {TestCaseSetting}           { yybegin(LINE); return RobotTokenTypes.TestCaseSetting; }
+        {Word}                      { yybegin(LINE); return RobotTokenTypes.Word; }
+        {Space}                     { yybegin(LINE); return RobotTokenTypes.Space; }
+        {Separator}                 { yybegin(LINE); return RobotTokenTypes.Separator; }
+    }
 }
+
+<LINE>  {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
 
 //.                               { return RobotTokenTypes.BadCharacter; }
