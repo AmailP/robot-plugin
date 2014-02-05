@@ -1,7 +1,6 @@
 package amailp.idea
 
 import amailp.elements.RobotTokenTypes
-import amailp.idea.RobotLanguage
 import amailp.lexer.RobotLexer
 import amailp.psi.RobotFile
 import com.intellij.lang.ASTNode
