@@ -20,7 +20,7 @@ public class TestHeaders extends BaseLexerTest {
     @Test
     public void testLineBeforeHeader() {
         scanString("\n*** Test Cases ***");
-        nextTokenIsType(RobotTokenTypes.LineTerminator);
+        nextTokenIsType(RobotTokenTypes.BlankLine);
         nextTokenIsType(RobotTokenTypes.TestCasesHeader);
     }
 

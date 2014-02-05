@@ -63,6 +63,12 @@ public class RobotLexerTest extends BaseLexerTest {
     }
 
     @Test
+    public void testBlankLine() {
+        scanString("   \n");
+        nextTokenIsType(RobotTokenTypes.BlankLine);
+    }
+
+    @Test
     public void testAll() {
         String s = new Scanner(this.getClass().getClassLoader().getResourceAsStream("complete.robot")).useDelimiter("\\A").next();
         scanString(s);

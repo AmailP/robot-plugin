@@ -41,6 +41,7 @@ AnyChar = [^]
 
 %%
 
+<YYINITIAL> {SpaceChars}* {LineTerminator}           { return RobotTokenTypes.BlankLine; }
 <YYINITIAL> {AnyChar}           { yypushback(yylength()); yybegin(LINE); }
 <LINE> {
     {SpaceChars}+ / {Comment}   { return RobotTokenTypes.IrrelevantSpaces; }
