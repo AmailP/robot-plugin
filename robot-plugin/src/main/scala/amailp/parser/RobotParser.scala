@@ -36,11 +36,11 @@ object RobotParser extends PsiParser {
     }
 
     def parseTestCase() {
-      if(currentIsSpace()) error("Title expected, not space")
+      if(currentIsSpace) error("Title expected, not space")
       val keywordMark = mark
       parseTitle(TestCaseTitle)
       //        parseKeywordSettings()
-      while(currentIsSpace())
+      while(currentIsSeparator)
         parseBodyRow()
       keywordMark done TestCase
     }
@@ -52,11 +52,11 @@ object RobotParser extends PsiParser {
     }
 
     def parseKeyword() {
-      if(currentIsSpace()) error("Title expected, not space")
+      if(currentIsSpace) error("Title expected, not space")
       val keywordMark = mark
       parseTitle(KeywordTitle)
       //        parseKeywordSettings()
-      while(currentIsSpace())
+      while(currentIsSeparator)
         parseBodyRow()
       keywordMark done Keyword
     }
@@ -65,8 +65,7 @@ object RobotParser extends PsiParser {
       val titleMark = mark
       parsePhrase()
       titleMark done titleType
-      skipSpace()
-      consumeLineTerminators()
+      consumeLineTerminator()
     }
 
     def parseVariables() {
@@ -80,20 +79,20 @@ object RobotParser extends PsiParser {
       if(!isHeader(headerType)) error("Header token expected")
       advanceLexer()
       headerMark done headerType
-
-      skipSpace()
-      consumeLineTerminators()
+      consumeLineTerminator()
       headerType
     }
     
     def parseBodyRow() {
       val rowMarker = mark
-      while(!isRowTerminator(currentType))
+      if(!currentIsSeparator)
+        parseCell()
+      while(currentIsSeparator)
       {
-        skipSpace()
+        consumeSeparator()
         parseCell()
       }
-      consumeLineTerminators()
+      consumeLineTerminator()
       rowMarker done TableRow
     }
 
@@ -104,26 +103,31 @@ object RobotParser extends PsiParser {
     }
 
     def parsePhrase() {
-      while(!isRowTerminator(currentType) && currentType != Separator)
+      while(!currentIsRowTerminator && currentType != Separator)
         advanceLexer()
     }
 
     def hasMoreTokens = !eof
 
-    def skipSpace() = if (currentIsSpace()) advanceLexer()
+    def currentIsSpace = currentIsSeparator || currentType == Space
 
-    def currentIsSpace() = currentType == Separator || currentType == Space
+    def currentIsSeparator = currentType == Separator
 
-    def consumeLineTerminators() = {
-      if (!isRowTerminator(currentType)) error("Line terminator expected")
-      while(currentType == LineTerminator)
-        advanceLexer()
+    def currentIsRowTerminator = currentType == LineTerminator || eof
+
+    def consumeSeparator() {
+      if(!currentIsSeparator) error("Cell separator expected")
+      advanceLexer()
     }
-    
-    def isRowTerminator(token: IElementType) = token == LineTerminator || eof
+
+    def consumeLineTerminator() {
+      if (!currentIsRowTerminator) error("Line terminator expected")
+      advanceLexer()
+    }
     
     def isHeader(token: IElementType) = HeaderTokens contains token
 
+    builder.setDebugMode(true)
     val rootMarker = mark
     while (hasMoreTokens) {
       parseTable()
