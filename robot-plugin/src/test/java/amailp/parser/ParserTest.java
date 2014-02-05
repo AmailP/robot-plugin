@@ -33,6 +33,6 @@ public class ParserTest extends ParsingTestCase {
         final PsiParser parser = RobotParser$.MODULE$;
         IFileElementType fileElem = new IFileElementType(RobotLanguage$.MODULE$);
         ASTNode root = parser.parse(fileElem, builder);
-        System.out.println(DebugUtil.treeToString(root.getFirstChildNode(), true));
+        System.out.println(DebugUtil.treeToString(root, true));
     }
 }

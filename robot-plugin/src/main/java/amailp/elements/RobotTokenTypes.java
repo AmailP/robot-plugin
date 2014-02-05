@@ -21,10 +21,12 @@ public interface RobotTokenTypes {
     final IElementType TestCaseSetting = new RobotIElementType("TestCaseSetting");
     final IElementType Word = new RobotIElementType("Word");
     final IElementType Space = new RobotIElementType("Space");
-    final IElementType Whitespaces = new RobotIElementType("Whitespaces");
+    final IElementType Separator = new RobotIElementType("Separator");
+    final IElementType IrrelevantSpaces = new RobotIElementType("IrrelevantSpaces");
+    final IElementType Comment = new RobotIElementType("Comment");
 
-    final TokenSet WhitespacesTokens = TokenSet.EMPTY;
-    final TokenSet CommentsTokens = TokenSet.EMPTY;
+    final TokenSet WhitespacesTokens = TokenSet.create(IrrelevantSpaces);
+    final TokenSet CommentsTokens = TokenSet.create(Comment);
     final TokenSet StringLiteralElements = TokenSet.EMPTY;
-    final TokenSet HeaderTokens = TokenSet.create(SettingsHeader, TestCasesHeader, KeywordsHeader);
+    final TokenSet HeaderTokens = TokenSet.create(SettingsHeader, TestCasesHeader, KeywordsHeader, VariablesHeader);
 }

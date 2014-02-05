@@ -2,9 +2,8 @@ package amailp.parser
 
 import com.intellij.lang.{ASTNode, PsiBuilder, PsiParser}
 import com.intellij.psi.tree.IElementType
-import amailp.elements.{RobotTokenTypes}
+import amailp.elements.RobotTokenTypes._
 import RobotASTTypes._
-import RobotTokenTypes._
 
 object RobotParser extends PsiParser {
   def parse(root: IElementType, builder: PsiBuilder): ASTNode = {
@@ -14,12 +13,16 @@ object RobotParser extends PsiParser {
     def parseTable() {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
-        case SettingsHeader => parseSettings(); SettingsTable
-        case TestCasesHeader => parseTestCases(); TestCasesTable
-        case KeywordsHeader => parseKeywords(); KeywordsTable
-        case VariablesHeader => parseVariables(); VariablesTable
+        case SettingsHeader => parseSettings(); Some(SettingsTable)
+        case TestCasesHeader => parseTestCases(); Some(TestCasesTable)
+        case KeywordsHeader => parseKeywords(); Some(KeywordsTable)
+        case VariablesHeader => parseVariables(); Some(VariablesTable)
+        case _ => None
       }
-      tableMarker done tableType
+      tableType match {
+        case Some(typ) => tableMarker done typ
+        case None => tableMarker drop()
+      }
     }
 
     def parseSettings() {
@@ -101,7 +104,7 @@ object RobotParser extends PsiParser {
     }
 
     def parsePhrase() {
-      while(!isRowTerminator(currentType) && currentType != Whitespaces)
+      while(!isRowTerminator(currentType) && currentType != Separator)
         advanceLexer()
     }
 
@@ -109,7 +112,7 @@ object RobotParser extends PsiParser {
 
     def skipSpace() = if (currentIsSpace()) advanceLexer()
 
-    def currentIsSpace() = currentType == Whitespaces || currentType == Space
+    def currentIsSpace() = currentType == Separator || currentType == Space
 
     def consumeLineTerminators() = {
       if (!isRowTerminator(currentType)) error("Line terminator expected")

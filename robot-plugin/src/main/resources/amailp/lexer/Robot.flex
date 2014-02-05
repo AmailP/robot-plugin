@@ -18,8 +18,9 @@ return;
 
 LineTerminator = \n | \r | \r\n
 Space = "\ "
-WhitespaceChar = [\ \t\f]
-Whitespaces = {WhitespaceChar} {WhitespaceChar}+
+SpaceChars = [\ \t\f]
+Separator = [\t\f] | {SpaceChars} {SpaceChars}+
+Comment = "#" .*
 
 SettingsHeader = "*** Settings ***" | "*** Setting ***"
 TestCasesHeader  = "*** Test Cases ***" | "*** Test Case ***"
@@ -40,18 +41,25 @@ AnyChar = [^]
 
 %%
 
-<YYINITIAL> {AnyChar}                   { yypushback(yylength()); yybegin(LINE); }
-<LINE>      {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
+<YYINITIAL> {AnyChar}           { yypushback(yylength()); yybegin(LINE); }
+<LINE> {
+    {SpaceChars}+ / {Comment}   { return RobotTokenTypes.IrrelevantSpaces; }
+    {SpaceChars}+ $             { return RobotTokenTypes.IrrelevantSpaces; }
+    {Comment}                   { return RobotTokenTypes.Comment; }
 
-<LINE>      {SettingsHeader}            { return RobotTokenTypes.SettingsHeader; }
-<LINE>      {TestCasesHeader}           { return RobotTokenTypes.TestCasesHeader; }
-<LINE>      {KeywordsHeader}            { return RobotTokenTypes.KeywordsHeader; }
-<LINE>      {VariablesHeader}           { return RobotTokenTypes.VariablesHeader; }
+    {SettingsHeader}            { return RobotTokenTypes.SettingsHeader; }
+    {TestCasesHeader}           { return RobotTokenTypes.TestCasesHeader; }
+    {KeywordsHeader}            { return RobotTokenTypes.KeywordsHeader; }
+    {VariablesHeader}           { return RobotTokenTypes.VariablesHeader; }
 
-<LINE>      {Variable}                  { return RobotTokenTypes.Variable; }
-<LINE>      {ListVariable}              { return RobotTokenTypes.ListVariable; }
-<LINE>      {TestCaseSetting}           { return RobotTokenTypes.TestCaseSetting; }
-<LINE>      {Word}                      { return RobotTokenTypes.Word; }
-<LINE>      {Space}                     { return RobotTokenTypes.Space; }
-<LINE>      {Whitespaces}               { return RobotTokenTypes.Whitespaces; }
-.                                       { return RobotTokenTypes.BadCharacter; }
+    {Variable}                  { return RobotTokenTypes.Variable; }
+    {ListVariable}              { return RobotTokenTypes.ListVariable; }
+    {TestCaseSetting}           { return RobotTokenTypes.TestCaseSetting; }
+    {Word}                      { return RobotTokenTypes.Word; }
+    {Space}                     { return RobotTokenTypes.Space; }
+    {Separator}                 { return RobotTokenTypes.Separator; }
+    <<EOF>>                     { return RobotTokenTypes.LineTerminator; }
+    {LineTerminator}            { yybegin(YYINITIAL); return RobotTokenTypes.LineTerminator; }
+}
+
+//.                               { return RobotTokenTypes.BadCharacter; }

@@ -1,6 +1,8 @@
 package amailp.lexer;
 
 import amailp.elements.RobotTokenTypes;
+import amailp.idea.RobotParserDefinition;
+import amailp.idea.RobotParserDefinition$;
 import org.junit.Test;
 
 import java.util.Scanner;
@@ -34,7 +36,7 @@ public class RobotLexerTest extends BaseLexerTest {
     @Test
     public void testCell() {
         scanString("    A cell");
-        nextTokenIsType(RobotTokenTypes.Whitespaces);
+        nextTokenIsType(RobotTokenTypes.Separator);
         nextTokenIs("A", RobotTokenTypes.Word);
         nextTokenIsType(RobotTokenTypes.Space);
         nextTokenIs("cell", RobotTokenTypes.Word);
@@ -42,14 +44,22 @@ public class RobotLexerTest extends BaseLexerTest {
 
     @Test
     public void testVariableCell() {
-        scanString("  This ${is} cell  ");
-        nextTokenIsType(RobotTokenTypes.Whitespaces);
+        scanString("  This ${is} cell  \n");
+        nextTokenIsType(RobotTokenTypes.Separator);
         nextTokenIs("This", RobotTokenTypes.Word);
         nextTokenIsType(RobotTokenTypes.Space);
         nextTokenIs("${is}", RobotTokenTypes.Variable);
         nextTokenIsType(RobotTokenTypes.Space);
         nextTokenIs("cell", RobotTokenTypes.Word);
-        nextTokenIsType(RobotTokenTypes.Whitespaces);
+        nextTokenIsType(RobotTokenTypes.IrrelevantSpaces);
+        nextTokenIsType(RobotTokenTypes.LineTerminator);
+    }
+
+    @Test
+    public void testComment() {
+        scanString("  #This is comment  ");
+        nextTokenIsType(RobotTokenTypes.IrrelevantSpaces);
+        nextTokenIs("#This is comment  ", RobotTokenTypes.Comment);
     }
 
     @Test
