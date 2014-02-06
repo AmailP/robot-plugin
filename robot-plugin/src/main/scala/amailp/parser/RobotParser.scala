@@ -15,10 +15,10 @@ object RobotParser extends PsiParser {
     def parseTable() {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
-        case SettingsHeader => parseSettings(); Some(SettingsTable)
-        case TestCasesHeader => parseTestCases(); Some(TestCasesTable)
-        case KeywordsHeader => parseKeywords(); Some(KeywordsTable)
-        case VariablesHeader => parseVariables(); Some(VariablesTable)
+        case SettingsHeader => parseTableItemsWith(parseSetting); Some(SettingsTable)
+        case TestCasesHeader => parseTableItemsWith(parseTestCase); Some(TestCasesTable)
+        case KeywordsHeader => parseTableItemsWith(parseKeyword); Some(KeywordsTable)
+        case VariablesHeader => parseTableItemsWith(parseBodyRow); Some(VariablesTable)
         case _ => None
       }
       tableType match {
@@ -27,9 +27,9 @@ object RobotParser extends PsiParser {
       }
     }
 
-    def parseSettings() {
+    def parseTableItemsWith(parseItem: () => Unit) {
       while(hasMoreTokens && !isHeader(currentType))
-        parseSetting()
+        parseItem()
     }
 
     def parseSetting() {
@@ -54,11 +54,6 @@ object RobotParser extends PsiParser {
       }
     }
 
-    def parseTestCases() {
-      while(hasMoreTokens && !isHeader(currentType))
-        parseTestCase()
-    }
-
     def parseTestCase() {
       if(currentIsSpace) error("Title expected, not space")
       val keywordMark = mark
@@ -67,12 +62,6 @@ object RobotParser extends PsiParser {
       while(currentIsSeparator)
         parseBodyRow()
       keywordMark done TestCase
-    }
-
-    def parseKeywords() {
-      while(hasMoreTokens && !isHeader(currentType)) {
-        parseKeyword()
-      }
     }
 
     def parseKeyword() {
@@ -90,11 +79,6 @@ object RobotParser extends PsiParser {
       parsePhrase()
       titleMark done titleType
       consumeLineTerminator()
-    }
-
-    def parseVariables() {
-      while(hasMoreTokens && !isHeader(currentType))
-        parseBodyRow()
     }
 
     def parseHeaderRow(): IElementType = {
