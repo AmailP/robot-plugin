@@ -51,6 +51,7 @@ ListVariable = "@{" {Word} "}"
 
 <YYINITIAL> {
     {SpaceChars}* {LineTerminator}  { return RobotTokenTypes.BlankLine; }
+    {SpaceChars}* {Comment} {LineTerminator}  { return RobotTokenTypes.Comment; }
 
     <LINE> {
         {SpaceChars}+ / {Comment}   { yybegin(LINE); return RobotTokenTypes.IrrelevantSpaces; }
