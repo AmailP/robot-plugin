@@ -1,8 +1,8 @@
 <idea-plugin version="2">
     <id>amailp.robot</id>
     <name>Robotframework Support</name>
-    <version>1.0</version>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <version>0.2</version>
+    <vendor email="valerio.angelini@here.com" url="http://www.here.com">HERE</vendor>
 
     <description><![CDATA[
       Enter short description for your amailp.plugin here.<br>
@@ -36,7 +36,6 @@
         <group id="RobotPlugin.SampleMenu" text="_Sample Menu" description="Sample menu">
             <add-to-group group-id="MainMenu" relative-to-action="HelpMenu" anchor="before" />
         </group>
-
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
