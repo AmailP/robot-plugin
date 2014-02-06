@@ -23,6 +23,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="scala-compiler" level="project" />
     <orderEntry type="library" name="scala-library" level="project" />
+    <orderEntry type="library" scope="TEST" name="scala-scalatest" level="project" />
   </component>
 </module>
 
