@@ -4,11 +4,13 @@ import com.intellij.lang.{ASTNode, PsiBuilder, PsiParser}
 import com.intellij.psi.tree.IElementType
 import amailp.elements.RobotTokenTypes._
 import RobotASTTypes._
+import amailp.psi.Settings
 
 object RobotParser extends PsiParser {
   def parse(root: IElementType, builder: PsiBuilder): ASTNode = {
     import builder._
     def currentType = getTokenType
+    def currentText = getTokenText
 
     def parseTable() {
       val tableMarker = mark
@@ -27,7 +29,29 @@ object RobotParser extends PsiParser {
 
     def parseSettings() {
       while(hasMoreTokens && !isHeader(currentType))
-        parseBodyRow()
+        parseSetting()
+    }
+
+    def parseSetting() {
+      val settingMarker = mark
+      parseSettingFirstCell()
+      while(currentIsSeparator)
+      {
+        consumeSeparator()
+        parseCell()
+      }
+      settingMarker done Setting
+      consumeLineTerminator()
+    }
+
+    def parseSettingFirstCell() {
+      val firstCellMarker = mark
+      val content = parseCell()
+      content match {
+        case amailp.psi.Ellipsis.string => firstCellMarker done Ellipsis
+        case _ @ cnt if Settings.names contains cnt => firstCellMarker done SettingName
+        case _ => firstCellMarker error "Settings name not known"
+      }
     }
 
     def parseTestCases() {
@@ -96,15 +120,20 @@ object RobotParser extends PsiParser {
       rowMarker done TableRow
     }
 
-    def parseCell() {
+    def parseCell(): String = {
       val cellMarker = mark
-      parsePhrase()
+      val result = parsePhrase()
       cellMarker done NonEmptyCell
+      result
     }
 
-    def parsePhrase() {
-      while(!currentIsRowTerminator && currentType != Separator)
+    def parsePhrase(): String = {
+      val content = new StringBuilder
+      while(!currentIsRowTerminator && currentType != Separator) {
+        content append currentText
         advanceLexer()
+      }
+      content.result()
     }
 
     def hasMoreTokens = !eof
