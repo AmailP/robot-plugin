@@ -27,6 +27,16 @@ object RobotParser extends PsiParser {
       }
     }
 
+    def parseHeaderRow(): IElementType = {
+      val headerMark = mark
+      val headerType = currentType
+      advanceLexer()
+      if(isHeader(headerType)) headerMark done headerType
+      else headerMark error "Table header expected"
+      consumeLineTerminator()
+      headerType
+    }
+
     def parseTableItemsWith(parseItem: () => Unit) {
       while(hasMoreTokens && !isHeader(currentType))
         parseItem()
@@ -80,21 +90,10 @@ object RobotParser extends PsiParser {
       titleMark done titleType
       consumeLineTerminator()
     }
-
-    def parseHeaderRow(): IElementType = {
-      val headerMark = mark
-      val headerType = currentType
-      if(!isHeader(headerType)) error("Header token expected")
-      advanceLexer()
-      headerMark done headerType
-      consumeLineTerminator()
-      headerType
-    }
     
     def parseBodyRow() {
       val rowMarker = mark
-      if(!currentIsSeparator)
-        parseCell()
+      if(!currentIsSeparator) parseCell()
       while(currentIsSeparator)
       {
         consumeSeparator()
