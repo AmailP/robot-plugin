@@ -16,8 +16,8 @@ object RobotParser extends PsiParser {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
         case SettingsHeader => parseTableItemsWith(parseSetting); Some(SettingsTable)
-        case TestCasesHeader => parseTableItemsWith(parseTestCase); Some(TestCasesTable)
-        case KeywordsHeader => parseTableItemsWith(parseKeyword); Some(KeywordsTable)
+        case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(TestCasesTable)
+        case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(KeywordsTable)
         case VariablesHeader => parseTableItemsWith(parseBodyRow); Some(VariablesTable)
         case _ => None
       }
@@ -45,11 +45,7 @@ object RobotParser extends PsiParser {
     def parseSetting() {
       val settingMarker = mark
       parseSettingFirstCell()
-      while(currentIsSeparator)
-      {
-        consumeSeparator()
-        parseCell()
-      }
+      parseRemainingCells()
       settingMarker done Setting
       consumeLineTerminator()
     }
@@ -64,59 +60,61 @@ object RobotParser extends PsiParser {
       }
     }
 
-    def parseTestCase() {
-      if(currentIsSpace) error("Title expected, not space")
-      val keywordMark = mark
-      parseTitle(TestCaseTitle)
-      //        parseKeywordSettings()
-      while(currentIsSeparator)
-        parseBodyRow()
-      keywordMark done TestCase
+    def parseTestCaseDefinition() {
+      parseDefinition(TestCaseName, TestCaseDefinition)
     }
 
-    def parseKeyword() {
-      if(currentIsSpace) error("Title expected, not space")
-      val keywordMark = mark
-      parseTitle(KeywordTitle)
-      //        parseKeywordSettings()
-      while(currentIsSeparator)
-        parseBodyRow()
-      keywordMark done Keyword
+    def parseKeywordDefinition() {
+      parseDefinition(KeywordName, KeywordDefinition)
     }
 
-    def parseTitle(titleType: IElementType) {
-      val titleMark = mark
-      parsePhrase()
-      titleMark done titleType
+    def parseDefinition(nameType: IElementType, definitionType: IElementType) {
+      if(currentIsSpace) error(s"$nameType expected, not space")
+      val keywordMark = mark
+      parseCell(nameType)
+      consumeLineTerminator()
+      while(currentIsSeparator) {
+        advanceLexer()
+        currentType match {
+          case TestCaseSetting => parseBodyRow()
+          case Variable => parseBodyRow()
+          case _ => parseAction()
+        }
+      }
+      keywordMark done definitionType
+    }
+
+    def parseAction() {
+      parseCell(KeywordName)
+      parseRemainingCells()
       consumeLineTerminator()
     }
     
     def parseBodyRow() {
       val rowMarker = mark
       if(!currentIsSeparator) parseCell()
-      while(currentIsSeparator)
-      {
-        consumeSeparator()
-        parseCell()
-      }
+      parseRemainingCells()
       consumeLineTerminator()
       rowMarker done TableRow
     }
 
-    def parseCell(): String = {
+    def parseCell(cellType: IElementType = NonEmptyCell): String = {
       val cellMarker = mark
-      val result = parsePhrase()
-      cellMarker done NonEmptyCell
-      result
-    }
-
-    def parsePhrase(): String = {
       val content = new StringBuilder
       while(!currentIsRowTerminator && currentType != Separator) {
         content append currentText
         advanceLexer()
       }
+      cellMarker done cellType
       content.result()
+    }
+
+    def parseRemainingCells() {
+      while(currentIsSeparator)
+      {
+        consumeSeparator()
+        parseCell()
+      }
     }
 
     def hasMoreTokens = !eof
