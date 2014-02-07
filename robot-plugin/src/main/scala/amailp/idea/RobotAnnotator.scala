@@ -17,6 +17,7 @@ class RobotAnnotator extends Annotator {
     element match {
       case Ellipsis(_) => highlightAs(LINE_COMMENT)
       case KeywordName(_) => highlightAs(KEYWORD)
+      case Keyword(_) => highlightAs(NUMBER)
       case TestCaseName(_) => highlightAs(LABEL)
       case SettingName(_) => highlightAs(INSTANCE_FIELD)
       case _ =>

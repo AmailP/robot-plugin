@@ -21,7 +21,7 @@ class RobotHighlighter extends SyntaxHighlighterBase {
     }
 
     tokenType match {
-      case token if HeaderTokens.contains(token) => arrayOfAttributesKeys(NUMBER)
+      case token if HeaderTokens.contains(token) => arrayOfAttributesKeys(METADATA)
       case Variable => arrayOfAttributesKeys(STRING)
       case TestCaseSetting => arrayOfAttributesKeys(INSTANCE_FIELD)
       case Comment => arrayOfAttributesKeys(LINE_COMMENT)

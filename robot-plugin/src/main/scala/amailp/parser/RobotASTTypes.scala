@@ -16,6 +16,7 @@ object RobotASTTypes {
   final val KeywordsTable: RobotIElementType = new RobotIElementType("KeywordsTable")
   final val KeywordName: RobotIElementType = new RobotIElementType("KeywordName")
   final val KeywordDefinition: RobotIElementType = new RobotIElementType("KeywordDefinition")
+  final val Keyword: RobotIElementType = new RobotIElementType("Keyword")
 
   final val VariablesTable: RobotIElementType = new RobotIElementType("VariablesTable")
   final val TableRow: RobotIElementType = new RobotIElementType("TableRow")

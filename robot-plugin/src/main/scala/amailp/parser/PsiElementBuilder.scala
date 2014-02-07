@@ -13,6 +13,7 @@ class PsiElementBuilder(node: ASTNode) {
       case SettingName => new amailp.psi.SettingName(node)
       case TestCaseName => new amailp.psi.TestCaseName(node)
       case KeywordName => new amailp.psi.KeywordName(node)
+      case Keyword => new amailp.psi.Keyword(node)
       case _ => new ASTWrapperPsiElement(node)
     }
   }

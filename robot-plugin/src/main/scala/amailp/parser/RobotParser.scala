@@ -55,7 +55,7 @@ object RobotParser extends PsiParser {
       val content = parseCell()
       content match {
         case amailp.psi.Ellipsis.string => firstCellMarker done Ellipsis
-        case _ @ cnt if Settings.names contains cnt => firstCellMarker done SettingName
+        case cnt if Settings.names contains cnt => firstCellMarker done SettingName
         case _ => firstCellMarker error "Settings name not known"
       }
     }
@@ -85,7 +85,7 @@ object RobotParser extends PsiParser {
     }
 
     def parseAction() {
-      parseCell(KeywordName)
+      parseCell(Keyword)
       parseRemainingCells()
       consumeLineTerminator()
     }

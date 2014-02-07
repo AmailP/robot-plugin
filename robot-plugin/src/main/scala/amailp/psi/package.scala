@@ -2,12 +2,15 @@ package amailp
 
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
+import com.intellij.psi.{PsiReferenceBase, PsiElement, PsiReference}
+import com.intellij.openapi.util.TextRange
 
 package object psi {
   case class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)
+  case class Keyword (node: ASTNode) extends ASTWrapperPsiElement(node)
   case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node)
 
   object Ellipsis {
