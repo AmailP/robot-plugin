@@ -21,6 +21,7 @@ Space = "\ "
 SpaceChars = [\ \t\f]
 Separator = [\t\f] | {SpaceChars} {SpaceChars}+
 Comment = "#" .*
+Ellipsis = \.\.\.
 
 SettingsHeader = "*** Settings ***" | "*** Setting ***"
 TestCasesHeader  = "*** Test Cases ***" | "*** Test Case ***"
@@ -63,6 +64,7 @@ ListVariable = "@{" {Word} "}"
         {KeywordsHeader}            { yybegin(LINE); return RobotTokenTypes.KeywordsHeader; }
         {VariablesHeader}           { yybegin(LINE); return RobotTokenTypes.VariablesHeader; }
 
+        {Ellipsis}                  { yybegin(LINE); return RobotTokenTypes.Ellipsis; }
         {Variable}                  { yybegin(LINE); return RobotTokenTypes.Variable; }
         {ListVariable}              { yybegin(LINE); return RobotTokenTypes.ListVariable; }
         {TestCaseSetting}           { yybegin(LINE); return RobotTokenTypes.TestCaseSetting; }

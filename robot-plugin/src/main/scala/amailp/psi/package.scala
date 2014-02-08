@@ -40,10 +40,6 @@ package object psi {
     override def handleContentChange(element: Keyword, range: TextRange, newContent: String): Keyword = null
   }
 
-  object Ellipsis {
-    val string = "..."
-  }
-
   object Settings {
     val names = Set[String]("Library", "Resource", "Variables", "Documentation", "Metadata", "Suite Setup",
       "Suite Teardown", "Suite Precondition", "Suite Postcondition", "Force Tags", "Default Tags", "Test Setup",

@@ -52,9 +52,11 @@ object RobotParser extends PsiParser {
 
     def parseSettingFirstCell() {
       val firstCellMarker = mark
-      val content = parseCell()
-      content match {
-        case amailp.psi.Ellipsis.string => firstCellMarker done Ellipsis
+      if(currentType == Ellipsis) {
+        advanceLexer()
+        firstCellMarker done Ellipsis
+      }
+      else parseCell() match {
         case cnt if Settings.names contains cnt => firstCellMarker done SettingName
         case _ => firstCellMarker error "Settings name not known"
       }
@@ -70,7 +72,7 @@ object RobotParser extends PsiParser {
 
     def parseDefinition(nameType: IElementType, definitionType: IElementType) {
       if(currentIsSpace) error(s"$nameType expected, not space")
-      val keywordMark = mark
+      val definitionMark = mark
       parseCell(nameType)
       consumeLineTerminator()
       while(currentIsSeparator) {
@@ -78,10 +80,11 @@ object RobotParser extends PsiParser {
         currentType match {
           case TestCaseSetting => parseBodyRow()
           case Variable => parseBodyRow()
+          case Ellipsis => parseCell(Ellipsis); parseBodyRow()
           case _ => parseAction()
         }
       }
-      keywordMark done definitionType
+      definitionMark done definitionType
     }
 
     def parseAction() {

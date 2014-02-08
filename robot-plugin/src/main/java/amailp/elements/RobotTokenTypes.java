@@ -16,6 +16,7 @@ public interface RobotTokenTypes {
     final IElementType KeywordsHeader = new RobotIElementType("KeywordsHeader");
     final IElementType VariablesHeader = new RobotIElementType("VariablesHeader");
 
+    final IElementType Ellipsis = new RobotIElementType("Ellipsis");
     final IElementType Variable = new RobotIElementType("Variable");
     final IElementType ListVariable = new RobotIElementType("ListVariable");
     final IElementType TestCaseSetting = new RobotIElementType("TestCaseSetting");

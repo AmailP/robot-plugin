@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import RobotASTTypes._
+import amailp.elements.RobotTokenTypes.Ellipsis
 
 class PsiElementBuilder(node: ASTNode) {
   def build(): PsiElement = {

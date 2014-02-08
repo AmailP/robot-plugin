@@ -3,8 +3,6 @@ package amailp.parser
 import amailp.elements.RobotIElementType
 
 object RobotASTTypes {
-  final val Ellipsis: RobotIElementType = new RobotIElementType("Ellipsis")
-
   final val SettingsTable: RobotIElementType = new RobotIElementType("SettingsTable")
   final val Setting: RobotIElementType = new RobotIElementType("Setting")
   final val SettingName: RobotIElementType = new RobotIElementType("SettingName")

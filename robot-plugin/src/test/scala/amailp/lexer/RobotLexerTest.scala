@@ -87,6 +87,13 @@ class RobotLexerTest extends _BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.BlankLine)
   }
 
+  test("Ellipsis") {
+    scanString(" ...\n")
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIsType(RobotTokenTypes.Ellipsis)
+    nextTokenIsType(RobotTokenTypes.LineTerminator)
+  }
+
   test("All") {
     val s: String = new Scanner(this.getClass.getClassLoader.getResourceAsStream("complete.robot")).useDelimiter("\\A").next
     scanString(s)
