@@ -13,9 +13,7 @@ package object psi {
   case class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)
-  case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) with PsiNamedElement{
-    override def setName(name: String): PsiElement = node.
-  }
+  case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node)
 
   case class Keyword (node: ASTNode) extends ASTWrapperPsiElement(node) {
     override lazy val getReference: PsiReference = new KeywordReference(this)
@@ -24,15 +22,15 @@ package object psi {
   class KeywordReference(element: Keyword) extends PsiReferenceBase[Keyword](element: Keyword){
     override def resolve(): PsiElement = {
       val textToBeFound = element.getText
-      fileDefinedKeywords find ( _.getText == textToBeFound ) match {
-        case Some(keyword) => keyword
+      fileDefinedKeywordNames find ( _.getText == textToBeFound ) match {
+        case Some(keyword) => keyword.getParent
         case None => null
       }
     }
 
-    override def getVariants: Array[AnyRef] = fileDefinedKeywords.map(_.getText).toArray
+    override def getVariants: Array[AnyRef] = fileDefinedKeywordNames.map(_.getText).toArray
 
-    private def fileDefinedKeywords = {
+    private def fileDefinedKeywordNames = {
       val currentFile: RobotFile = PsiTreeUtil.getParentOfType(element, classOf[RobotFile])
       PsiTreeUtil findChildrenOfType (currentFile, classOf[KeywordName])
     }
