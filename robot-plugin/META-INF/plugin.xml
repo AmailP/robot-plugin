@@ -44,5 +44,7 @@
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.idea.RobotParserDefinition"/>
         <fileTypeFactory implementation="amailp.file.RobotFileTypeFactory" />
         <toolWindow anchor="right" icon="/amailp/toolWindowRobot.png" id="Robot Framework" factoryClass="amailp.toolWindow.RobotToolWindowFactory" />
+
+        <lang.elementManipulator forClass="amailp.psi.package$Keyword" implementationClass="amailp.psi.package$KeywordManipulator"/>
     </extensions>
 </idea-plugin>
