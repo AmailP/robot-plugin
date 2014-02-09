@@ -45,7 +45,7 @@
         <fileTypeFactory implementation="amailp.file.RobotFileTypeFactory" />
         <toolWindow anchor="right" icon="/amailp/toolWindowRobot.png" id="Robot Framework" factoryClass="amailp.toolWindow.RobotToolWindowFactory" />
 
-        <lang.elementManipulator forClass="amailp.psi.package$Keyword" implementationClass="amailp.psi.package$KeywordManipulator"/>
-        <lang.elementManipulator forClass="amailp.psi.package$ResourceValue" implementationClass="amailp.psi.package$ResourceValueManipulator"/>
+        <lang.elementManipulator forClass="amailp.psi.Keyword" implementationClass="amailp.psi.KeywordManipulator"/>
+        <lang.elementManipulator forClass="amailp.psi.ResourceValue" implementationClass="amailp.psi.ResourceValueManipulator"/>
     </extensions>
 </idea-plugin>
