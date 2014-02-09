@@ -5,13 +5,14 @@ import com.intellij.psi.tree.IElementType
 import amailp.parser.RobotASTTypes._
 import amailp.elements.RobotTokenTypes._
 import com.intellij.lang.impl.PsiBuilderAdapter
+import com.intellij.lang.PsiBuilder.Marker
 
 package object parser {
   trait SubParser {
     def parse(implicit builder: RobotPsiBuilder)
   }
 
-  class RobotPsiBuilder(builder: PsiBuilder) extends PsiBuilderAdapter(builder) {
+  implicit class RobotPsiBuilder(builder: PsiBuilder) extends PsiBuilderAdapter(builder) {
     def currentType = getTokenType
     def currentText = getTokenText
 
@@ -23,15 +24,18 @@ package object parser {
       rowMarker done TableRow
     }
 
-    def parseCell(cellType: IElementType = NonEmptyCell): String = {
+    def parseCell(cellType: IElementType = NonEmptyCell): IElementType = {
+      parseCell((m, _) => {m done cellType; cellType})
+    }
+
+    def parseCell(terminateMarker: (Marker, String) => IElementType): IElementType = {
       val cellMarker = mark
-      val content = new StringBuilder
+      val contentBuilder = new StringBuilder
       while(!currentIsRowTerminator && currentType != Separator) {
-        content append currentText
+        contentBuilder append currentText
         advanceLexer()
       }
-      cellMarker done cellType
-      content.result()
+      terminateMarker(cellMarker, contentBuilder.result())
     }
 
     def parseRemainingCells() {

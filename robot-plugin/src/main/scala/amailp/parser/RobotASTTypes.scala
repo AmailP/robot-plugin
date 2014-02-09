@@ -6,6 +6,8 @@ object RobotASTTypes {
   final val SettingsTable: RobotIElementType = new RobotIElementType("SettingsTable")
   final val Setting: RobotIElementType = new RobotIElementType("Setting")
   final val SettingName: RobotIElementType = new RobotIElementType("SettingName")
+  final val ResourceName: RobotIElementType = new RobotIElementType("ResourceName")
+  final val ResourceValue: RobotIElementType = new RobotIElementType("ResourceValue")
 
   final val TestCasesTable: RobotIElementType = new RobotIElementType("TestCasesTable")
   final val TestCaseName: RobotIElementType = new RobotIElementType("TestCaseTitle")
