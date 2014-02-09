@@ -4,25 +4,23 @@ import com.intellij.lang.{ASTNode, PsiBuilder, PsiParser}
 import com.intellij.psi.tree.IElementType
 import amailp.elements.RobotTokenTypes._
 import RobotASTTypes._
-import amailp.psi.Settings
 
 object RobotParser extends PsiParser {
   def parse(root: IElementType, builder: PsiBuilder): ASTNode = {
-    import builder._
-    def currentType = getTokenType
-    def currentText = getTokenText
+    implicit val robotBuilder = new RobotPsiBuilder(builder)
+    import robotBuilder._
 
     def parseTable() {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
-        case SettingsHeader => parseTableItemsWith(parseSetting); Some(SettingsTable)
+        case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(SettingsTable)
         case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(TestCasesTable)
         case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(KeywordsTable)
         case VariablesHeader => parseTableItemsWith(parseBodyRow); Some(VariablesTable)
         case _ => None
       }
       tableType match {
-        case Some(typ) => tableMarker done typ
+        case Some(t) => tableMarker done t
         case None => tableMarker drop()
       }
     }
@@ -37,29 +35,14 @@ object RobotParser extends PsiParser {
       headerType
     }
 
+    def parseTableItemsWithSubParser(subParser: SubParser) {
+      while(hasMoreTokens && !isHeader(currentType))
+        subParser.parse
+    }
+
     def parseTableItemsWith(parseItem: () => Unit) {
       while(hasMoreTokens && !isHeader(currentType))
         parseItem()
-    }
-
-    def parseSetting() {
-      val settingMarker = mark
-      parseSettingFirstCell()
-      parseRemainingCells()
-      settingMarker done Setting
-      consumeLineTerminator()
-    }
-
-    def parseSettingFirstCell() {
-      val firstCellMarker = mark
-      if(currentType == Ellipsis) {
-        advanceLexer()
-        firstCellMarker done Ellipsis
-      }
-      else parseCell() match {
-        case cnt if Settings.names contains cnt => firstCellMarker done SettingName
-        case _ => firstCellMarker error "Settings name not known"
-      }
     }
 
     def parseTestCaseDefinition() {
@@ -92,53 +75,6 @@ object RobotParser extends PsiParser {
       parseRemainingCells()
       consumeLineTerminator()
     }
-    
-    def parseBodyRow() {
-      val rowMarker = mark
-      if(!currentIsSeparator) parseCell()
-      parseRemainingCells()
-      consumeLineTerminator()
-      rowMarker done TableRow
-    }
-
-    def parseCell(cellType: IElementType = NonEmptyCell): String = {
-      val cellMarker = mark
-      val content = new StringBuilder
-      while(!currentIsRowTerminator && currentType != Separator) {
-        content append currentText
-        advanceLexer()
-      }
-      cellMarker done cellType
-      content.result()
-    }
-
-    def parseRemainingCells() {
-      while(currentIsSeparator)
-      {
-        consumeSeparator()
-        parseCell()
-      }
-    }
-
-    def hasMoreTokens = !eof
-
-    def currentIsSpace = currentIsSeparator || currentType == Space
-
-    def currentIsSeparator = currentType == Separator
-
-    def currentIsRowTerminator = currentType == LineTerminator || eof
-
-    def consumeSeparator() {
-      if(!currentIsSeparator) error("Cell separator expected")
-      advanceLexer()
-    }
-
-    def consumeLineTerminator() {
-      if (!currentIsRowTerminator) error("Line terminator expected")
-      advanceLexer()
-    }
-    
-    def isHeader(token: IElementType) = HeaderTokens contains token
 
     builder.setDebugMode(true)
     val rootMarker = mark
