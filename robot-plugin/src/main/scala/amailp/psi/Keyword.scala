@@ -12,11 +12,18 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) {
 }
 
 class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](element) {
+
+  def sameTextAsKeyword(keywordName: KeywordName) = keywordName.getText == element.getText
+
   override def resolve() = {
-    val textToBeFound = element.getText
-    fileDefinedKeywordNames find (_.getText == textToBeFound) match {
+    fileDefinedKeywordNames find sameTextAsKeyword match {
       case Some(keyword) => keyword.getParent
-      case None => null
+      case None => currentRobotFile.getRecursivelyImportedRobotFiles
+          .flatMap(_.getDefinedKeywordNames)
+          .find(sameTextAsKeyword) match {
+          case Some(keyword) => keyword.getParent
+          case None => null
+        }
     }
   }
 
