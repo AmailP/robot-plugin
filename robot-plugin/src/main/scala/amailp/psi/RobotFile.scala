@@ -21,15 +21,13 @@ class RobotFile(viewProvider: FileViewProvider)
   override def getIcon(flags: Int): Icon = super.getIcon(flags)
 
   def getDefinedKeywordNames = PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[KeywordName]).toSet
-  def getImportedRobotFiles = {
-    PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue])
-      .toIterable
-      .map(resourceName => getVirtualFile.getParent.findFileByRelativePath(resourceName.getText))
-      .filterNot(_ == null)
-      .map(file => PsiManager.getInstance(getProject).findFile(file))
-      .filter(_.isInstanceOf[RobotFile])
-      .map(_.asInstanceOf[RobotFile])
-      .toSet[RobotFile]
+  def getImportedRobotFiles: Set[RobotFile] = {
+    val currentDir = getVirtualFile.getParent
+    for (
+      resourceValue: ResourceValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue]).toSet;
+      linkedFile = currentDir.findFileByRelativePath(resourceValue.getText) if !(linkedFile == null);
+      robotFile = PsiManager.getInstance(getProject).findFile(linkedFile) if robotFile.isInstanceOf[RobotFile]
+    ) yield robotFile.asInstanceOf[RobotFile]
   }
 
   def getRecursivelyImportedRobotFiles = {
