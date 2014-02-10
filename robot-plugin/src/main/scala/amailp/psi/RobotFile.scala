@@ -21,8 +21,9 @@ class RobotFile(viewProvider: FileViewProvider)
   override def getIcon(flags: Int): Icon = super.getIcon(flags)
 
   def getDefinedKeywordNames = PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[KeywordName]).toSet
+
   def getImportedRobotFiles: Set[RobotFile] = {
-    val currentDir = getVirtualFile.getParent
+    val currentDir = getOriginalFile.getVirtualFile.getParent
     for (
       resourceValue: ResourceValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue]).toSet;
       linkedFile = currentDir.findFileByRelativePath(resourceValue.getText) if !(linkedFile == null);

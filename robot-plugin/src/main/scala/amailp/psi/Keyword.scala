@@ -13,7 +13,7 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) {
 
 class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](element) {
 
-  def sameTextAsKeyword(keywordName: KeywordName) = keywordName.getText == element.getText
+  def sameTextAsKeyword(keywordName: KeywordName) = keywordName.getText equalsIgnoreCase element.getText
 
   override def resolve() = {
     fileDefinedKeywordNames find sameTextAsKeyword match {
@@ -27,7 +27,16 @@ class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](ele
     }
   }
 
-  override def getVariants: Array[AnyRef] = fileDefinedKeywordNames.map(_.getText).toArray
+  override def getVariants: Array[AnyRef] = {
+    val externalKeywordNames: Set[KeywordName] = for {
+      robotFile: RobotFile <- currentRobotFile.getRecursivelyImportedRobotFiles.toSet
+      externalKeywordName: KeywordName <- robotFile.getDefinedKeywordNames
+    } yield externalKeywordName
+
+    for {
+      keywordname <- (externalKeywordNames | fileDefinedKeywordNames.toSet).toArray
+    } yield keywordname.getText
+  }
 
   private def fileDefinedKeywordNames = {
     PsiTreeUtil findChildrenOfType(currentRobotFile, classOf[KeywordName])

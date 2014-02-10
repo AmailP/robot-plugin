@@ -13,9 +13,9 @@ package object psi {
   case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node)
 
   abstract class RobotReferenceBase[T <: PsiElement](element: T) extends PsiReferenceBase[T](element){
-    def currentRobotFile = PsiTreeUtil.getParentOfType(element, classOf[RobotFile])
+    def currentRobotFile = PsiTreeUtil.getParentOfType(getElement, classOf[RobotFile])
     def currentFile = currentRobotFile.getVirtualFile
     def currentDirectory = currentFile.getParent
-    def psiManager = PsiManager.getInstance(element.getProject)
+    def psiManager = PsiManager.getInstance(getElement.getProject)
   }
 }
