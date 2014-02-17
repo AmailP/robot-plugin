@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>amailp.robot</id>
     <name>Robotframework Support</name>
-    <version>0.2</version>
+    <version>0.3</version>
     <vendor email="valerio.angelini@here.com" url="http://www.here.com">HERE</vendor>
 
     <description><![CDATA[
