@@ -1,12 +1,28 @@
 <component name="ArtifactManager">
   <artifact name="plugin-installer">
     <output-path>$PROJECT_DIR$/out/artifacts/plugin_installer</output-path>
+    <properties id="ant-postprocessing">
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/build.xml</file>
+        <target>copy-with-version</target>
+      </options>
+    </properties>
+    <properties id="ant-preprocessing">
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/build.xml</file>
+        <target>shrink-scala-library</target>
+        <build-properties>
+          <build-property name="pluginJar.path" value="$PROJECT_DIR$/out/artifacts/plugin_jar/robot-plugin.jar" />
+          <build-property name="ideaLib.path" value="$APPLICATION_HOME_DIR$/lib" />
+        </build-properties>
+      </options>
+    </properties>
     <root id="root">
       <element id="archive" name="robot-plugin.zip">
         <element id="directory" name="robot-plugin">
           <element id="directory" name="lib">
-            <element id="library" level="project" name="scala-library" />
             <element id="artifact" artifact-name="plugin-jar" />
+            <element id="dir-copy" path="$PROJECT_DIR$/out/artifacts/plugin_installer/proguard" />
           </element>
         </element>
       </element>

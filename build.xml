@@ -1,0 +1,43 @@
+<project name="Artifact Tasks" default="shrink-scala-library">
+
+    <property name="version" value="0.4"/>
+
+    <!-- The following properties are overridden by the artifact builder -->
+    <property name="artifact.output.path" value="."/>
+    <property name="pluginJar.path" value="out/artifacts/plugin_jar/robot-plugin.jar"/>
+    <property name="ideaLib.path" value="/Applications/IntelliJ IDEA 13.app/lib"/>
+
+    <target name="replace-version">
+        <replace file="${artifact.output.path}/META-INF/plugin.xml" token="@SNAPSHOT@" value="${version}" />
+    </target>
+
+    <target name="shrink-scala-library">
+        <taskdef resource="proguard/ant/task.properties" classpath="lib/proguard.jar" />
+
+        <proguard printmapping="out.map"
+                  renamesourcefileattribute="SourceFile"
+                  obfuscate="false"
+                  optimize="false"
+                  shrink="true">
+
+            <injar file="${pluginJar.path}" filter="!META-INF/**"/>
+            <injar  file="lib/scala-library.jar" />
+            <outjar file="${artifact.output.path}/proguard/shrinked-scala-library.jar" filter="!amailp/**,!icons/**"/>
+
+            <libraryjar file="${ideaLib.path}/openapi.jar" />
+            <libraryjar file="${ideaLib.path}/util.jar" />
+            <libraryjar file="${ideaLib.path}/idea.jar" />
+            <libraryjar file="${ideaLib.path}/annotations.jar" />
+            <libraryjar file="${ideaLib.path}/extensions.jar" />
+            <libraryjar file="${java.home}/lib/rt.jar" />
+
+            <dontwarn filter="scala.**" />
+
+            <keep name="amailp/**" />
+        </proguard>
+    </target>
+
+    <target name="copy-with-version">
+        <copy file="${artifact.output.path}/robot-plugin.zip" tofile="robot-plugin-${version}.zip" />
+    </target>
+</project>

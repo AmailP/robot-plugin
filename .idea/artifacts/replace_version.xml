@@ -1,0 +1,16 @@
+<component name="ArtifactManager">
+  <artifact name="replace-version">
+    <output-path>$PROJECT_DIR$/out/artifacts/replace_version</output-path>
+    <properties id="ant-postprocessing">
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/build.xml</file>
+        <target>replace-version</target>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="META-INF">
+        <element id="dir-copy" path="$PROJECT_DIR$/META-INF" />
+      </element>
+    </root>
+  </artifact>
+</component>
