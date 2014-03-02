@@ -1,0 +1,15 @@
+<component name="ArtifactManager">
+  <artifact name="plugin-installer">
+    <output-path>$PROJECT_DIR$/out/artifacts/plugin_installer</output-path>
+    <root id="root">
+      <element id="archive" name="robot-plugin.zip">
+        <element id="directory" name="robot-plugin">
+          <element id="directory" name="lib">
+            <element id="library" level="project" name="scala-library" />
+            <element id="artifact" artifact-name="plugin-jar" />
+          </element>
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
