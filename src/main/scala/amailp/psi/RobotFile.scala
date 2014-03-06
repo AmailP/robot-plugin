@@ -4,7 +4,7 @@ import com.intellij.psi.{PsiManager, FileViewProvider}
 import com.intellij.extapi.psi.PsiFileBase
 import amailp.idea.RobotLanguage
 import com.intellij.openapi.fileTypes.FileType
-import amailp.file.RobotFileType
+import amailp.idea.RobotFileType
 import java.lang.String
 import javax.swing.Icon
 import scala.annotation.tailrec
@@ -14,7 +14,7 @@ import scala.collection.JavaConversions._
 class RobotFile(viewProvider: FileViewProvider)
   extends PsiFileBase(viewProvider, RobotLanguage) {
 
-  def getFileType: FileType = RobotFileType.INSTANCE
+  def getFileType: FileType = RobotFileType
 
   override def toString: String = "RobotFile: " + getVirtualFile.getName
 

@@ -46,7 +46,7 @@
         <annotator language="Robotframework" implementationClass="amailp.idea.RobotAnnotator"/>
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.idea.RobotHighlighterFactory"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.idea.RobotParserDefinition"/>
-        <fileTypeFactory implementation="amailp.file.RobotFileTypeFactory" />
+        <fileTypeFactory implementation="amailp.idea.RobotFileTypeFactory" />
         <toolWindow anchor="right" icon="/icons/robo_toolwin_13.png" id="Robot Framework" factoryClass="amailp.toolWindow.RobotToolWindowFactory" />
 
         <lang.elementManipulator forClass="amailp.psi.Keyword" implementationClass="amailp.psi.KeywordManipulator"/>
