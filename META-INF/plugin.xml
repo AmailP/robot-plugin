@@ -37,6 +37,9 @@
         <group id="RobotPlugin.SampleMenu" text="_Sample Menu" description="Sample menu">
             <add-to-group group-id="MainMenu" relative-to-action="HelpMenu" anchor="before" />
         </group>
+        <action id="Robot.NewFile" class="amailp.actions.NewRobotFileAction" text="Robot File" description="Create a new Robot file">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
@@ -48,5 +51,7 @@
 
         <lang.elementManipulator forClass="amailp.psi.Keyword" implementationClass="amailp.psi.KeywordManipulator"/>
         <lang.elementManipulator forClass="amailp.psi.ResourceValue" implementationClass="amailp.psi.ResourceValueManipulator"/>
+        <internalFileTemplate name="Robot Test Suite"/>
+        <internalFileTemplate name="Robot Keywords"/>
     </extensions>
 </idea-plugin>
