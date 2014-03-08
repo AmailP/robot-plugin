@@ -2,7 +2,7 @@
     <id>amailp.robot</id>
     <name>Robot Framework Support</name>
     <version>@SNAPSHOT@</version>
-    <vendor email="amailp@gmail.com">HERE</vendor>
+    <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
 
