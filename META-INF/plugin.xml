@@ -1,56 +1,52 @@
 <idea-plugin version="2">
-    <id>amailp.robot</id>
+    <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
     <version>@SNAPSHOT@</version>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
+      Basic support for Robot Framework
+      <ul>
+        <li>Syntax highlighting</li>
+        <li>Code autocompletion</li>
+        <li>Jump to source</li>
+      </ul>
 
-      Enter short description for your amailp.plugin here.<br>
-      <small>most HTML tags may be used</small>
       ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <small>most HTML tags may be used</small>
+      0.6
+      <ul>
+        <li>Robot File templates added</li>
+        <li>Support added for JetBrains products other than IntelliJ</li>
+      </ul>
       ]]>
     </change-notes>
 
-    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
-    <idea-version since-build="129.1328"/>
+    <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
+    <idea-version since-build="123.72"/>
 
-    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-         on how to target different products -->
-    <!-- uncomment to enable amailp.plugin in all products
+    <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
-    -->
 
-    <application-components>
-        <!-- Add your application components here -->
-    </application-components>
+    <application-components/>
 
-    <project-components>
-        <!-- Add your project components here -->
-    </project-components>
+    <project-components/>
 
     <actions>
-        <group id="RobotPlugin.SampleMenu" text="_Sample Menu" description="Sample menu">
-            <add-to-group group-id="MainMenu" relative-to-action="HelpMenu" anchor="before" />
-        </group>
-        <action id="Robot.NewFile" class="amailp.actions.NewRobotFileAction" text="Robot File" description="Create a new Robot file">
+        <action id="Robot.NewFile" class="amailp.intellij.robot.actions.NewRobotFileAction" text="Robot File" description="Create a new Robot file">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="Robotframework" implementationClass="amailp.idea.RobotAnnotator"/>
-        <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.idea.RobotHighlighterFactory"/>
-        <lang.parserDefinition language="Robotframework" implementationClass="amailp.idea.RobotParserDefinition"/>
-        <fileTypeFactory implementation="amailp.idea.RobotFileTypeFactory" />
-        <toolWindow anchor="right" icon="/icons/robo_toolwin_13.png" id="Robot Framework" factoryClass="amailp.toolWindow.RobotToolWindowFactory" />
+        <annotator language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotAnnotator"/>
+        <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotHighlighterFactory"/>
+        <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotParserDefinition"/>
+        <fileTypeFactory implementation="amailp.intellij.robot.idea.RobotFileTypeFactory" />
 
-        <lang.elementManipulator forClass="amailp.psi.Keyword" implementationClass="amailp.psi.KeywordManipulator"/>
-        <lang.elementManipulator forClass="amailp.psi.ResourceValue" implementationClass="amailp.psi.ResourceValueManipulator"/>
+        <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.KeywordManipulator"/>
+        <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.ResourceValueManipulator"/>
         <internalFileTemplate name="Robot Test Suite"/>
         <internalFileTemplate name="Robot Keywords"/>
     </extensions>
