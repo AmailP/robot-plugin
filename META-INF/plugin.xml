@@ -8,17 +8,33 @@
       Basic support for Robot Framework
       <ul>
         <li>Syntax highlighting</li>
-        <li>Code autocompletion</li>
+        <li>Code completion</li>
         <li>Jump to source</li>
       </ul>
-
       ]]></description>
 
     <change-notes><![CDATA[
-      0.6
+      0.6 - 11 mar 2014
       <ul>
         <li>Robot File templates added</li>
         <li>Support added for JetBrains products other than IntelliJ</li>
+        <li>First version published on repo</li>
+      </ul>
+      0.5 - 3 mar 2014
+      <ul>
+        <li>Rewritten build scripts, the plugin size is 10% compared to the old one (~6MB to 650KB)</li>
+      </ul>
+      0.3 - 12 feb 2014
+      <ul>
+        <li>Keyword autocompletion support (not working still for python defined keywords)</li>
+        <li>Jump to definition support (ctrl-click) for keywords and resources</li>
+        <li>Quick preview support (ctrl-shift-i)</li>
+        <li>Improved highlighting: Ellipsis</li>
+      </ul>
+      0.2 - 6 feb 2014
+      <ul>
+        <li>Improved highlighting: Comments, Settings, Ellipsis</li>
+        <li>Minor bugs fixed</li>
       </ul>
       ]]>
     </change-notes>
