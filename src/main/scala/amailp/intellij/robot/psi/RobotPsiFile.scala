@@ -10,6 +10,7 @@ import javax.swing.Icon
 import scala.annotation.tailrec
 import com.intellij.psi.util.PsiTreeUtil
 import scala.collection.JavaConversions._
+import scala.collection.immutable.Stream.Empty
 
 class RobotPsiFile(viewProvider: FileViewProvider)
   extends PsiFileBase(viewProvider, RobotLanguage) {
@@ -22,26 +23,27 @@ class RobotPsiFile(viewProvider: FileViewProvider)
 
   def getDefinedKeywordNames = PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[KeywordName]).toSet
 
-  def getImportedRobotFiles: Set[RobotPsiFile] = {
+  def getImportedRobotFiles: Stream[RobotPsiFile] = {
     val currentDir = getOriginalFile.getVirtualFile.getParent
     for (
-      resourceValue: ResourceValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue]).toSet;
+      resourceValue: ResourceValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue]).toStream;
       linkedFile = currentDir.findFileByRelativePath(resourceValue.getText) if !(linkedFile == null);
       robotFile = PsiManager.getInstance(getProject).findFile(linkedFile) if robotFile.isInstanceOf[RobotPsiFile]
     ) yield robotFile.asInstanceOf[RobotPsiFile]
   }
 
-  def getRecursivelyImportedRobotFiles = {
+  def getRecursivelyImportedRobotFiles: Stream[RobotPsiFile] = {
     @tailrec
-    def visit(toVisit: Set[RobotPsiFile], visited: Set[RobotPsiFile], accumulator: Set[RobotPsiFile]): Set[RobotPsiFile] = {
-      if(toVisit.isEmpty){
-        accumulator
-      } else {
-        val head = toVisit.head
-        val importedFromHead = head.getImportedRobotFiles
-        visit(toVisit - head | importedFromHead, visited + head, accumulator | importedFromHead )
+    def visit(toVisit: Stream[RobotPsiFile], visited: Set[RobotPsiFile], accumulator: Stream[RobotPsiFile]): Stream[RobotPsiFile] = {
+      toVisit match {
+        case head #:: tail if visited.contains(head) =>
+          visit(toVisit.tail, visited, accumulator)
+        case head #:: tail if !visited.contains(head) =>
+          val importedFromHead = head.getImportedRobotFiles
+          visit(toVisit.tail #::: importedFromHead, visited + head, accumulator #::: importedFromHead )
+        case Empty => accumulator
       }
     }
-    visit(Set(this), Set(), Set())
+    visit(Stream(this), Set(), Stream())
   }
 }

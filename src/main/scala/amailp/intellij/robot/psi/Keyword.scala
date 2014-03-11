@@ -7,6 +7,9 @@ import scala.collection.JavaConversions._
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 
+/**
+ * An instance of a keyword when is used
+ */
 case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) {
   override lazy val getReference: PsiReference = new KeywordReference(this)
 
@@ -21,7 +24,7 @@ class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](ele
 
   def sameTextAsKeyword(keywordName: KeywordName) = keywordName.getText equalsIgnoreCase element.getText
 
-  private def findKeywordNamesInRobotFiles(files: Iterable[RobotPsiFile], original: String = element.getText) = {
+  private def findKeywordNamesInRobotFiles(files: Stream[RobotPsiFile], original: String = element.getText) = {
     for {
       file <- files
       fileKeywordName <- file.getDefinedKeywordNames
@@ -30,30 +33,17 @@ class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](ele
   }
 
   override def resolve() = {
-    findKeywordNamesInRobotFiles(List(currentRobotFile)).headOption match {
+    findKeywordNamesInRobotFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles).headOption match {
       case Some(keyword) => keyword
-      case None => findKeywordNamesInRobotFiles(currentRobotFile.getRecursivelyImportedRobotFiles).headOption match {
-        case Some(keyword) => keyword
-        case None => element.getTextStrippedFromIgnored match {
-          case Some(strippedKeywordName) => findKeywordNamesInRobotFiles(List(currentRobotFile), strippedKeywordName).headOption match {
-            case Some(keyword) => keyword
-            case None => findKeywordNamesInRobotFiles(currentRobotFile.getRecursivelyImportedRobotFiles, strippedKeywordName).headOption match {
-              case Some(keyword) => keyword
-              case None => null
-            }
-          }
+      case None => element.getTextStrippedFromIgnored match {
+        case Some(strippedKeywordName) => findKeywordNamesInRobotFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, strippedKeywordName).headOption match {
+          case Some(keyword) => keyword
           case None => null
         }
+        case None => null
       }
     }
   }
-
-  private def stripIgnored = for {
-    prefix <- List("given", "when", "then", "and")
-    if element.getText.toLowerCase.startsWith(prefix)
-    stripped = element.getText.toLowerCase.replaceFirst(prefix, "").trim
-  } yield stripped
-
 
   override def getVariants: Array[AnyRef] = {
     val externalKeywordNames: Set[KeywordName] = for {
@@ -67,7 +57,7 @@ class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](ele
   }
 
   private def fileDefinedKeywordNames = {
-    findKeywordNamesInRobotFiles(List(currentRobotFile))
+    findKeywordNamesInRobotFiles(Stream(currentRobotFile))
   }
 }
 
