@@ -6,6 +6,8 @@ import com.intellij.openapi.util.TextRange
 import scala.collection.JavaConversions._
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
+import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
+
 
 /**
  * An instance of a keyword when is used
@@ -14,10 +16,14 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) {
   override lazy val getReference: PsiReference = new KeywordReference(this)
 
   lazy val getTextStrippedFromIgnored = (for {
-    prefix <- List("given", "when", "then", "and")
-    if getText.toLowerCase.startsWith(prefix)
+    prefix <- Keyword.ignoredPrefixes
+    if getText.toLowerCase.startsWith(prefix.toLowerCase)
     stripped = getText.toLowerCase.replaceFirst(prefix, "").trim
   } yield stripped).headOption
+}
+
+object Keyword {
+  val ignoredPrefixes = List("Given", "When", "Then", "And")
 }
 
 class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](element) {
@@ -45,15 +51,26 @@ class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](ele
     }
   }
 
-  override def getVariants: Array[AnyRef] = {
+  override def getVariants = {
     val externalKeywordNames: Set[KeywordName] = for {
       robotFile: RobotPsiFile <- currentRobotFile.getRecursivelyImportedRobotFiles.toSet
       externalKeywordName: KeywordName <- robotFile.getDefinedKeywordNames
     } yield externalKeywordName
 
-    for {
-      keywordName <- (externalKeywordNames | fileDefinedKeywordNames.toSet).toArray
-    } yield keywordName.getText
+    val keywords = (externalKeywordNames | fileDefinedKeywordNames.toSet).map(_.getText)
+
+    val prefixedKeywords = for {
+      keyword <- keywords
+      prefix <- Keyword.ignoredPrefixes
+    } yield s"$prefix $keyword"
+
+    for (
+      keyword <- (keywords | prefixedKeywords).toArray
+    ) yield LookupElementBuilder.create(keyword)
+      .withCaseSensitivity(false)
+      .withTypeText("Keyword", true)
+      .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
+      .asInstanceOf[AnyRef]
   }
 
   private def fileDefinedKeywordNames = {
