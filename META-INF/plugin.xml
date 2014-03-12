@@ -14,7 +14,7 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.7 - xxx
+      0.7 - 12 mar 2014
       <ul>
         <li>Given/When/Then/And are ignored in jump to definition</li>
         <li>Given/When/Then/And are proposed in autocompletion for any keyword</li>
