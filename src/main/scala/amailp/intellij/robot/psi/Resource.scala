@@ -12,7 +12,7 @@ case class ResourceValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
 
 class ResourceValueReference(element: ResourceValue) extends RobotReferenceBase[ResourceValue](element){
   override def resolve() = {
-    Option[VirtualFile](currentDirectory.findFileByRelativePath(element.getText)) match {
+    Option[VirtualFile](currentDirectory.findFileByRelativePath(getElement.getText)) match {
       case Some(targetFile) => psiManager.findFile(targetFile)
       case None => null
     }

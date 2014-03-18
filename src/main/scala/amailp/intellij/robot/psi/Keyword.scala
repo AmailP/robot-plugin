@@ -1,9 +1,7 @@
 package amailp.intellij.robot.psi
 
-import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.{PsiElement, PsiReference, AbstractElementManipulator}
+import com.intellij.psi.{PsiReference, AbstractElementManipulator}
 import com.intellij.openapi.util.TextRange
-import scala.collection.JavaConversions._
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
@@ -17,8 +15,9 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) {
 
   lazy val getTextStrippedFromIgnored = (for {
     prefix <- Keyword.ignoredPrefixes
-    if getText.toLowerCase.startsWith(prefix.toLowerCase)
-    stripped = getText.toLowerCase.replaceFirst(prefix, "").trim
+    loweredPrefix = prefix.toLowerCase
+    if getText.toLowerCase.startsWith(loweredPrefix)
+    stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
   } yield stripped).headOption
 }
 
@@ -28,21 +27,19 @@ object Keyword {
 
 class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](element) {
 
-  def sameTextAsKeyword(keywordName: KeywordName) = keywordName.getText equalsIgnoreCase element.getText
-
-  private def findKeywordNamesInRobotFiles(files: Stream[RobotPsiFile], original: String = element.getText) = {
+  private def findInFilesMatchingKeywordDefs(files: Stream[RobotPsiFile], original: String = element.getText) = {
     for {
       file <- files
-      fileKeywordName <- file.getDefinedKeywordNames
-      if fileKeywordName.getText equalsIgnoreCase original
-    } yield fileKeywordName
+      keywordDefinition <- file.getKeywordDefinitions
+      if keywordDefinition matches original
+    } yield keywordDefinition
   }
 
   override def resolve() = {
-    findKeywordNamesInRobotFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles).headOption match {
+    findInFilesMatchingKeywordDefs(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles).headOption match {
       case Some(keyword) => keyword
       case None => element.getTextStrippedFromIgnored match {
-        case Some(strippedKeywordName) => findKeywordNamesInRobotFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, strippedKeywordName).headOption match {
+        case Some(strippedKeywordName) => findInFilesMatchingKeywordDefs(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, strippedKeywordName).headOption match {
           case Some(keyword) => keyword
           case None => null
         }
@@ -52,29 +49,25 @@ class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](ele
   }
 
   override def getVariants = {
-    val externalKeywordNames: Set[KeywordName] = for {
+    val externalKeywordDefinitions: Set[KeywordDefinition] = for {
       robotFile: RobotPsiFile <- currentRobotFile.getRecursivelyImportedRobotFiles.toSet
-      externalKeywordName: KeywordName <- robotFile.getDefinedKeywordNames
+      externalKeywordName: KeywordDefinition <- robotFile.getKeywordDefinitions
     } yield externalKeywordName
 
-    val keywords = (externalKeywordNames | fileDefinedKeywordNames.toSet).map(_.getText)
+    val keywordNames = (externalKeywordDefinitions | currentRobotFile.getKeywordDefinitions).map(_.name)
 
     val prefixedKeywords = for {
-      keyword <- keywords
+      keyword <- keywordNames
       prefix <- Keyword.ignoredPrefixes
     } yield s"$prefix $keyword"
 
     for (
-      keyword <- (keywords | prefixedKeywords).toArray
+      keyword <- (keywordNames | prefixedKeywords).toArray
     ) yield LookupElementBuilder.create(keyword)
       .withCaseSensitivity(false)
       .withTypeText("Keyword", true)
       .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
       .asInstanceOf[AnyRef]
-  }
-
-  private def fileDefinedKeywordNames = {
-    findKeywordNamesInRobotFiles(Stream(currentRobotFile))
   }
 }
 

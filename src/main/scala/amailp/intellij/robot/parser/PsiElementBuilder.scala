@@ -13,6 +13,7 @@ class PsiElementBuilder(node: ASTNode) {
       case SettingName | ResourceName => new amailp.intellij.robot.psi.SettingName(node)
       case ResourceValue => new amailp.intellij.robot.psi.ResourceValue(node)
       case TestCaseName => new amailp.intellij.robot.psi.TestCaseName(node)
+      case KeywordDefinition => new amailp.intellij.robot.psi.KeywordDefinition(node)
       case KeywordName => new amailp.intellij.robot.psi.KeywordName(node)
       case Keyword => new amailp.intellij.robot.psi.Keyword(node)
       case _ => new ASTWrapperPsiElement(node)
