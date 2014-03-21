@@ -33,10 +33,11 @@ package object psi {
     private def keywordName = getNode.findChildByType(parser.KeywordName).getPsi(classOf[KeywordName])
   }
 
-  abstract class RobotReferenceBase[T <: PsiElement](element: T) extends PsiReferenceBase[T](element){
-    def currentRobotFile = PsiTreeUtil.getParentOfType(getElement, classOf[RobotPsiFile])
+  trait RobotPsiUtils {
+    def utilsPsiElement: PsiElement
+    def currentRobotFile = PsiTreeUtil.getParentOfType(utilsPsiElement, classOf[RobotPsiFile])
     def currentFile = currentRobotFile.getVirtualFile
     def currentDirectory = currentFile.getParent
-    def psiManager = PsiManager.getInstance(getElement.getProject)
+    def psiManager = PsiManager.getInstance(utilsPsiElement.getProject)
   }
 }

@@ -14,6 +14,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.7.1 - 12 mar 2014
+      <ul>
+        <li>Fixed trivial bug</li>
+      </ul>
       0.7 - 12 mar 2014
       <ul>
         <li>Given/When/Then/And are ignored in jump to definition</li>

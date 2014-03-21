@@ -1,17 +1,33 @@
 package amailp.intellij.robot.psi
 
-import com.intellij.psi.{PsiReference, AbstractElementManipulator}
+import com.intellij.psi.{PsiElement, PsiReferenceBase, PsiReference, AbstractElementManipulator}
 import com.intellij.openapi.util.TextRange
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
+import com.intellij.psi.util.PsiTreeUtil
 
 
 /**
  * An instance of a keyword when is used
  */
-case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) {
-  override lazy val getReference: PsiReference = new KeywordReference(this)
+case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils {
+  override def utilsPsiElement: PsiElement = this
+
+  override def getReferences: Array[PsiReference] = {
+    (for {
+      keywordName <- List(getText) ++ getTextStrippedFromIgnored.toList
+      keywordDefinition <- findInFilesMatchingKeywordDefs(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, keywordName)
+    } yield new KeywordReference(this, keywordDefinition).asInstanceOf[PsiReference]).toArray
+  }
+
+  private def findInFilesMatchingKeywordDefs(files: Stream[RobotPsiFile], original: String) = {
+    for {
+      file <- files
+      keywordDefinition <- file.getKeywordDefinitions
+      if keywordDefinition matches original
+    } yield keywordDefinition
+  }
 
   lazy val getTextStrippedFromIgnored = (for {
     prefix <- Keyword.ignoredPrefixes
@@ -25,28 +41,11 @@ object Keyword {
   val ignoredPrefixes = List("Given", "When", "Then", "And")
 }
 
-class KeywordReference(element: Keyword) extends RobotReferenceBase[Keyword](element) {
+class KeywordReference(keyword: Keyword, val definition: KeywordDefinition) extends PsiReferenceBase[Keyword](keyword) with RobotPsiUtils {
 
-  private def findInFilesMatchingKeywordDefs(files: Stream[RobotPsiFile], original: String = element.getText) = {
-    for {
-      file <- files
-      keywordDefinition <- file.getKeywordDefinitions
-      if keywordDefinition matches original
-    } yield keywordDefinition
-  }
+  override def resolve() = definition
 
-  override def resolve() = {
-    findInFilesMatchingKeywordDefs(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles).headOption match {
-      case Some(keyword) => keyword
-      case None => element.getTextStrippedFromIgnored match {
-        case Some(strippedKeywordName) => findInFilesMatchingKeywordDefs(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, strippedKeywordName).headOption match {
-          case Some(keyword) => keyword
-          case None => null
-        }
-        case None => null
-      }
-    }
-  }
+  override def utilsPsiElement: PsiElement = getElement
 
   override def getVariants = {
     val externalKeywordDefinitions: Set[KeywordDefinition] = for {
