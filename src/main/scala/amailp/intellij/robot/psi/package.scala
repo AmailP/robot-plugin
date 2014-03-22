@@ -7,6 +7,7 @@ import com.intellij.psi._
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes
+import scala.collection.JavaConversions._
 
 package object psi {
   case class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
@@ -28,9 +29,25 @@ package object psi {
   }
   case class KeywordDefinition (node: ASTNode) extends ASTWrapperPsiElement(node) {
     def name: String = keywordName.getText
-    def matches(string: String) = keywordName matches string
+    def keywordName = getNode.findChildByType(parser.KeywordName).getPsi(classOf[KeywordName])
+  }
 
-    private def keywordName = getNode.findChildByType(parser.KeywordName).getPsi(classOf[KeywordName])
+  object KeywordDefinition {
+    def findMatchingInFiles(files: Stream[RobotPsiFile], reference: String) = {
+      for {
+        keywordDefinition <- findInFiles(files)
+        if keywordDefinition.keywordName matches reference
+      } yield keywordDefinition
+    }
+
+    def findInFiles(files: Stream[RobotPsiFile]) = {
+      for {
+        file <- files
+        keywordDefinition <- findInFile(file)
+      } yield keywordDefinition
+    }
+
+    def findInFile(file: RobotPsiFile) = PsiTreeUtil.findChildrenOfType(file.getNode.getPsi, classOf[KeywordDefinition]).toSet
   }
 
   trait RobotPsiUtils {
