@@ -14,17 +14,17 @@ package object psi {
   case class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) {
-    def regExp = {
+    def textCaseInsensitiveExcludingVariables = {
       val offset = getTextRange.getStartOffset
       var result = getText
       for {
         variable <- variables.sortWith((v1, v2) => v1.getTextRange.getStartOffset > v2.getTextRange.getStartOffset)
         relativeTextRange = variable.getTextRange.shiftRight(-offset)
       } result = relativeTextRange.replace(result, ".*")
-      result
+      s"(?i)$result"
     }
     def variables = getNode.getChildren(TokenSet.create(RobotTokenTypes.Variable))
-    def matches(string: String) = string matches regExp
+    def matches(string: String) = string matches textCaseInsensitiveExcludingVariables
   }
   case class KeywordDefinition (node: ASTNode) extends ASTWrapperPsiElement(node) {
     def name: String = keywordName.getText
