@@ -16,6 +16,7 @@
     <change-notes><![CDATA[
       0.8 - xxx 2014
       <ul>
+        <li>Support for comment/uncomment lines</li>
         <li>Jump to definition supports multiple definitions</li>
         <li>Jump to definition supports for keywords with variable embedded arguments</li>
         <li>Jump to definition supports ignorable Given/When/Then/And</li>
@@ -72,6 +73,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <annotator language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotAnnotator"/>
+
+        <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotCommenter"/>
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotHighlighterFactory"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotParserDefinition"/>
         <fileTypeFactory implementation="amailp.intellij.robot.idea.RobotFileTypeFactory" />
