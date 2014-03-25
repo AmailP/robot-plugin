@@ -5,13 +5,13 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
+import amailp.intellij.robot.idea.UsageFindable
 
 
 /**
  * An instance of a keyword when is used
  */
-case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils {
-  override def utilsPsiElement: PsiElement = this
+case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils with UsageFindable {
 
   override def getReference = new KeywordToDefinitionReference(this)
 
@@ -21,6 +21,8 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
     if getText.toLowerCase.startsWith(loweredPrefix)
     stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
   } yield stripped).headOption
+  override val utilsPsiElement: PsiElement = this
+  override val element: PsiElement = this
 }
 
 object Keyword {
@@ -36,7 +38,7 @@ class KeywordToDefinitionReference(keyword: Keyword)
   override def getVariants = {
     val externalKeywordDefinitions = KeywordDefinition.findInFiles(currentRobotFile.getRecursivelyImportedRobotFiles).toSet
 
-    val keywordNames = (externalKeywordDefinitions | KeywordDefinition.findInFile(currentRobotFile)).map(_.name)
+    val keywordNames = (externalKeywordDefinitions | KeywordDefinition.findInFile(currentRobotFile)).map(_.getName)
 
     val prefixedKeywords = for {
       keyword <- keywordNames
@@ -58,7 +60,7 @@ class KeywordToDefinitionReference(keyword: Keyword)
     for {
       keywordName <- List(getElement.getText) ++ getElement.getTextStrippedFromIgnored.toList
       keywordDefinition <- KeywordDefinition.findMatchingInFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, keywordName)
-    } yield new PsiElementResolveResult(keywordDefinition.keywordName)
+    } yield new PsiElementResolveResult(keywordDefinition)
   }.toArray
 }
 
