@@ -15,12 +15,14 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
 
   override def getReference = new KeywordToDefinitionReference(this)
 
-  lazy val getTextStrippedFromIgnored = (for {
-    prefix <- Keyword.ignoredPrefixes
-    loweredPrefix = prefix.toLowerCase
-    if getText.toLowerCase.startsWith(loweredPrefix)
-    stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
-  } yield stripped).headOption
+  def getTextStrippedFromIgnored = {
+    for {
+      prefix <- Keyword.ignoredPrefixes
+      loweredPrefix = prefix.toLowerCase
+      if getText.toLowerCase.startsWith(loweredPrefix)
+      stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
+    } yield stripped
+  }.headOption
 }
 
 object Keyword {
@@ -36,7 +38,7 @@ class KeywordToDefinitionReference(keyword: Keyword)
   override def getVariants = {
     val externalKeywordDefinitions = KeywordDefinition.findInFiles(currentRobotFile.getRecursivelyImportedRobotFiles).toSet
 
-    val keywordNames = (externalKeywordDefinitions | KeywordDefinition.findInFile(currentRobotFile)).map(_.name)
+    val keywordNames = (externalKeywordDefinitions | KeywordDefinition.findInFile(currentRobotFile)).map(_.getName)
 
     val prefixedKeywords = for {
       keyword <- keywordNames
@@ -58,7 +60,7 @@ class KeywordToDefinitionReference(keyword: Keyword)
     for {
       keywordName <- List(getElement.getText) ++ getElement.getTextStrippedFromIgnored.toList
       keywordDefinition <- KeywordDefinition.findMatchingInFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, keywordName)
-    } yield new PsiElementResolveResult(keywordDefinition.keywordName)
+    } yield new PsiElementResolveResult(keywordDefinition)
   }.toArray
 }
 

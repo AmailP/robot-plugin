@@ -27,9 +27,10 @@ package object psi {
     def variables = getNode.getChildren(TokenSet.create(RobotTokenTypes.Variable))
     def matches(string: String) = string matches textCaseInsensitiveExcludingVariables
   }
-  case class KeywordDefinition (node: ASTNode) extends ASTWrapperPsiElement(node) {
-    def name: String = keywordName.getText
+  case class KeywordDefinition (node: ASTNode) extends ASTWrapperPsiElement(node) with PsiNamedElement {
+    override def getName: String = keywordName.getText
     def keywordName = getNode.findChildByType(parser.KeywordName).getPsi(classOf[KeywordName])
+    def setName(name: String): PsiElement = ???
   }
 
   object KeywordDefinition {
