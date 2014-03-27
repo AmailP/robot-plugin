@@ -77,6 +77,7 @@
         <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotCommenter"/>
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotHighlighterFactory"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotParserDefinition"/>
+        <lang.psiStructureViewFactory language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotPsiStructureViewFactory"/>
         <fileTypeFactory implementation="amailp.intellij.robot.idea.RobotFileTypeFactory" />
 
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.KeywordManipulator"/>

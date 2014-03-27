@@ -3,6 +3,7 @@ package amailp.intellij.robot.parser
 import amailp.intellij.robot.elements.RobotTokenTypes._
 import com.intellij.lang.PsiBuilder.Marker
 import com.intellij.psi.tree.IElementType
+import amailp.intellij.robot.ast
 
 object SettingParser extends SubParser {
 
@@ -21,24 +22,24 @@ object SettingParser extends SubParser {
       }
       else parseCell((marker: Marker, content: String) => {
         content match {
-          case "Resource" => marker done ResourceName ; ResourceName
-          case cnt if otherSettingNames contains cnt => marker done SettingName ; SettingName
-          case _ => marker error "Settings name not known" ; NonEmptyCell
+          case "Resource" => marker done ast.ResourceName ; ast.ResourceName
+          case cnt if otherSettingNames contains cnt => marker done ast.SettingName ; ast.SettingName
+          case _ => marker error "Settings name not known" ; ast.NonEmptyCell
         }
       })
     }
 
     def parseResouceValue() {
       consumeSeparator()
-      parseCell(ResourceValue)
+      parseCell(ast.ResourceValue)
     }
 
     val settingMarker = mark
     parseSettingFirstCell() match {
-      case ResourceName => parseResouceValue()
+      case ast.ResourceName => parseResouceValue()
       case _ => parseRemainingCells()
     }
-    settingMarker done Setting
+    settingMarker done ast.Setting
     consumeLineTerminator()
   }
 }

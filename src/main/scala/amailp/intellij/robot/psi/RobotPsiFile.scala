@@ -11,6 +11,7 @@ import scala.annotation.tailrec
 import com.intellij.psi.util.PsiTreeUtil
 import scala.collection.JavaConversions._
 import scala.collection.immutable.Stream.Empty
+import com.intellij.ide.structureView.StructureViewTreeElement
 
 class RobotPsiFile(viewProvider: FileViewProvider)
   extends PsiFileBase(viewProvider, RobotLanguage) {
