@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="robot-plugin" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin" singleton="true">
     <module name="robot-plugin" />
-    <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m" />
+    <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -Didea.is.internal=true" />
     <option name="PROGRAM_PARAMETERS" value="" />
     <log_file path="$USER_HOME$/Library/Caches/IntelliJIdea13/plugins-sandbox/system/log/idea.log" checked="false" skipped="true" show_all="false" alias="IDEA LOG" />
     <RunnerSettings RunnerId="Debug">
