@@ -5,7 +5,9 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
-import amailp.intellij.robot.idea.UsageFindable
+import amailp.intellij.robot.idea.{RobotFileType, UsageFindable}
+import com.intellij.psi.util.PsiTreeUtil
+import scala.collection.JavaConversions._
 
 
 /**
@@ -23,6 +25,20 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
   } yield stripped).headOption
   override val utilsPsiElement: PsiElement = this
   override val element: PsiElement = this
+
+  def setNewName(name: String): PsiElement = {
+    //TODO factorize with KeyDef one
+    val fileContent =
+      s"""
+          |*** Keywords ***
+          |KeyDef
+          |    $name
+        """.stripMargin
+    val dummyFile = PsiFileFactory.getInstance(getProject).createFileFromText("dummy", RobotFileType, fileContent).asInstanceOf[RobotPsiFile]
+    val dummyKeyword= PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[Keyword]).head
+    this.getNode.getTreeParent.replaceChild(this.getNode, dummyKeyword.getNode)
+    this
+  }
 }
 
 object Keyword {
@@ -32,6 +48,8 @@ object Keyword {
 class KeywordToDefinitionReference(keyword: Keyword)
   extends PsiPolyVariantReferenceBase[Keyword](keyword)
   with RobotPsiUtils {
+
+  override def handleElementRename(newElementName: String): PsiElement = myElement.setNewName(newElementName)
 
   override def utilsPsiElement: PsiElement = getElement
 

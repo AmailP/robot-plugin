@@ -84,5 +84,8 @@
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.ResourceValueManipulator"/>
         <internalFileTemplate name="Robot Test Suite"/>
         <internalFileTemplate name="Robot Keywords"/>
+        <pom.declarationSearcher implementation="amailp.intellij.robot.idea.RobotDeclarationSearcher"/>
+        <findUsagesHandlerFactory implementation="amailp.intellij.robot.idea.RobotFindUsagesHandlerFactory" id="robot" order="last, before java"/>
+        <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotNamesValidator"/>
     </extensions>
 </idea-plugin>

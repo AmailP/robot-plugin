@@ -1,24 +1,22 @@
 package amailp.intellij.robot
 
 
-import com.intellij.extapi.psi.{PsiElementBase, ASTWrapperPsiElement}
-import com.intellij.lang.{Language, ASTNode}
+import com.intellij.extapi.psi.ASTWrapperPsiElement
+import com.intellij.lang.ASTNode
 import com.intellij.psi._
 import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.idea.{UsageFindable, RobotFileType}
-import com.intellij.psi.impl.source.tree.{SharedImplUtil, LeafPsiElement}
-import com.intellij.openapi.util.TextRange
-import com.intellij.psi.impl.source.SourceTreeToPsiMap
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 
 package object psi {
   case class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)
-  case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) with UsageFindable{
+  case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) {
     def matches(string: String) = string equalsIgnoreCase getText
     val element: PsiElement = this
   }

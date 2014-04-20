@@ -6,11 +6,10 @@ import com.intellij.psi.PsiElement
 import amailp.intellij.robot.lexer.RobotLexer
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes
-import amailp.intellij.robot.psi.{KeywordName, KeywordDefinition, Keyword}
 
 class RobotFindUsagesProvider extends FindUsagesProvider {
   override def getNodeText(element: PsiElement, useFullName: Boolean): String = element.asInstanceOf[UsageFindable].getNodeText(useFullName)
-  override def getDescriptiveName(element: PsiElement): String = "AAA Descriptive Name"
+  override def getDescriptiveName(element: PsiElement): String = element.asInstanceOf[UsageFindable].getDescriptiveName
   override def getType(element: PsiElement): String = element.asInstanceOf[UsageFindable].getType
   override def getHelpId(element: PsiElement): String = element.asInstanceOf[UsageFindable].getHelpId
   override def canFindUsagesFor(element: PsiElement): Boolean = element.isInstanceOf[UsageFindable]
@@ -24,7 +23,7 @@ class RobotWordsScanner extends DefaultWordsScanner(new RobotLexer,
 trait UsageFindable {
   val element: PsiElement
   def getNodeText(useFullName: Boolean): String = element.getText
-  def getDescriptiveName: String = "AAA Descriptive Name"
-  def getType: String = "AAA Type"
+  def getDescriptiveName: String = ""
+  def getType: String = "Keyword"
   def getHelpId: String = "AAA getHelpId"
 }
