@@ -89,6 +89,7 @@
 
         <!-- Rename -->
         <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.NamesValidator"/>
+        <renameHandler implementation="amailp.intellij.robot.extensions.RenameHandler"/>
 
         <!-- File templates -->
         <internalFileTemplate name="Robot Test Suite"/>
