@@ -1,8 +1,6 @@
-package amailp.intellij.robot.idea
+package amailp.intellij.robot.extensions
 
-import com.intellij.lang.Commenter
-
-class RobotCommenter extends Commenter {
+class Commenter extends com.intellij.lang.Commenter {
   def getLineCommentPrefix: String = "#"
 
   def getCommentedBlockCommentSuffix: String = null

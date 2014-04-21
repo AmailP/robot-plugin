@@ -1,6 +1,6 @@
 package amailp.intellij.robot.elements;
 
-import amailp.intellij.robot.idea.RobotIElementType;
+import amailp.intellij.robot.lexer.RobotIElementType;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.TokenSet;

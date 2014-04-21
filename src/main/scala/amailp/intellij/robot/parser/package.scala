@@ -5,7 +5,7 @@ import com.intellij.psi.tree.IElementType
 import amailp.intellij.robot.elements.RobotTokenTypes._
 import com.intellij.lang.impl.PsiBuilderAdapter
 import com.intellij.lang.PsiBuilder.Marker
-import amailp.intellij.robot.idea.RobotIElementType
+import amailp.intellij.robot.lexer.RobotIElementType
 
 package object parser {
 

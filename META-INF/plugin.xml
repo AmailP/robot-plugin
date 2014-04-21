@@ -72,20 +72,24 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
-        <annotator language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotAnnotator"/>
-
-        <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotCommenter"/>
-        <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotHighlighterFactory"/>
-        <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotParserDefinition"/>
-        <lang.findUsagesProvider language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotFindUsagesProvider"/>
-        <fileTypeFactory implementation="amailp.intellij.robot.idea.RobotFileTypeFactory" />
-
+        <annotator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Annotator"/>
+        <fileTypeFactory implementation="amailp.intellij.robot.extensions.FileTypeFactory" />
+        <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Commenter"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.KeywordManipulator"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.ResourceValueManipulator"/>
+        <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.extensions.ParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
+
+        <!-- Find Usages -->
+        <lang.findUsagesProvider language="Robotframework" implementationClass="amailp.intellij.robot.extensions.FindUsagesProvider"/>
+        <pom.declarationSearcher implementation="amailp.intellij.robot.extensions.DeclarationSearcher"/>
+        <findUsagesHandlerFactory implementation="amailp.intellij.robot.extensions.FindUsagesHandlerFactory" id="robot" order="last, before java"/>
+
+        <!-- Rename -->
+        <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.NamesValidator"/>
+
+        <!-- File templates -->
         <internalFileTemplate name="Robot Test Suite"/>
         <internalFileTemplate name="Robot Keywords"/>
-        <pom.declarationSearcher implementation="amailp.intellij.robot.idea.RobotDeclarationSearcher"/>
-        <findUsagesHandlerFactory implementation="amailp.intellij.robot.idea.RobotFindUsagesHandlerFactory" id="robot" order="last, before java"/>
-        <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.idea.RobotNamesValidator"/>
     </extensions>
 </idea-plugin>

@@ -1,13 +1,13 @@
-package amailp.intellij.robot.idea
+package amailp.intellij.robot.extensions
 
-import com.intellij.lang.annotation.{AnnotationHolder, Annotator}
+import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.psi.PsiElement
 import amailp.intellij.robot.psi._
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
 import DefaultLanguageHighlighterColors._
 import com.intellij.openapi.editor.colors.TextAttributesKey
 
-class RobotAnnotator extends Annotator {
+class Annotator extends com.intellij.lang.annotation.Annotator {
   def annotate(element: PsiElement, holder: AnnotationHolder) {
 
     def highlightAs(attr: TextAttributesKey) {

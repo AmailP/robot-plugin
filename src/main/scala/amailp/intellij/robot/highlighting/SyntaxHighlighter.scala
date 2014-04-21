@@ -1,17 +1,15 @@
-package amailp.intellij.robot.idea
+package amailp.intellij.robot.highlighting
 
-import com.intellij.openapi.fileTypes.{SyntaxHighlighter, SyntaxHighlighterFactory, SyntaxHighlighterBase}
+import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.lexer.Lexer
 import amailp.intellij.robot.lexer.RobotLexer
 import com.intellij.psi.tree.IElementType
 import com.intellij.openapi.editor.colors.TextAttributesKey
-import com.intellij.openapi.editor.DefaultLanguageHighlighterColors._
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import amailp.intellij.robot.elements.RobotTokenTypes._
+import com.intellij.openapi.editor.DefaultLanguageHighlighterColors._
 import com.intellij.openapi.editor.HighlighterColors._
 
-class RobotHighlighter extends SyntaxHighlighterBase {
+class SyntaxHighlighter extends SyntaxHighlighterBase {
   def getHighlightingLexer: Lexer = new RobotLexer()
 
   def getTokenHighlights(tokenType: IElementType): Array[TextAttributesKey] = {
@@ -29,8 +27,4 @@ class RobotHighlighter extends SyntaxHighlighterBase {
       case _ =>  Array()
     }
   }
-}
-
-class RobotHighlighterFactory extends SyntaxHighlighterFactory {
-  def getSyntaxHighlighter(project: Project, virtualFile: VirtualFile): SyntaxHighlighter = new RobotHighlighter
 }

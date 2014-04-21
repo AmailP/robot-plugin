@@ -1,6 +1,6 @@
 package amailp.intellij.robot.parser;
 
-import amailp.intellij.robot.idea.*;
+import amailp.intellij.robot.lang.RobotLanguage$;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiBuilder;
@@ -15,7 +15,7 @@ import com.intellij.testFramework.PlatformTestCase;
 public class ParserTest extends ParsingTestCase {
 
     public ParserTest() {
-        super("", "robot", new amailp.intellij.robot.idea.RobotParserDefinition());
+        super("", "robot", new amailp.intellij.robot.extensions.ParserDefinition());
         PlatformTestCase.initPlatformLangPrefix();
     }
 
@@ -26,7 +26,7 @@ public class ParserTest extends ParsingTestCase {
 
     public static void main(String[] args) throws Exception {
         new ParserTest().setUp();
-        ParserDefinition pd = new amailp.intellij.robot.idea.RobotParserDefinition();
+        ParserDefinition pd = new amailp.intellij.robot.extensions.ParserDefinition();
         String robotTestCase = StreamUtil.readText(pd.getClass().getResourceAsStream("complete.robot"), "utf-8");
         PsiBuilder builder = new PsiBuilderFactoryImpl().createBuilder(pd, pd.createLexer(null), robotTestCase);
         builder.setDebugMode(true);

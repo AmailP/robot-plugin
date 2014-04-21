@@ -2,20 +2,20 @@ package amailp.intellij.robot.psi
 
 import com.intellij.psi.{PsiManager, FileViewProvider}
 import com.intellij.extapi.psi.PsiFileBase
-import amailp.intellij.robot.idea.RobotLanguage
 import com.intellij.openapi.fileTypes.FileType
-import amailp.intellij.robot.idea.RobotFileType
 import java.lang.String
 import javax.swing.Icon
 import scala.annotation.tailrec
 import com.intellij.psi.util.PsiTreeUtil
 import scala.collection.JavaConversions._
 import scala.collection.immutable.Stream.Empty
+import amailp.intellij.robot
+import amailp.intellij.robot.lang.RobotLanguage
 
 class RobotPsiFile(viewProvider: FileViewProvider)
   extends PsiFileBase(viewProvider, RobotLanguage) {
 
-  def getFileType: FileType = RobotFileType
+  def getFileType: FileType = robot.file.FileType
 
   override def toString: String = "RobotFile: " + getVirtualFile.getName
 

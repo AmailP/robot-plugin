@@ -8,8 +8,9 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes
 import scala.collection.JavaConversions._
-import amailp.intellij.robot.idea.{UsageFindable, RobotFileType}
 import com.intellij.psi.impl.source.tree.LeafPsiElement
+import amailp.intellij.robot.file.FileType
+import amailp.intellij.robot.findUsage.UsageFindable
 
 package object psi {
   case class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
@@ -44,7 +45,7 @@ package object psi {
           |*** Keywords ***
           |$name
         """.stripMargin
-      val dummyFile = PsiFileFactory.getInstance(getProject).createFileFromText("dummy", RobotFileType, fileContent).asInstanceOf[RobotPsiFile]
+      val dummyFile = PsiFileFactory.getInstance(getProject).createFileFromText("dummy", FileType, fileContent).asInstanceOf[RobotPsiFile]
       val dummyKeyword = KeywordDefinition.findInFile(dummyFile).head
       this.getNode.replaceChild(keywordName.getNode, dummyKeyword.keywordName.getNode)
       this

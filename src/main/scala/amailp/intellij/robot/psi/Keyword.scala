@@ -5,9 +5,10 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
-import amailp.intellij.robot.idea.{RobotFileType, UsageFindable}
 import com.intellij.psi.util.PsiTreeUtil
 import scala.collection.JavaConversions._
+import amailp.intellij.robot.file.FileType
+import amailp.intellij.robot.findUsage.UsageFindable
 
 
 /**
@@ -34,7 +35,7 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
           |KeyDef
           |    $name
         """.stripMargin
-    val dummyFile = PsiFileFactory.getInstance(getProject).createFileFromText("dummy", RobotFileType, fileContent).asInstanceOf[RobotPsiFile]
+    val dummyFile = PsiFileFactory.getInstance(getProject).createFileFromText("dummy", FileType, fileContent).asInstanceOf[RobotPsiFile]
     val dummyKeyword= PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[Keyword]).head
     this.getNode.getTreeParent.replaceChild(this.getNode, dummyKeyword.getNode)
     this

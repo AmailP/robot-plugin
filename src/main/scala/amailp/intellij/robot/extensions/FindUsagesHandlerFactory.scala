@@ -1,11 +1,11 @@
-package amailp.intellij.robot.idea
+package amailp.intellij.robot.extensions
 
 import com.intellij.psi.{DelegatePsiTarget, PsiElement}
 import com.intellij.pom.PomTargetPsiElement
 import amailp.intellij.robot.psi.KeywordDefinition
-import com.intellij.find.findUsages.{FindUsagesHandler, FindUsagesHandlerFactory}
+import com.intellij.find.findUsages.FindUsagesHandler
 
-class RobotFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
+class FindUsagesHandlerFactory extends com.intellij.find.findUsages.FindUsagesHandlerFactory {
   def canFindUsages(element: PsiElement): Boolean = getKeywordDefinition(element).isDefined
 
   def createFindUsagesHandler(element: PsiElement, forHighlightUsages: Boolean): FindUsagesHandler =

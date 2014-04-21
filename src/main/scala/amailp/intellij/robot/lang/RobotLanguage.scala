@@ -1,4 +1,4 @@
-package amailp.intellij.robot.idea
+package amailp.intellij.robot.lang
 
 import com.intellij.lang.Language
 
