@@ -1,6 +1,5 @@
 package amailp.intellij.robot
 
-
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi._
@@ -8,7 +7,6 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes
 import scala.collection.JavaConversions._
-import com.intellij.ide.structureView
 import com.intellij.navigation.ItemPresentation
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import amailp.intellij.robot.file.FileType
@@ -17,6 +15,7 @@ import javax.swing.Icon
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.treeView.smartTree.TreeElement
 
+//TODO delete or anyway reduce package object
 package object psi {
   case class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   case class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
@@ -89,7 +88,7 @@ package object psi {
 
   class Tables(node: ASTNode) extends ASTWrapperPsiElement(node) {
     val structureViewTreeElement = new StructureViewTreeElement
-    class StructureViewTreeElement extends structureView.StructureViewTreeElement {
+    class StructureViewTreeElement extends com.intellij.ide.structureView.StructureViewTreeElement {
       def getValue: AnyRef = Tables.this
       def getPresentation: ItemPresentation = new ItemPresentation {
         def getPresentableText: String = "Tables"
@@ -106,7 +105,7 @@ package object psi {
 
   class TestCases(node: ASTNode) extends ASTWrapperPsiElement(node) {
     val structureViewTreeElement = new StructureViewTreeElement
-    class StructureViewTreeElement extends structureView.StructureViewTreeElement {
+    class StructureViewTreeElement extends com.intellij.ide.structureView.StructureViewTreeElement {
       def getValue: AnyRef = TestCases.this
       def getPresentation: ItemPresentation = new ItemPresentation {
         def getPresentableText: String = "Test Cases"

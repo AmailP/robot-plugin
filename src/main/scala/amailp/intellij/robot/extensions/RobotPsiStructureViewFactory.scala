@@ -1,4 +1,4 @@
-package amailp.intellij.robot.idea
+package amailp.intellij.robot.extensions
 
 import com.intellij.lang.PsiStructureViewFactory
 import com.intellij.psi.PsiFile
@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project
 import amailp.intellij.robot.psi.RobotPsiFile
 import com.intellij.openapi.editor.Editor
 import amailp.intellij.robot.psi
+import amailp.intellij.robot.structureView.{RobotTreeBasedStructureViewBuilder, RobotStructureViewModel}
 
 class RobotPsiStructureViewFactory extends PsiStructureViewFactory {
   def getStructureViewBuilder(psiFile: PsiFile): StructureViewBuilder = new StructureViewBuilder {
@@ -16,12 +17,6 @@ class RobotPsiStructureViewFactory extends PsiStructureViewFactory {
   }
 }
 
-class RobotTreeBasedStructureViewBuilder(psiFile: RobotPsiFile) extends TreeBasedStructureViewBuilder {
-  override def createStructureViewModel(editor: Editor): StructureViewModel = {
-    val element: StructureViewTreeElement =  psiFile.findChildByClass(classOf[psi.Tables]).structureViewTreeElement
-    new RobotStructureViewModel(psiFile, editor, element)
-  }
-}
 
-class RobotStructureViewModel(file: RobotPsiFile, editor: Editor, element: StructureViewTreeElement)
-  extends StructureViewModelBase(file, editor, element)
+
+
