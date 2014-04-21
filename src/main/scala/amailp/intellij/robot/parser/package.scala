@@ -5,28 +5,8 @@ import com.intellij.psi.tree.IElementType
 import amailp.intellij.robot.elements.RobotTokenTypes._
 import com.intellij.lang.impl.PsiBuilderAdapter
 import com.intellij.lang.PsiBuilder.Marker
-import amailp.intellij.robot.lexer.RobotIElementType
 
 package object parser {
-
-  object SettingsTable extends RobotIElementType("SettingsTable")
-  object Setting extends RobotIElementType("Setting")
-  object SettingName extends RobotIElementType("SettingName")
-  object ResourceName extends RobotIElementType("ResourceName")
-  object ResourceValue extends RobotIElementType("ResourceValue")
-
-  object TestCasesTable extends RobotIElementType("TestCasesTable")
-  object TestCaseName extends RobotIElementType("TestCaseTitle")
-  object TestCaseDefinition extends RobotIElementType("TestCaseDefinition")
-
-  object KeywordsTable extends RobotIElementType("KeywordsTable")
-  object KeywordName extends RobotIElementType("KeywordName")
-  object KeywordDefinition extends RobotIElementType("KeywordDefinition")
-  object Keyword extends RobotIElementType("Keyword")
-
-  object VariablesTable extends RobotIElementType("VariablesTable")
-  object TableRow extends RobotIElementType("TableRow")
-  object NonEmptyCell extends RobotIElementType("NonEmptyCell")
 
   trait SubParser {
     def parse(implicit builder: RobotPsiBuilder)
@@ -41,10 +21,10 @@ package object parser {
       if(!currentIsSeparator) parseCell()
       parseRemainingCells()
       consumeLineTerminator()
-      rowMarker done TableRow
+      rowMarker done ast.TableRow
     }
 
-    def parseCell(cellType: IElementType = NonEmptyCell): IElementType = {
+    def parseCell(cellType: IElementType = ast.NonEmptyCell): IElementType = {
       parseCell((m, _) => {m done cellType; cellType})
     }
 

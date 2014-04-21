@@ -18,15 +18,16 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
 
   override def getReference = new KeywordToDefinitionReference(this)
 
-  lazy val getTextStrippedFromIgnored = (for {
-    prefix <- Keyword.ignoredPrefixes
-    loweredPrefix = prefix.toLowerCase
-    if getText.toLowerCase.startsWith(loweredPrefix)
-    stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
-  } yield stripped).headOption
+  def getTextStrippedFromIgnored = {
+    for {
+      prefix <- Keyword.ignoredPrefixes
+      loweredPrefix = prefix.toLowerCase
+      if getText.toLowerCase.startsWith(loweredPrefix)
+      stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
+    } yield stripped
+  }.headOption
   override val utilsPsiElement: PsiElement = this
   override val element: PsiElement = this
-
   def setNewName(name: String): PsiElement = {
     //TODO factorize with KeyDef one
     val fileContent =

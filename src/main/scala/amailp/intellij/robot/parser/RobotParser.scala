@@ -3,6 +3,7 @@ package amailp.intellij.robot.parser
 import com.intellij.lang.{ASTNode, PsiBuilder, PsiParser}
 import com.intellij.psi.tree.IElementType
 import amailp.intellij.robot.elements.RobotTokenTypes._
+import amailp.intellij.robot.ast
 
 object RobotParser extends PsiParser {
   def parse(root: IElementType, builder: PsiBuilder): ASTNode = {
@@ -12,10 +13,10 @@ object RobotParser extends PsiParser {
     def parseTable() {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
-        case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(SettingsTable)
-        case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(TestCasesTable)
-        case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(KeywordsTable)
-        case VariablesHeader => parseTableItemsWith(parseBodyRow); Some(VariablesTable)
+        case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(ast.SettingsTable)
+        case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
+        case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(ast.KeywordsTable)
+        case VariablesHeader => parseTableItemsWith(parseBodyRow); Some(ast.VariablesTable)
         case _ => None
       }
       tableType match {
@@ -45,11 +46,11 @@ object RobotParser extends PsiParser {
     }
 
     def parseTestCaseDefinition() {
-      parseDefinition(TestCaseName, TestCaseDefinition)
+      parseDefinition(ast.TestCaseName, ast.TestCaseDefinition)
     }
 
     def parseKeywordDefinition() {
-      parseDefinition(KeywordName, KeywordDefinition)
+      parseDefinition(ast.KeywordName, ast.KeywordDefinition)
     }
 
     def parseDefinition(nameType: IElementType, definitionType: IElementType) {
@@ -70,17 +71,19 @@ object RobotParser extends PsiParser {
     }
 
     def parseAction() {
-      parseCell(Keyword)
+      parseCell(ast.Keyword)
       parseRemainingCells()
       consumeLineTerminator()
     }
 
     builder.setDebugMode(true)
     val rootMarker = mark
+    val tablesMarker = mark
     while (hasMoreTokens) {
       parseTable()
     }
-    rootMarker.done(root)
+    tablesMarker done ast.Tables
+    rootMarker done root
     builder.getTreeBuilt
   }
 }

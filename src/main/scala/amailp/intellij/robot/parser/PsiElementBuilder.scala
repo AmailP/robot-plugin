@@ -4,18 +4,22 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import amailp.intellij.robot.elements.RobotTokenTypes.Ellipsis
+import amailp.intellij.robot.{ast, psi}
 
 class PsiElementBuilder(node: ASTNode) {
   def build(): PsiElement = {
     node.getElementType match {
-      case Ellipsis => new amailp.intellij.robot.psi.Ellipsis(node)
-      case SettingsTable => new amailp.intellij.robot.psi.Settings(node)
-      case SettingName | ResourceName => new amailp.intellij.robot.psi.SettingName(node)
-      case ResourceValue => new amailp.intellij.robot.psi.ResourceValue(node)
-      case TestCaseName => new amailp.intellij.robot.psi.TestCaseName(node)
-      case KeywordDefinition => new amailp.intellij.robot.psi.KeywordDefinition(node)
-      case KeywordName => new amailp.intellij.robot.psi.KeywordName(node)
-      case Keyword => new amailp.intellij.robot.psi.Keyword(node)
+      case ast.Tables => new psi.Tables(node)
+      case Ellipsis => new psi.Ellipsis(node)
+      case ast.SettingsTable => new psi.Settings(node)
+      case ast.SettingName | ast.ResourceName => new psi.SettingName(node)
+      case ast.ResourceValue => new psi.ResourceValue(node)
+      case ast.TestCasesTable => new psi.TestCases(node)
+      case ast.TestCaseDefinition => new psi.TestCaseDefinition(node)
+      case ast.TestCaseName => new psi.TestCaseName(node)
+      case ast.KeywordDefinition => new psi.KeywordDefinition(node)
+      case ast.KeywordName => new psi.KeywordName(node)
+      case ast.Keyword => new psi.Keyword(node)
       case _ => new ASTWrapperPsiElement(node)
     }
   }
