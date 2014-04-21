@@ -14,7 +14,7 @@ class FindUsagesHandlerFactory extends com.intellij.find.findUsages.FindUsagesHa
       case None => null
     }
 
-  private def getKeywordDefinition[T](element: PsiElement): Option[KeywordDefinition] = element match {
+  private def getKeywordDefinition(element: PsiElement): Option[KeywordDefinition] = element match {
     case e: PomTargetPsiElement => e.getTarget match {
       case t: DelegatePsiTarget => t.getNavigationElement match {
         case p: KeywordDefinition => Some(p)

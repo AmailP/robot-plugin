@@ -5,7 +5,7 @@ import com.intellij.psi.PsiElement
 trait UsageFindable {
   val element: PsiElement
   def getNodeText(useFullName: Boolean): String = element.getText
-  def getDescriptiveName: String = ""
-  def getType: String = "Keyword"
+  def getDescriptiveName: String
+  def getType: String
   def getHelpId: String = "AAA getHelpId"
 }

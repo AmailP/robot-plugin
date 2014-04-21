@@ -40,6 +40,9 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
     this.getNode.getTreeParent.replaceChild(this.getNode, dummyKeyword.getNode)
     this
   }
+
+  def getType: String = "Keyword"
+  def getDescriptiveName: String = getNode.getText
 }
 
 object Keyword {

@@ -51,6 +51,9 @@ package object psi {
       this
     }
     override val element: PsiElement = this
+
+    def getType: String = "Keyword definition"
+    def getDescriptiveName: String = getName
   }
 
   object KeywordDefinition {

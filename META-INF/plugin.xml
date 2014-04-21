@@ -81,9 +81,11 @@
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
 
         <!-- Find Usages -->
+        <elementDescriptionProvider implementation="amailp.intellij.robot.extensions.ElementDescriptionProvider"/>
+        <findUsagesHandlerFactory implementation="amailp.intellij.robot.extensions.FindUsagesHandlerFactory" id="robot" order="last, before java"/>
         <lang.findUsagesProvider language="Robotframework" implementationClass="amailp.intellij.robot.extensions.FindUsagesProvider"/>
         <pom.declarationSearcher implementation="amailp.intellij.robot.extensions.DeclarationSearcher"/>
-        <findUsagesHandlerFactory implementation="amailp.intellij.robot.extensions.FindUsagesHandlerFactory" id="robot" order="last, before java"/>
+        <usageTypeProvider implementation="amailp.intellij.robot.extensions.UsageTypeProvider"/>
 
         <!-- Rename -->
         <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.NamesValidator"/>
