@@ -72,13 +72,13 @@
     </actions>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Language support -->
         <annotator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Annotator"/>
-        <fileTypeFactory implementation="amailp.intellij.robot.extensions.FileTypeFactory" />
+        <fileTypeFactory implementation="amailp.intellij.robot.extensions.FileTypeFactory"/>
         <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Commenter"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.KeywordManipulator"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.ResourceValueManipulator"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.extensions.ParserDefinition"/>
-        <lang.psiStructureViewFactory language="Robotframework" implementationClass="amailp.intellij.robot.extensions.RobotPsiStructureViewFactory"/>
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
 
         <!-- Find Usages -->
@@ -95,5 +95,8 @@
         <!-- File templates -->
         <internalFileTemplate name="Robot Test Suite"/>
         <internalFileTemplate name="Robot Keywords"/>
+
+        <!-- Structure view -->
+        <lang.psiStructureViewFactory language="Robotframework" implementationClass="amailp.intellij.robot.extensions.RobotPsiStructureViewFactory"/>
     </extensions>
 </idea-plugin>
