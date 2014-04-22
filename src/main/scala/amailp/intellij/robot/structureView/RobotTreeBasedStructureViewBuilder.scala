@@ -6,8 +6,10 @@ import com.intellij.openapi.editor.Editor
 import amailp.intellij.robot.psi
 
 class RobotTreeBasedStructureViewBuilder(psiFile: RobotPsiFile) extends TreeBasedStructureViewBuilder {
-   override def createStructureViewModel(editor: Editor): StructureViewModel = {
-     val element: StructureViewTreeElement =  psiFile.findChildByClass(classOf[psi.Tables]).structureViewTreeElement
-     new RobotStructureViewModel(psiFile, editor, element)
-   }
- }
+  override def createStructureViewModel(editor: Editor): StructureViewModel = {
+    val element: StructureViewTreeElement =  psiFile.findChildByClass(classOf[psi.Tables]).structureViewTreeElement
+    new RobotStructureViewModel(psiFile, editor, element)
+  }
+
+  override val isRootNodeShown = false
+}
