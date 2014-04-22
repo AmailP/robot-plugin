@@ -111,7 +111,8 @@ package object psi {
         def getIcon(unused: Boolean): Icon = null
       }
       def getChildren: Array[TreeElement] =
-        findChildrenByType(TokenSet.create(ast.TestCasesTable, ast.KeywordsTable)).map((tc: {val structureViewTreeElement: StructureViewTreeElement}) => tc.structureViewTreeElement).toArray
+        findChildrenByType(TokenSet.create(ast.TestCasesTable, ast.KeywordsTable))
+          .map((tc: {val structureViewTreeElement: com.intellij.ide.structureView.StructureViewTreeElement}) => tc.structureViewTreeElement).toArray
       def canNavigateToSource: Boolean = false
       def canNavigate: Boolean = false
       def navigate(requestFocus: Boolean): Unit = ()
