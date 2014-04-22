@@ -17,6 +17,7 @@ class PsiElementBuilder(node: ASTNode) {
       case ast.TestCasesTable => new psi.TestCases(node)
       case ast.TestCaseDefinition => new psi.TestCaseDefinition(node)
       case ast.TestCaseName => new psi.TestCaseName(node)
+      case ast.KeywordsTable => new psi.Keywords(node)
       case ast.KeywordDefinition => new psi.KeywordDefinition(node)
       case ast.KeywordName => new psi.KeywordName(node)
       case ast.Keyword => new psi.Keyword(node)
