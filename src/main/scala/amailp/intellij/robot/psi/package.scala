@@ -14,6 +14,7 @@ import amailp.intellij.robot.findUsage.UsageFindable
 import javax.swing.Icon
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.treeView.smartTree.TreeElement
+import com.intellij.ide.structureView.StructureViewTreeElement
 
 //TODO delete or anyway reduce package object
 package object psi {
@@ -24,22 +25,22 @@ package object psi {
     def matches(string: String) = string equalsIgnoreCase getText
     val element: PsiElement = this
   }
-  case class VariableKeywordName (node: ASTNode) extends LeafPsiElement(ast.KeywordName, node.getText) with RobotPsiUtils {
-    def utilsPsiElement = this
-    def textCaseInsensitiveExcludingVariables = {
-      val offset = getTextRange.getStartOffset
-      var result = getText
-      for {
-        variable <- variables.sortWith((v1, v2) => v1.getTextRange.getStartOffset > v2.getTextRange.getStartOffset)
-        relativeTextRange = variable.getTextRange.shiftRight(-offset)
-      } result = relativeTextRange.replace(result, ".*")
-      s"(?i)$result"
-    }
-    def variables = getNode.getChildren(TokenSet.create(RobotTokenTypes.Variable))
-    def matches(string: String) = string matches textCaseInsensitiveExcludingVariables
-  }
+//  case class VariableKeywordName (node: ASTNode) extends LeafPsiElement(ast.KeywordName, node.getText) with RobotPsiUtils {
+//    def utilsPsiElement = this
+//    def textCaseInsensitiveExcludingVariables = {
+//      val offset = getTextRange.getStartOffset
+//      var result = getText
+//      for {
+//        variable <- variables.sortWith((v1, v2) => v1.getTextRange.getStartOffset > v2.getTextRange.getStartOffset)
+//        relativeTextRange = variable.getTextRange.shiftRight(-offset)
+//      } result = relativeTextRange.replace(result, ".*")
+//      s"(?i)$result"
+//    }
+//    def variables = getNode.getChildren(TokenSet.create(RobotTokenTypes.Variable))
+//    def matches(string: String) = string matches textCaseInsensitiveExcludingVariables
+//  }
 
-  case class KeywordDefinition (node: ASTNode) extends ASTWrapperPsiElement(node) with PsiNamedElement with UsageFindable {
+  case class KeywordDefinition (node: ASTNode) extends ASTWrapperPsiElement(node) with PsiNamedElement with UsageFindable with StructureViewElement {
     private def keywordName = getNode.findChildByType(ast.KeywordName).getPsi(classOf[KeywordName])
     override def getNodeText(useFullName: Boolean) = getName
     override def getName: String = keywordName.getText
@@ -59,20 +60,9 @@ package object psi {
     def getType: String = "Keyword definition"
     def getDescriptiveName: String = getName
 
-    val structureViewTreeElement = new StructureViewTreeElement
-
-    class StructureViewTreeElement extends com.intellij.ide.structureView.StructureViewTreeElement {
-      def getValue: AnyRef = KeywordDefinition.this
-      def getPresentation: ItemPresentation = new ItemPresentation {
-        def getPresentableText: String = KeywordDefinition.this.getName
-        def getLocationString: String = null
-        def getIcon(unused: Boolean): Icon = AllIcons.Nodes.TestSourceFolder
-      }
-      def getChildren: Array[TreeElement] = TreeElement.EMPTY_ARRAY
-      def canNavigateToSource: Boolean = false
-      def canNavigate: Boolean = false
-      def navigate(requestFocus: Boolean): Unit = ()
-    }
+    def structureViewText: String = getName
+    def structureViewIcon: Icon = AllIcons.Nodes.TestSourceFolder
+    def structureViewChildren: Array[TreeElement] = TreeElement.EMPTY_ARRAY
   }
 
   object KeywordDefinition {
@@ -93,7 +83,7 @@ package object psi {
     def findInFile(file: RobotPsiFile) = PsiTreeUtil.findChildrenOfType(file.getNode.getPsi, classOf[KeywordDefinition]).toSet
   }
 
-  trait RobotPsiUtils {
+  trait ExtRobotPsiUtils {
     def utilsPsiElement: PsiElement
     def currentRobotFile = PsiTreeUtil.getParentOfType(utilsPsiElement, classOf[RobotPsiFile])
     def currentFile = currentRobotFile.getVirtualFile
@@ -101,57 +91,45 @@ package object psi {
     def psiManager = PsiManager.getInstance(utilsPsiElement.getProject)
   }
 
-  class Tables(node: ASTNode) extends ASTWrapperPsiElement(node) {
-    val structureViewTreeElement = new StructureViewTreeElement
-    class StructureViewTreeElement extends com.intellij.ide.structureView.StructureViewTreeElement {
-      def getValue: AnyRef = Tables.this
-      def getPresentation: ItemPresentation = new ItemPresentation {
-        def getPresentableText: String = "Tables"
-        def getLocationString: String = "Loc string"
-        def getIcon(unused: Boolean): Icon = null
-      }
-      def getChildren: Array[TreeElement] =
-        findChildrenByType(TokenSet.create(ast.TestCasesTable, ast.KeywordsTable))
-          .map((tc: {val structureViewTreeElement: com.intellij.ide.structureView.StructureViewTreeElement}) => tc.structureViewTreeElement).toArray
-      def canNavigateToSource: Boolean = false
-      def canNavigate: Boolean = false
-      def navigate(requestFocus: Boolean): Unit = ()
-    }
+  trait RobotPsiUtils extends PsiElement with ExtRobotPsiUtils {
+    def utilsPsiElement = this
   }
 
-  class TestCases(node: ASTNode) extends ASTWrapperPsiElement(node) {
-    val structureViewTreeElement = new StructureViewTreeElement
+  trait StructureViewElement extends ASTWrapperPsiElement with StructureViewTreeElement {
+    def structureViewText: String
+    def structureViewIcon: Icon
+    def structureViewChildren: Array[TreeElement]
 
-    class StructureViewTreeElement extends com.intellij.ide.structureView.StructureViewTreeElement {
-      def getValue: AnyRef = TestCases.this
-      def getPresentation: ItemPresentation = new ItemPresentation {
-        def getPresentableText: String = "Test Cases"
-        def getLocationString: String = null
-        def getIcon(unused: Boolean): Icon = AllIcons.Nodes.TestSourceFolder
-      }
-      def getChildren: Array[TreeElement] =
-        findChildrenByType(ast.TestCaseDefinition).map((tc: psi.TestCaseDefinition) => tc.structureViewTreeElement).toArray
-      def canNavigateToSource: Boolean = false
-      def canNavigate: Boolean = false
-      def navigate(requestFocus: Boolean): Unit = ()
+    def getValue: AnyRef = this
+    override def getPresentation: ItemPresentation = new ItemPresentation {
+      def getPresentableText: String = structureViewText
+      def getLocationString: String = s"AAA $structureViewText location string"
+      def getIcon(unused: Boolean): Icon = structureViewIcon
     }
+    final override def getChildren: Array[TreeElement] = structureViewChildren
+    override def canNavigateToSource: Boolean = false
+    override def canNavigate: Boolean = false
+    override def navigate(requestFocus: Boolean): Unit = ()
   }
 
-  class Keywords(node: ASTNode) extends ASTWrapperPsiElement(node) {
-    val structureViewTreeElement = new StructureViewTreeElement
+  class Tables(node: ASTNode) extends ASTWrapperPsiElement(node) with StructureViewElement {
+    def structureViewText: String = "AAA Tables structure view text"
+    def structureViewIcon: Icon = null
+    def structureViewChildren: Array[TreeElement] =
+      findChildrenByType[StructureViewElement](TokenSet.create(ast.TestCasesTable, ast.KeywordsTable)).toArray
+  }
 
-    class StructureViewTreeElement extends com.intellij.ide.structureView.StructureViewTreeElement {
-      def getValue: AnyRef = Keywords.this
-      def getPresentation: ItemPresentation = new ItemPresentation {
-        def getPresentableText: String = "Keywords"
-        def getLocationString: String = null
-        def getIcon(unused: Boolean): Icon = AllIcons.Nodes.TestSourceFolder
-      }
-      def getChildren: Array[TreeElement] =
-        findChildrenByType(ast.KeywordDefinition).map((tc: psi.KeywordDefinition) => tc.structureViewTreeElement).toArray
-      def canNavigateToSource: Boolean = false
-      def canNavigate: Boolean = false
-      def navigate(requestFocus: Boolean): Unit = ()
-    }
+  class TestCases(node: ASTNode) extends ASTWrapperPsiElement(node) with StructureViewElement {
+    def structureViewText: String = "Test Cases"
+    def structureViewIcon: Icon = AllIcons.Nodes.TestSourceFolder
+    def structureViewChildren: Array[TreeElement] =
+      findChildrenByType[_ >: StructureViewElement](ast.TestCaseDefinition).toArray
+  }
+
+  class Keywords(node: ASTNode) extends ASTWrapperPsiElement(node) with StructureViewElement {
+    def structureViewText: String = "Keywords"
+    def structureViewIcon: Icon = AllIcons.Nodes.TestSourceFolder
+    def structureViewChildren: Array[TreeElement] =
+      findChildrenByType[_ >: StructureViewElement](ast.KeywordDefinition).toArray
   }
 }

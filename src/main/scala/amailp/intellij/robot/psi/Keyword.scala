@@ -26,7 +26,6 @@ case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
       stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
     } yield stripped
   }.headOption
-  override val utilsPsiElement: PsiElement = this
   override val element: PsiElement = this
   def setNewName(name: String): PsiElement = {
     //TODO factorize with KeyDef one
@@ -51,12 +50,9 @@ object Keyword {
 }
 
 class KeywordToDefinitionReference(keyword: Keyword)
-  extends PsiPolyVariantReferenceBase[Keyword](keyword)
-  with RobotPsiUtils {
+  extends PsiPolyVariantReferenceBase[Keyword](keyword) with ExtRobotPsiUtils {
 
-  override def handleElementRename(newElementName: String): PsiElement = myElement.setNewName(newElementName)
-
-  override def utilsPsiElement: PsiElement = getElement
+  override def handleElementRename(newElementName: String): PsiElement = getElement.setNewName(newElementName)
 
   override def getVariants = {
     val externalKeywordDefinitions = KeywordDefinition.findInFiles(currentRobotFile.getRecursivelyImportedRobotFiles).toSet
@@ -85,6 +81,8 @@ class KeywordToDefinitionReference(keyword: Keyword)
       keywordDefinition <- KeywordDefinition.findMatchingInFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, keywordName)
     } yield new PsiElementResolveResult(keywordDefinition)
   }.toArray
+
+  def utilsPsiElement: PsiElement = getElement
 }
 
 class KeywordManipulator extends AbstractElementManipulator[Keyword] {
