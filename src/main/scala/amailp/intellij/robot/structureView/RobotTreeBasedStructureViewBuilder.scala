@@ -7,7 +7,7 @@ import amailp.intellij.robot.psi
 
 class RobotTreeBasedStructureViewBuilder(psiFile: RobotPsiFile) extends TreeBasedStructureViewBuilder {
   override def createStructureViewModel(editor: Editor): StructureViewModel = {
-    val element: StructureViewTreeElement =  psiFile.findChildByClass(classOf[psi.Tables]).structureViewTreeElement
+    val element: StructureViewTreeElement =  psiFile.findChildByClass(classOf[psi.Tables]).structureTreeElement
     new RobotStructureViewModel(psiFile, editor, element)
   }
 

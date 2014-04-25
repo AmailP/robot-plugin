@@ -9,23 +9,15 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement
 import amailp.intellij.robot.ast
 import com.intellij.icons.AllIcons
 import com.intellij.ide.util.PsiNavigationSupport
+import com.intellij.psi.tree.TokenSet
 
-class TestCaseDefinition(node: ASTNode) extends ASTWrapperPsiElement(node) {
+class TestCaseDefinition(node: ASTNode) extends RobotPsiElement(node) {
   override def getName = testCaseName.getText
   def testCaseName = getNode.findChildByType(ast.TestCaseName).getPsi(classOf[TestCaseName])
-  val structureViewTreeElement = new StructureViewTreeElement
-  class StructureViewTreeElement extends structureView.StructureViewTreeElement {
-    def getValue: AnyRef = TestCaseDefinition.this
-    def getPresentation: ItemPresentation = new ItemPresentation {
-      def getPresentableText: String = TestCaseDefinition.this.getName
-      def getLocationString: String = null
-      def getIcon(unused: Boolean): Icon = AllIcons.Nodes.Method
-    }
-    def getChildren: Array[TreeElement] = TreeElement.EMPTY_ARRAY
-    def canNavigateToSource: Boolean = canNavigate
-    def canNavigate: Boolean = PsiNavigationSupport.getInstance().canNavigate(TestCaseDefinition.this)
-    def navigate(requestFocus: Boolean): Unit = PsiNavigationSupport.getInstance().getDescriptor(TestCaseDefinition.this).navigate(requestFocus)
-  }
+
+  def structureViewText: String = getName
+  def structureViewIcon: Icon = AllIcons.Nodes.Method
+  def structureViewChildrenTokenTypes = Nil
 }
 
 case class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)

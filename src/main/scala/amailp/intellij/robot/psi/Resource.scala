@@ -10,7 +10,7 @@ case class ResourceValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
   override lazy val getReference: PsiReference = new ResourceValueReference(this)
 }
 
-class ResourceValueReference(element: ResourceValue) extends PsiReferenceBase[ResourceValue](element) with RobotPsiUtils {
+class ResourceValueReference(element: ResourceValue) extends PsiReferenceBase[ResourceValue](element) with ExtRobotPsiUtils {
   override def resolve() = {
     Option[VirtualFile](currentDirectory.findFileByRelativePath(getElement.getText)) match {
       case Some(targetFile) => psiManager.findFile(targetFile)
