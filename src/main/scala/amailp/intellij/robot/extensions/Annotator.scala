@@ -15,11 +15,11 @@ class Annotator extends com.intellij.lang.annotation.Annotator {
     }
 
     element match {
-      case Ellipsis(_) => highlightAs(LINE_COMMENT)
-      case KeywordName(_) => highlightAs(KEYWORD)
-      case Keyword(_) => highlightAs(NUMBER)
-      case TestCaseName(_) => highlightAs(LABEL)
-      case SettingName(_) => highlightAs(INSTANCE_FIELD)
+      case _: Ellipsis => highlightAs(LINE_COMMENT)
+      case _: KeywordName => highlightAs(KEYWORD)
+      case _: Keyword => highlightAs(NUMBER)
+      case _: TestCaseName => highlightAs(LABEL)
+      case _: SettingName => highlightAs(INSTANCE_FIELD)
       case _ =>
     }
   }

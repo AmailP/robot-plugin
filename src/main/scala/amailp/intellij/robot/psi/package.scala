@@ -4,29 +4,22 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement
 import com.intellij.lang.ASTNode
 import com.intellij.psi._
 import com.intellij.psi.util.PsiTreeUtil
-import com.intellij.psi.tree.TokenSet
-import amailp.intellij.robot.elements.RobotTokenTypes
 import scala.collection.JavaConversions._
-import com.intellij.navigation.ItemPresentation
-import com.intellij.psi.impl.source.tree.LeafPsiElement
 import amailp.intellij.robot.file.FileType
 import amailp.intellij.robot.findUsage.UsageFindable
 import javax.swing.Icon
 import com.intellij.icons.AllIcons
-import com.intellij.ide.util.treeView.smartTree.TreeElement
-import com.intellij.ide.structureView.StructureViewTreeElement
-import amailp.intellij.robot.lexer.RobotIElementType
 
 //TODO delete or anyway reduce package object
 package object psi {
-  case class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
-  case class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
-  case class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
-  case class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) {
+  class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
+  class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
+  class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
+  class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) {
     def matches(string: String) = string equalsIgnoreCase getText
     val element: PsiElement = this
   }
-//  case class VariableKeywordName (node: ASTNode) extends LeafPsiElement(ast.KeywordName, node.getText) with RobotPsiUtils {
+//  class VariableKeywordName (node: ASTNode) extends LeafPsiElement(ast.KeywordName, node.getText) with RobotPsiUtils {
 //    def utilsPsiElement = this
 //    def textCaseInsensitiveExcludingVariables = {
 //      val offset = getTextRange.getStartOffset
@@ -41,7 +34,7 @@ package object psi {
 //    def matches(string: String) = string matches textCaseInsensitiveExcludingVariables
 //  }
 
-  case class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNamedElement with UsageFindable {
+  class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNamedElement with UsageFindable {
     private def keywordName = getNode.findChildByType(ast.KeywordName).getPsi(classOf[KeywordName])
     override def getNodeText(useFullName: Boolean) = getName
     override def getName: String = keywordName.getText
@@ -96,27 +89,6 @@ package object psi {
     def utilsPsiElement = this
   }
 
-  abstract class RobotPsiElement(node: ASTNode) extends ASTWrapperPsiElement(node) {
-
-    def structureViewText: String
-    def structureViewIcon: Icon
-    def structureViewChildrenTokenTypes: List[RobotIElementType]
-
-    val structureTreeElement: StructureViewTreeElement = new StructureViewTreeElement {
-      def getChildren: Array[TreeElement] =
-        findChildrenByType[RobotPsiElement](TokenSet.create(structureViewChildrenTokenTypes: _*)).map(_.structureTreeElement).toArray
-      def getPresentation: ItemPresentation = new ItemPresentation {
-        def getPresentableText: String = structureViewText
-        def getLocationString: String = s"AAA $structureViewText location string"
-        def getIcon(unused: Boolean): Icon = structureViewIcon
-      }
-      def canNavigateToSource: Boolean = false
-      def canNavigate: Boolean = false
-      def navigate(requestFocus: Boolean): Unit = ()
-      def getValue: AnyRef = RobotPsiElement.this
-    }
-  }
-
 
   class Tables(node: ASTNode) extends RobotPsiElement(node) {
     def structureViewText: String = "AAA Tables structure view text"
@@ -136,3 +108,5 @@ package object psi {
     def structureViewChildrenTokenTypes = List(ast.KeywordDefinition)
   }
 }
+
+

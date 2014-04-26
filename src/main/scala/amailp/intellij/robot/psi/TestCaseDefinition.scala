@@ -20,4 +20,4 @@ class TestCaseDefinition(node: ASTNode) extends RobotPsiElement(node) {
   def structureViewChildrenTokenTypes = Nil
 }
 
-case class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)
+class TestCaseName(node: ASTNode) extends ASTWrapperPsiElement(node)

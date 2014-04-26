@@ -14,7 +14,7 @@ import amailp.intellij.robot.findUsage.UsageFindable
 /**
  * An instance of a keyword when is used
  */
-case class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils with UsageFindable {
+class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils with UsageFindable {
 
   override def getReference = new KeywordToDefinitionReference(this)
 

@@ -10,7 +10,7 @@ import amailp.intellij.robot.file.FileType
 import com.intellij.psi.util.PsiTreeUtil
 import scala.collection.JavaConversions._
 
-case class ResourceValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
+class ResourceValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
   override def getReference: PsiReference = new ResourceValueReference(this)
 }
 
