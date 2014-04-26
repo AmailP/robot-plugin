@@ -16,7 +16,7 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.8 - xxx 2014
+      0.8 - 27 apr 2014
       <ul>
         <li>Find usages support</li>
         <li>Structure view support</li>
@@ -24,6 +24,7 @@
         <li>Support for comment/uncomment lines</li>
         <li>Jump to definition supports multiple definitions</li>
         <li>Jump to definition supports ignorable Given/When/Then/And</li>
+        <li>Jump to definition supports embedded variables</li>
       </ul>
       0.7.1 - 12 mar 2014
       <ul>
