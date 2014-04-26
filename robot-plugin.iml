@@ -7,6 +7,7 @@
         <option name="compileOrder" value="ScalaThenJava" />
         <option name="compilerLibraryLevel" value="Project" />
         <option name="compilerLibraryName" value="scala-compiler" />
+        <option name="languageLevel" value="Scala 2.11" />
       </configuration>
     </facet>
   </component>
