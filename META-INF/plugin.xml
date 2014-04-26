@@ -10,15 +10,19 @@
         <li>Syntax highlighting</li>
         <li>Code completion</li>
         <li>Jump to definition</li>
+        <li>Find and rename usages</li>
+        <li>Structure view</li>
       </ul>
       ]]></description>
 
     <change-notes><![CDATA[
       0.8 - xxx 2014
       <ul>
+        <li>Find usages support</li>
+        <li>Structure view support</li>
+        <li>Refactor/rename support</li>
         <li>Support for comment/uncomment lines</li>
         <li>Jump to definition supports multiple definitions</li>
-        <li>Jump to definition supports for keywords with variable embedded arguments</li>
         <li>Jump to definition supports ignorable Given/When/Then/And</li>
       </ul>
       0.7.1 - 12 mar 2014
