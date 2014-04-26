@@ -2,12 +2,16 @@ package amailp.intellij.robot.psi
 
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
-import com.intellij.psi.{PsiElement, PsiReferenceBase, AbstractElementManipulator, PsiReference}
+import com.intellij.psi._
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.util.TextRange
+import scala.Some
+import amailp.intellij.robot.file.FileType
+import com.intellij.psi.util.PsiTreeUtil
+import scala.collection.JavaConversions._
 
 case class ResourceValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
-  override lazy val getReference: PsiReference = new ResourceValueReference(this)
+  override def getReference: PsiReference = new ResourceValueReference(this)
 }
 
 class ResourceValueReference(element: ResourceValue) extends PsiReferenceBase[ResourceValue](element) with ExtRobotPsiUtils {
@@ -23,6 +27,17 @@ class ResourceValueReference(element: ResourceValue) extends PsiReferenceBase[Re
   override def utilsPsiElement: PsiElement = getElement
 }
 
-class ResourceValueManipulator extends AbstractElementManipulator[Keyword]{
-  override def handleContentChange(element: Keyword, range: TextRange, newContent: String): Keyword = null
+class ResourceValueManipulator extends AbstractElementManipulator[ResourceValue]{
+  override def handleContentChange(element: ResourceValue, range: TextRange, newContent: String): ResourceValue = {
+    //TODO factorize with KeyDef one
+    val fileContent =
+      s"""
+          |*** Settings ***
+          |Resource    $newContent
+        """.stripMargin
+    val dummyFile = PsiFileFactory.getInstance(element.getProject).createFileFromText("dummy", FileType, fileContent).asInstanceOf[RobotPsiFile]
+    val dummyKeyword= PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[ResourceValue]).head
+    element.getNode.getTreeParent.replaceChild(element.getNode, dummyKeyword.getNode)
+    element
+  }
 }
