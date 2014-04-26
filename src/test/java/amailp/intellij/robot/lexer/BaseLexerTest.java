@@ -5,7 +5,7 @@ import com.intellij.psi.tree.IElementType;
 import org.junit.After;
 import org.junit.Before;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 

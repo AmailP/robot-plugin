@@ -80,8 +80,8 @@
         <annotator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Annotator"/>
         <fileTypeFactory implementation="amailp.intellij.robot.extensions.FileTypeFactory"/>
         <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Commenter"/>
-        <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.KeywordManipulator"/>
-        <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.ResourceValueManipulator"/>
+        <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.manipulator.Keyword"/>
+        <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.manipulator.ResourceValue"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.extensions.ParserDefinition"/>
         <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
 

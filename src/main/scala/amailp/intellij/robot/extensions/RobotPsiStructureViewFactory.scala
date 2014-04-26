@@ -6,9 +6,7 @@ import com.intellij.ide.structureView._
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.project.Project
 import amailp.intellij.robot.psi.RobotPsiFile
-import com.intellij.openapi.editor.Editor
-import amailp.intellij.robot.psi
-import amailp.intellij.robot.structureView.{RobotTreeBasedStructureViewBuilder, RobotStructureViewModel}
+import amailp.intellij.robot.structureView.RobotTreeBasedStructureViewBuilder
 
 class RobotPsiStructureViewFactory extends PsiStructureViewFactory {
   def getStructureViewBuilder(psiFile: PsiFile): StructureViewBuilder = new StructureViewBuilder {
