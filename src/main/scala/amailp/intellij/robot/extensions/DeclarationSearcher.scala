@@ -8,8 +8,7 @@ import amailp.intellij.robot.psi.KeywordName
 class DeclarationSearcher extends com.intellij.pom.PomDeclarationSearcher {
   def findDeclarationsAt(element: PsiElement, offsetInElement: Int, consumer: Consumer[PomTarget]): Unit = {
     element match {
-    //TODO instead of instantiating DelegatePsiTarget, KeywordDefinition could possibly implement PsiTarget
-      case keywordName : KeywordName => consumer.consume(new DelegatePsiTarget(keywordName.getParent))
+      case keywordName : KeywordName => consumer.consume(keywordName.getDefinition)
       case _ =>
     }
   }

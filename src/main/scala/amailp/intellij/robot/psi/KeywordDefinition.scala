@@ -10,7 +10,7 @@ import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
 
 
-class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNamedElement with UsageFindable with InStructureView {
+class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNamedElement with UsageFindable with InStructureView with PsiTarget {
   private def keywordName = getNode.findChildByType(ast.KeywordName).getPsi(classOf[KeywordName])
   override def getNodeText(useFullName: Boolean) = getName
   override def getName: String = keywordName.getText

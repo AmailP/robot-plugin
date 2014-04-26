@@ -87,14 +87,12 @@
 
         <!-- Find Usages -->
         <elementDescriptionProvider implementation="amailp.intellij.robot.extensions.ElementDescriptionProvider"/>
-        <findUsagesHandlerFactory implementation="amailp.intellij.robot.extensions.FindUsagesHandlerFactory" id="robot" order="last, before java"/>
         <lang.findUsagesProvider language="Robotframework" implementationClass="amailp.intellij.robot.extensions.FindUsagesProvider"/>
         <pom.declarationSearcher implementation="amailp.intellij.robot.extensions.DeclarationSearcher"/>
         <usageTypeProvider implementation="amailp.intellij.robot.extensions.UsageTypeProvider"/>
 
         <!-- Rename -->
         <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.NamesValidator"/>
-        <renameHandler implementation="amailp.intellij.robot.extensions.RenameHandler"/>
 
         <!-- File templates -->
         <internalFileTemplate name="Robot Test Suite"/>

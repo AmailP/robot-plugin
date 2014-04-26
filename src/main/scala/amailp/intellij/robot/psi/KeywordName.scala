@@ -7,6 +7,7 @@ import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes._
 
 class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) {
+  def getDefinition: KeywordDefinition = element.getParent.asInstanceOf[KeywordDefinition]
   def variables = getNode.getChildren(TokenSet.create(Variable))
   def textCaseInsensitiveExcludingVariables = {
     val offset = getTextRange.getStartOffset
