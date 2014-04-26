@@ -21,7 +21,7 @@ trait InStructureView extends RobotPsiElement {
     }.toArray
     def getPresentation: ItemPresentation = new ItemPresentation {
       def getPresentableText: String = structureViewText
-      def getLocationString: String = s"AAA $structureViewText location string"
+      def getLocationString: String = null
       def getIcon(unused: Boolean): Icon = structureViewIcon
     }
     def canNavigateToSource: Boolean = false

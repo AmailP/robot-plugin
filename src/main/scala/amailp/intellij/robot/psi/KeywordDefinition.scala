@@ -8,6 +8,7 @@ import scala.collection.JavaConversions._
 import amailp.intellij.robot.findUsage.UsageFindable
 import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
+import amailp.intellij.robot.file.Icons
 
 
 class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNamedElement with UsageFindable with InStructureView with PsiTarget {
@@ -25,7 +26,7 @@ class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNa
   def getDescriptiveName: String = getName
 
   def structureViewText = getName
-  def structureViewIcon = AllIcons.Nodes.TestSourceFolder
+  def structureViewIcon = Icons.keyword
   def structureViewChildrenTokenTypes = Nil
 }
 

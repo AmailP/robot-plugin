@@ -5,6 +5,7 @@ import com.intellij.lang.ASTNode
 import javax.swing.Icon
 import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
+import amailp.intellij.robot.file.Icons
 
 package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
@@ -25,7 +26,7 @@ package object psi {
 
   class Keywords(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
     def structureViewText = "Keywords"
-    def structureViewIcon = AllIcons.Nodes.TestSourceFolder
+    def structureViewIcon = Icons.keywords
     def structureViewChildrenTokenTypes = List(ast.KeywordDefinition)
   }
 }
