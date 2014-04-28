@@ -1,0 +1,8 @@
+<idea-plugin version="2">
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Robot libraries completion -->
+        <completion.contributor language="Robotframework" implementationClass="amailp.intellij.robot.extensions.RobotLibrariesCompletionContributor"/>
+    </extensions>
+
+</idea-plugin>

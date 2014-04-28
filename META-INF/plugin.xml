@@ -65,6 +65,7 @@
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
+    <depends optional="true" config-file="robot-python.xml">PythonCore</depends>
 
     <application-components/>
 
@@ -102,4 +103,6 @@
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="Robotframework" implementationClass="amailp.intellij.robot.extensions.RobotPsiStructureViewFactory"/>
     </extensions>
+
+
 </idea-plugin>
