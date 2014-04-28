@@ -4,6 +4,7 @@ import com.intellij.psi.{PsiElementResolveResult, ResolveResult, PsiElement, Psi
 import amailp.intellij.robot.psi.{Keyword, KeywordDefinition}
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
+import amailp.intellij.robot.file.Icons
 
 class KeywordToDefinitionReference(keyword: Keyword)
   extends PsiPolyVariantReferenceBase[Keyword](keyword) with ExtRobotPsiUtils {
@@ -26,6 +27,7 @@ class KeywordToDefinitionReference(keyword: Keyword)
       ) yield LookupElementBuilder.create(keyword)
         .withCaseSensitivity(false)
         .withTypeText("Keyword", true)
+        .withIcon(Icons.keyword)
         .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
         .asInstanceOf[AnyRef]
     ).toArray
