@@ -7,7 +7,7 @@ import amailp.intellij.robot.ast
 
 object SettingParser extends SubParser {
 
-  val otherSettingNames = Set[String]("Library", "Variables", "Documentation", "Metadata", "Suite Setup",
+  val otherSettingNames = Set[String]("Variables", "Documentation", "Metadata", "Suite Setup",
     "Suite Teardown", "Suite Precondition", "Suite Postcondition", "Force Tags", "Default Tags", "Test Setup",
     "Test Teardown", "Test Precondition", "Test Postcondition", "Test Template", "Test Timeout")
   
@@ -22,21 +22,29 @@ object SettingParser extends SubParser {
       }
       else parseCell((marker: Marker, content: String) => {
         content match {
-          case "Resource" => marker done ast.ResourceName ; ast.ResourceName
+          case "Resource" => marker done ast.ResourceKey ; ast.ResourceKey
+          case "Library" => marker done ast.LibraryKey ; ast.LibraryKey
           case cnt if otherSettingNames contains cnt => marker done ast.SettingName ; ast.SettingName
           case _ => marker error "Settings name not known" ; ast.NonEmptyCell
         }
       })
     }
 
+    //TODO remove duplication for settings
     def parseResouceValue() {
       consumeSeparator()
       parseCell(ast.ResourceValue)
     }
 
+    def parseLibraryValue() {
+      consumeSeparator()
+      parseCell(ast.LibraryValue)
+    }
+
     val settingMarker = mark
     parseSettingFirstCell() match {
-      case ast.ResourceName => parseResouceValue()
+      case ast.ResourceKey => parseResouceValue()
+      case ast.LibraryKey => parseLibraryValue()
       case _ => parseRemainingCells()
     }
     settingMarker done ast.Setting

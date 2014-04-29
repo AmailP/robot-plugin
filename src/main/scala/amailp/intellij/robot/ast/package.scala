@@ -9,8 +9,10 @@ package object ast {
   object SettingsTable extends RobotIElementType("SettingsTable")
   object Setting extends RobotIElementType("Setting")
   object SettingName extends RobotIElementType("SettingName")
-  object ResourceName extends RobotIElementType("ResourceName")
+  object ResourceKey extends RobotIElementType("ResourceKey")
   object ResourceValue extends RobotIElementType("ResourceValue")
+  object LibraryKey extends RobotIElementType("LibraryKey")
+  object LibraryValue extends RobotIElementType("LibraryValue")
 
   object TestCasesTable extends RobotIElementType("TestCasesTable")
   object TestCaseName extends RobotIElementType("TestCaseTitle")

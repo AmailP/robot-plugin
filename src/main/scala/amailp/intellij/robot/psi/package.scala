@@ -6,11 +6,16 @@ import javax.swing.Icon
 import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
+import com.intellij.psi.PsiReference
+import amailp.intellij.robot.psi.reference.ResourceValueReference
 
 package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
+  class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
+    def isRobotLibrary: Boolean = !getText.endsWith(".py")
+  }
 
   class Tables(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
     def structureViewText: String = "AAA Tables structure view text"
