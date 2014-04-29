@@ -39,7 +39,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
   def getRecursivelyImportedRobotLibraries: Iterable[LibraryValue] = {
     for {
       file <- getRecursivelyImportedRobotFiles
-      lib <- getImportedRobotLibraries
+      lib <- file.getImportedRobotLibraries
     } yield lib
   }
 

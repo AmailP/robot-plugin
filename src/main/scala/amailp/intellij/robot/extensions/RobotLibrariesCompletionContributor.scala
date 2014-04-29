@@ -8,9 +8,10 @@ import amailp.intellij.robot.elements.RobotTokenTypes
 import amailp.intellij.robot.psi.{KeywordDefinition, TestCaseDefinition}
 import com.jetbrains.python.psi.stubs.PyClassNameIndex
 import com.jetbrains.python.psi.{Property, PyFunction, PyClass}
-import java.util
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
+import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
+import com.intellij.psi.PsiElement
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -21,35 +22,39 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
                                  completionParameters: CompletionParameters,
                                  processingContext: ProcessingContext,
                                  completionResultSet:  CompletionResultSet) = {
-      completionParameters.getPosition.getParent.getParent match {
+      val currentPsiElem = completionParameters.getPosition
+      val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
+        def utilsPsiElement: PsiElement = currentPsiElem
+      }
+      println(s"Robot libs: ${for {
+        lib <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.toList
+      } yield lib.getText}")
+      //TODO redo filtering, this does not work well enough
+      println(s"Parent: ${currentPsiElem.getParent.getParent.getText}")
+      println(s"Parent type: ${currentPsiElem.getParent.getParent.getClass.getSimpleName}")
+      currentPsiElem.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
-          val c = PyClassNameIndex.findClass("robot.libraries.Collections.Collections", completionParameters.getPosition.getProject)
-          //val scoll: Iterable[PyClass] = coll
           for {
-            clazz: PyClass <- List(c)
+            lib <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries
+            pyClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.${lib.getText}.${lib.getText}", completionParameters.getPosition.getProject))
           } {
-            println(s"QName: ${clazz.getQualifiedName}")
-            val m: scala.collection.Map[String, Property] = clazz.getProperties
-            for ((k, v) <- m) {
-              println(s"prop: ${k}")
-            }
-            val anc: Iterable[PyClass] = clazz.getAncestorClasses
+            println(s"QName: ${pyClass.getQualifiedName}")
+            val ancestors: Iterable[PyClass] = pyClass.getAncestorClasses
+            val pyClasses =  pyClass +: ancestors.toSeq
             for {
-              a <- anc
-              m <- a.getMethods
-              n = m.getName if !n.startsWith("_")
+              pyClass <- pyClasses
+              method <- pyClass.getMethods
+              methodName = method.getName if !methodName.startsWith("_")
             } {
-              println(s"a: ${a.getName}\nmeth: ${n}")
-              completionResultSet.addElement(LookupElementBuilder.create(n.replace('_',' '))
+              println(s"a: ${pyClass.getName}\nmeth: ${methodName}")
+              completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
                 .withTypeText("RobotKeyword", true)
                 .withIcon(Icons.robot)
                 .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
             }
           }
-          completionResultSet.addElement(LookupElementBuilder.create("something"))
         case _ =>
-          completionResultSet.addElement(LookupElementBuilder.create("somethung"))
       }
     }
   })

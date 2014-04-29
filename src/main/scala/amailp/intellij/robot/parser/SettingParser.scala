@@ -36,6 +36,7 @@ object SettingParser extends SubParser {
       parseCell(ast.ResourceValue)
     }
 
+    //TODO parse library parameters (e.g. main.robot -> main.py)
     def parseLibraryValue() {
       consumeSeparator()
       parseCell(ast.LibraryValue)

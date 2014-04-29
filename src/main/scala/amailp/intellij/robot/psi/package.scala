@@ -14,6 +14,7 @@ package object psi {
   class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
   class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
+    //TODO improve check by looking up content of robot.libraries python module
     def isRobotLibrary: Boolean = !getText.endsWith(".py")
   }
 
