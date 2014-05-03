@@ -16,6 +16,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.8.1 - 4 may 2014
+      <ul>
+        <li>Bug #3 fixed: Embedded variables surrounded with quotes raises fatal error</li>
+      </ul>
       0.8 - 27 apr 2014
       <ul>
         <li>Find usages support</li>
