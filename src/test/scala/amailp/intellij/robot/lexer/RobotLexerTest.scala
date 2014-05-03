@@ -76,6 +76,45 @@ class RobotLexerTest extends _BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.LineTerminator)
   }
 
+  test("VariableQuotedCell") {
+    scanString("  This '${is}' cell  \n")
+    nextTokenIsType(RobotTokenTypes.Separator)
+    nextTokenIs("This", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("'", RobotTokenTypes.Word)
+    nextTokenIs("${is}", RobotTokenTypes.Variable)
+    nextTokenIs("'", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("cell", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.IrrelevantSpaces)
+    nextTokenIsType(RobotTokenTypes.LineTerminator)
+  }
+
+  test("NonVariableCell") {
+    scanString("  This $ {is} notCell  \n")
+    nextTokenIsType(RobotTokenTypes.Separator)
+    nextTokenIs("This", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("$", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("{is}", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("notCell", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.IrrelevantSpaces)
+    nextTokenIsType(RobotTokenTypes.LineTerminator)
+  }
+
+  test("NotEndedVariableCell") {
+    scanString("This ${is notCell\n")
+    nextTokenIs("This", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("$", RobotTokenTypes.Word)
+    nextTokenIs("{is", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.Space)
+    nextTokenIs("notCell", RobotTokenTypes.Word)
+    nextTokenIsType(RobotTokenTypes.LineTerminator)
+  }
+
   test("Comment") {
     scanString("  #This is comment  ")
     nextTokenIsType(RobotTokenTypes.IrrelevantSpaces)
