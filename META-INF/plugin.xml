@@ -5,13 +5,14 @@
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
-      Basic support for Robot Framework
+      Robot Framework support plugin for IntelliJ Idea
       <ul>
         <li>Syntax highlighting</li>
         <li>Code completion</li>
-        <li>Jump to definition</li>
-        <li>Find and rename usages</li>
-        <li>Structure view</li>
+        <li>Jump to keyword definition, from local file and from the recursively imported resources</li>
+        <li>Jump to resource</li>
+        <li>Find usages / rename of keywords and resources</li>
+        <li>Structure view for test cases and keywords</li>
       </ul>
       ]]></description>
 
