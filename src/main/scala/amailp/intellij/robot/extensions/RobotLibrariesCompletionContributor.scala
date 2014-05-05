@@ -35,8 +35,8 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       currentPsiElem.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
-            lib <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries
-            pyClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.${lib.getText}.${lib.getText}", completionParameters.getPosition.getProject))
+            libName <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
+            pyClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.$libName.$libName", completionParameters.getPosition.getProject))
           } {
             println(s"QName: ${pyClass.getQualifiedName}")
             val ancestors: Iterable[PyClass] = pyClass.getAncestorClasses
@@ -46,7 +46,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
               method <- pyClass.getMethods
               methodName = method.getName if !methodName.startsWith("_")
             } {
-              println(s"a: ${pyClass.getName}\nmeth: ${methodName}")
+              println(s"a: ${pyClass.getName}\nmeth: $methodName")
               completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
                 .withTypeText("RobotKeyword", true)
