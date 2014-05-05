@@ -30,22 +30,21 @@ object SettingParser extends SubParser {
       })
     }
 
-    //TODO remove duplication for settings
     def parseResouceValue() {
       consumeSeparator()
       parseCell(ast.ResourceValue)
     }
 
-    //TODO parse library parameters (e.g. main.robot -> main.py)
-    def parseLibraryValue() {
+    def parseLibraryValueAndParameters() {
       consumeSeparator()
       parseCell(ast.LibraryValue)
+      parseRemainingCells()
     }
 
     val settingMarker = mark
     parseSettingFirstCell() match {
       case ast.ResourceKey => parseResouceValue()
-      case ast.LibraryKey => parseLibraryValue()
+      case ast.LibraryKey => parseLibraryValueAndParameters()
       case _ => parseRemainingCells()
     }
     settingMarker done ast.Setting
