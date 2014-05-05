@@ -6,6 +6,8 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement
 import com.intellij.ide.structureView.StructureViewTreeElement
 import amailp.intellij.robot.lexer.RobotIElementType
 import amailp.intellij.robot.psi.RobotPsiElement
+import com.intellij.ide.util.PsiNavigationSupport
+import com.intellij.pom.Navigatable
 
 trait InStructureView extends RobotPsiElement {
   def structureViewText: String
@@ -24,9 +26,11 @@ trait InStructureView extends RobotPsiElement {
       def getLocationString: String = null
       def getIcon(unused: Boolean): Icon = structureViewIcon
     }
-    def canNavigateToSource: Boolean = false
-    def canNavigate: Boolean = false
-    def navigate(requestFocus: Boolean): Unit = ()
+    def canNavigateToSource: Boolean = true
+    def canNavigate: Boolean = getNavigatable.canNavigate
+    def navigate(requestFocus: Boolean): Unit = getNavigatable.navigate(requestFocus)
+    private def getNavigatable: Navigatable = PsiNavigationSupport.getInstance().getDescriptor(InStructureView.this)
+
     def getValue: AnyRef = InStructureView.this
   }
 }
