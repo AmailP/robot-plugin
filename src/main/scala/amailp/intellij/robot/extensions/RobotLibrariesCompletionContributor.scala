@@ -7,7 +7,6 @@ import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuild
 import amailp.intellij.robot.elements.RobotTokenTypes
 import amailp.intellij.robot.psi.{KeywordDefinition, TestCaseDefinition}
 import com.jetbrains.python.psi.stubs.PyClassNameIndex
-import com.jetbrains.python.psi.PyClass
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils

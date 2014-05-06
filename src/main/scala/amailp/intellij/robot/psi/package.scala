@@ -6,8 +6,6 @@ import javax.swing.Icon
 import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
-import com.intellij.psi.PsiReference
-import amailp.intellij.robot.psi.reference.ResourceValueReference
 
 package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)

@@ -6,7 +6,6 @@ import com.intellij.psi._
 import com.intellij.psi.util.PsiTreeUtil
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.findUsage.UsageFindable
-import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
 
