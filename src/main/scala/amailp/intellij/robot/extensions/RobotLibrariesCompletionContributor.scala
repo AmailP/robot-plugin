@@ -33,7 +33,6 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
             libName <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
             pyBaseClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.$libName.$libName", completionParameters.getPosition.getProject))
           } {
-            println(s"QName: ${pyBaseClass.getQualifiedName}")
             val ancestors: Iterable[PyClass] = pyBaseClass.getAncestorClasses
             val pyClasses =  pyBaseClass +: ancestors.toSeq
             for {
@@ -41,7 +40,6 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
               method <- pyClass.getMethods
               methodName = method.getName if !methodName.startsWith("_")
             } {
-              println(s"a: ${pyClass.getName}\nmeth: $methodName")
               completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
                 .withTypeText(pyBaseClass.getName, true)
