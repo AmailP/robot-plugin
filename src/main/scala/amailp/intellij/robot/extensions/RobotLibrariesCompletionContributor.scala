@@ -31,19 +31,14 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           for {
             libName <- robotLibrariesInScope
             pyBaseClass <- findRobotPyClass(libName)
-          } {
-            for {
-              pyClass <- pyBaseClass +: pyBaseClass.getAncestorClasses.toSeq
-              method <- pyClass.getMethods
-              methodName = method.getName if !methodName.startsWith("_")
-            } {
-              completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
+            pyClass <- pyBaseClass +: pyBaseClass.getAncestorClasses.toSeq
+            method <- pyClass.getMethods
+            methodName = method.getName if !methodName.startsWith("_")
+          } completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
                 .withTypeText(pyBaseClass.getName, true)
                 .withIcon(Icons.robot)
                 .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
-            }
-          }
         case _ =>
       }
       def robotLibrariesInScope = psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
