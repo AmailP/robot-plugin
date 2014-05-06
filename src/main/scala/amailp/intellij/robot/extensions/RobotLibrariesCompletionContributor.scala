@@ -7,7 +7,7 @@ import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuild
 import amailp.intellij.robot.elements.RobotTokenTypes
 import amailp.intellij.robot.psi.{KeywordDefinition, TestCaseDefinition}
 import com.jetbrains.python.psi.stubs.PyClassNameIndex
-import com.jetbrains.python.psi.{Property, PyFunction, PyClass}
+import com.jetbrains.python.psi.PyClass
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
@@ -26,21 +26,16 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
         def utilsPsiElement: PsiElement = currentPsiElem
       }
-      println(s"Robot libs: ${for {
-        lib <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.toList
-      } yield lib.getText}")
-      //TODO redo filtering, this does not work well enough
-      println(s"Parent: ${currentPsiElem.getParent.getParent.getText}")
-      println(s"Parent type: ${currentPsiElem.getParent.getParent.getClass.getSimpleName}")
-      currentPsiElem.getParent.getParent match {
+      //TODO rethink filtering, this maybe does not work well enough
+      currentPsiElem.getParent.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
             libName <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
-            pyClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.$libName.$libName", completionParameters.getPosition.getProject))
+            pyBaseClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.$libName.$libName", completionParameters.getPosition.getProject))
           } {
-            println(s"QName: ${pyClass.getQualifiedName}")
-            val ancestors: Iterable[PyClass] = pyClass.getAncestorClasses
-            val pyClasses =  pyClass +: ancestors.toSeq
+            println(s"QName: ${pyBaseClass.getQualifiedName}")
+            val ancestors: Iterable[PyClass] = pyBaseClass.getAncestorClasses
+            val pyClasses =  pyBaseClass +: ancestors.toSeq
             for {
               pyClass <- pyClasses
               method <- pyClass.getMethods
@@ -49,7 +44,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
               println(s"a: ${pyClass.getName}\nmeth: $methodName")
               completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
-                .withTypeText("RobotKeyword", true)
+                .withTypeText(pyBaseClass.getName, true)
                 .withIcon(Icons.robot)
                 .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
             }
