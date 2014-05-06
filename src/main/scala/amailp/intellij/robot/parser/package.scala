@@ -31,7 +31,7 @@ package object parser {
     def parseCell(terminateMarker: (Marker, String) => IElementType): IElementType = {
       val cellMarker = mark
       val contentBuilder = new StringBuilder
-      while(!currentIsRowTerminator && currentType != Separator) {
+      while(!currentIsLineTerminator && currentType != Separator) {
         contentBuilder append currentText
         advanceLexer()
       }
@@ -52,7 +52,7 @@ package object parser {
 
     def currentIsSeparator = currentType == Separator
 
-    def currentIsRowTerminator = currentType == LineTerminator || eof
+    def currentIsLineTerminator = currentType == LineTerminator || eof
 
     def consumeSeparator() {
       if(!currentIsSeparator) error("Cell separator expected")
@@ -60,7 +60,7 @@ package object parser {
     }
 
     def consumeLineTerminator() {
-      if (!currentIsRowTerminator) error("Line terminator expected")
+      if (!currentIsLineTerminator && !eof) error("Line terminator expected")
       advanceLexer()
     }
 
