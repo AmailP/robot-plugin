@@ -30,13 +30,11 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       currentPsiElem.getParent.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
-            libName <- psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
-            pyBaseClass <- Option(PyClassNameIndex.findClass(s"robot.libraries.$libName.$libName", completionParameters.getPosition.getProject))
+            libName <- robotLibrariesInScope
+            pyBaseClass <- findRobotPyClass(libName)
           } {
-            val ancestors: Iterable[PyClass] = pyBaseClass.getAncestorClasses
-            val pyClasses =  pyBaseClass +: ancestors.toSeq
             for {
-              pyClass <- pyClasses
+              pyClass <- pyBaseClass +: pyBaseClass.getAncestorClasses.toSeq
               method <- pyClass.getMethods
               methodName = method.getName if !methodName.startsWith("_")
             } {
@@ -49,6 +47,9 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           }
         case _ =>
       }
+      def robotLibrariesInScope = psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
+      def findRobotPyClass(name: String) = Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
     }
   })
+
 }
