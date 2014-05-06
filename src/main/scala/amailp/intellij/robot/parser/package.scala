@@ -16,12 +16,10 @@ package object parser {
     def currentType = getTokenType
     def currentText = getTokenText
 
-    def parseBodyRow() {
-      val rowMarker = mark
+    def parseRowContent() {
       if(!currentIsSeparator) parseCell()
       parseRemainingCells()
       consumeLineTerminator()
-      rowMarker done ast.TableRow
     }
 
     def parseCell(cellType: IElementType = ast.NonEmptyCell): IElementType = {

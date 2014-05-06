@@ -16,7 +16,7 @@ object RobotParser extends PsiParser {
         case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(ast.SettingsTable)
         case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
         case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(ast.KeywordsTable)
-        case VariablesHeader => parseTableItemsWith(parseBodyRow); Some(ast.VariablesTable)
+        case VariablesHeader => parseTableItemsWith(parseRowContent); Some(ast.VariablesTable)
         case _ => None
       }
       tableType match {
@@ -60,20 +60,21 @@ object RobotParser extends PsiParser {
       consumeLineTerminator()
       while(currentIsSeparator) {
         advanceLexer()
+        val rowMarker = mark
         currentType match {
-          case TestCaseSetting => parseBodyRow()
-          case Variable => parseBodyRow()
-          case Ellipsis => parseCell(Ellipsis); parseBodyRow()
+          case TestCaseSetting => parseRowContent()
+          case Variable => parseRowContent()
+          case Ellipsis => parseCell(Ellipsis); parseRowContent()
           case _ => parseAction()
         }
+        rowMarker done ast.TableRow
       }
       definitionMark done definitionType
     }
 
     def parseAction() {
       parseCell(ast.Keyword)
-      parseRemainingCells()
-      consumeLineTerminator()
+      parseRowContent()
     }
 
     builder.setDebugMode(true)
