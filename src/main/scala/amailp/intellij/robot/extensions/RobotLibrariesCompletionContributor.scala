@@ -11,6 +11,7 @@ import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
+import com.jetbrains.python.psi.PyParameterList
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -36,13 +37,20 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
             methodName = method.getName if !methodName.startsWith("_")
           } completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
-                .withTypeText(pyBaseClass.getName, true)
                 .withIcon(Icons.robot)
+                .withTypeText(pyBaseClass.getName, true)
+                .withTailText(formatMethodParameters(method.getParameterList))
                 .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
         case _ =>
       }
-      def robotLibrariesInScope = psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
-      def findRobotPyClass(name: String) = Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
+      def robotLibrariesInScope =
+        psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
+      def findRobotPyClass(name: String) =
+        Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
+      def formatMethodParameters(parameterList: PyParameterList) = {
+        for (parameter <- parameterList.getParameters)
+          yield parameter.getName
+      }.drop(1).mkString(" (", ", ", ")")
     }
   })
 
