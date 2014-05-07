@@ -8,7 +8,12 @@
       Robot Framework support plugin for IntelliJ Idea
       <ul>
         <li>Syntax highlighting</li>
-        <li>Code completion</li>
+        <li>Code completion support:
+          <ul>
+            <li>User defined keywords in .robot files</li>
+            <li>Robot Library keywords (requires Python or Python CE JetBrains plugin)</li>
+          </ul>
+        </li>
         <li>Jump to keyword definition, from local file and from the recursively imported resources</li>
         <li>Jump to resource</li>
         <li>Find usages / rename of keywords and resources</li>
@@ -17,6 +22,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.9 - 7 may 2014
+      <ul>
+        <li>Robot framework library keywords completion support (requires Python or Python CE JetBrains plugin)</li>
+        <li>Navigate to source support in structure view</li>
+      </ul>
       0.8.1 - 4 may 2014
       <ul>
         <li>Bug #3 fixed: Embedded variables surrounded with quotes raises fatal error</li>
@@ -71,6 +81,7 @@
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="robot-python.xml">PythonCore</depends>
+    <depends optional="true" config-file="robot-python.xml">Pythonid</depends>
 
     <application-components/>
 
