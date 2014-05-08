@@ -22,6 +22,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.9.1 - 8 may 2014
+      <ul>
+        <li>Robot framework library keywords completion support enabled in PyCharm</li>
+      </ul>
       0.9 - 7 may 2014
       <ul>
         <li>Robot framework library keywords completion support (requires Python or Python CE JetBrains plugin)</li>
