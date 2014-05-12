@@ -11,7 +11,7 @@
         <li>Code completion support:
           <ul>
             <li>User defined keywords in .robot files</li>
-            <li>Robot Library keywords (requires Python or Python CE JetBrains plugin)</li>
+            <li>Robot Library keywords (requires PyCharm, Python plugin or Python CE plugin)</li>
           </ul>
         </li>
         <li>Jump to keyword definition, from local file and from the recursively imported resources</li>
@@ -22,6 +22,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.9.2 - 12 may 2014
+      <ul>
+        <li>Bug fixed: Python libraries are only loaded from external resources</li>
+      </ul>
       0.9.1 - 8 may 2014
       <ul>
         <li>Robot framework library keywords completion support enabled in PyCharm</li>

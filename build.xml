@@ -1,6 +1,6 @@
 <project name="Artifact Tasks" default="shrink-scala-library">
 
-    <property name="version" value="0.9.1"/>
+    <property name="version" value="0.9.2"/>
 
     <!-- The following properties are overridden by the artifact builder -->
     <property name="artifact.output.path" value="."/>

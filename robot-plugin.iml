@@ -27,6 +27,7 @@
     <orderEntry type="library" name="scala-library" level="project" />
     <orderEntry type="library" scope="TEST" name="scala-scalatest" level="project" />
     <orderEntry type="library" scope="TEST" name="scala-xml" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="python-community" level="application" />
   </component>
 </module>
 
