@@ -30,7 +30,10 @@ class RobotPsiFile(viewProvider: FileViewProvider)
     ) yield robotFile.asInstanceOf[RobotPsiFile]
   }
 
-  def getImportedRobotLibraries: Iterable[LibraryValue] = {
+  def getImportedRobotLibraries: Iterable[LibraryValue] =
+    getLocallyImportedRobotLibraries ++ getRecursivelyImportedRobotLibraries
+
+  def getLocallyImportedRobotLibraries: Iterable[LibraryValue] = {
     for {
       lib: LibraryValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue]) if lib.isRobotLibrary
     } yield lib
@@ -39,7 +42,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
   def getRecursivelyImportedRobotLibraries: Iterable[LibraryValue] = {
     for {
       file <- getRecursivelyImportedRobotFiles
-      lib <- file.getImportedRobotLibraries
+      lib <- file.getLocallyImportedRobotLibraries
     } yield lib
   }
 

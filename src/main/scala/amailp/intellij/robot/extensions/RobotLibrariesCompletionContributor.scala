@@ -44,7 +44,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case _ =>
       }
       def robotLibrariesInScope =
-        psiUtils.currentRobotFile.getRecursivelyImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
+        psiUtils.currentRobotFile.getImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
       def findRobotPyClass(name: String) =
         Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
       def formatMethodParameters(parameterList: PyParameterList) = {
