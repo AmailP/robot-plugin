@@ -11,7 +11,7 @@ import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
-import com.jetbrains.python.psi.PyParameterList
+import com.jetbrains.python.psi.{PySingleStarParameter, PyTupleParameter, PyParameter, PyParameterList}
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -30,7 +30,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       currentPsiElem.getParent.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
-            libName <- robotLibrariesInScope
+            libName: String <- robotLibrariesInScope.toSet
             pyBaseClass <- findRobotPyClass(libName)
             pyClass <- pyBaseClass +: pyBaseClass.getAncestorClasses.toSeq
             method <- pyClass.getMethods
@@ -45,12 +45,32 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       }
       def robotLibrariesInScope =
         psiUtils.currentRobotFile.getImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
+
       def findRobotPyClass(name: String) =
-        Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
+        Option(PyClassNameIndex.findClass(s"$name", currentPsiElem.getProject))
+          .orElse(Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject)))
+          .orElse(Option(PyClassNameIndex.findClass(s"$name.$name", currentPsiElem.getProject))) // TODO this won't work with modules
+
       def formatMethodParameters(parameterList: PyParameterList) = {
-        for (parameter <- parameterList.getParameters)
-          yield parameter.getName
+        parameterList.getParameters
+        val params = parameterList.getParameters.reverseIterator
+        var paramNames: List[String] = Nil
+
+        if(params.hasNext && parameterList.hasKeywordContainer)
+          paramNames = s"**${params.next().getName}" :: paramNames
+
+        if(params.hasNext && parameterList.hasPositionalContainer)
+          paramNames = s"*${params.next().getName}" :: paramNames
+
+        for (parameter <- params)
+          paramNames = formatParameterName(parameter) :: paramNames
+        paramNames
       }.drop(1).mkString(" (", ", ", ")")
+
+      def formatParameterName(parameter: PyParameter) = parameter match {
+        case p if p.hasDefaultValue => s"${p.getName}=${p.getDefaultValue.getText}"
+        case p => p.getName
+      }
     }
   })
 
