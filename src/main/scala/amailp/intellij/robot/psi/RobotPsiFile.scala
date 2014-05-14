@@ -35,7 +35,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
 
   def getLocallyImportedRobotLibraries: Iterable[LibraryValue] = {
     for {
-      lib: LibraryValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue]) if lib.isRobotLibrary
+      lib: LibraryValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
     } yield lib
   }
 

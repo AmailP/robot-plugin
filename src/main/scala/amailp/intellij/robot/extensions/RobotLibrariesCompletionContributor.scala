@@ -11,7 +11,8 @@ import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
-import com.jetbrains.python.psi.{PySingleStarParameter, PyTupleParameter, PyParameter, PyParameterList}
+import com.jetbrains.python.psi.{PyParameter, PyParameterList}
+import com.intellij.psi.util.QualifiedName
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -24,7 +25,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
                                  completionResultSet:  CompletionResultSet) = {
       val currentPsiElem = completionParameters.getPosition
       val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
-        def utilsPsiElement: PsiElement = currentPsiElem
+        def utilsPsiElement: PsiElement = completionParameters.getOriginalPosition
       }
       //TODO rethink filtering, this maybe does not work well enough
       currentPsiElem.getParent.getParent.getParent match {
@@ -47,13 +48,15 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         psiUtils.currentRobotFile.getImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
 
       def findRobotPyClass(name: String) =
-        Option(PyClassNameIndex.findClass(s"$name", currentPsiElem.getProject))
-          .orElse(Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject)))
-          .orElse(Option(PyClassNameIndex.findClass(s"$name.$name", currentPsiElem.getProject))) // TODO this won't work with modules
+        if(isPythonFile(name))
+          matchLocalFile(name)
+        else
+          matchExactQName(name)
+          .orElse(matchRobotLibrary(name))
+          .orElse(matchClassWithLibraryName(name))
 
       def formatMethodParameters(parameterList: PyParameterList) = {
-        parameterList.getParameters
-        val params = parameterList.getParameters.reverseIterator
+        val params = parameterList.getParameters.drop(1).reverseIterator
         var paramNames: List[String] = Nil
 
         if(params.hasNext && parameterList.hasKeywordContainer)
@@ -65,12 +68,29 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         for (parameter <- params)
           paramNames = formatParameterName(parameter) :: paramNames
         paramNames
-      }.drop(1).mkString(" (", ", ", ")")
+      }.mkString(" (", ", ", ")")
 
       def formatParameterName(parameter: PyParameter) = parameter match {
         case p if p.hasDefaultValue => s"${p.getName}=${p.getDefaultValue.getText}"
         case p => p.getName
       }
+
+      def matchLocalFile(name: String) =
+        for {
+          file <- Option(psiUtils.currentDirectory.findFileByRelativePath(name))
+          pyClass <- PyClassNameIndex.find(file.getNameWithoutExtension, currentPsiElem.getProject, false)
+            .find(_.getContainingFile.getVirtualFile == file)
+        } yield pyClass
+      def matchExactQName(name: String) =
+        Option(PyClassNameIndex.findClass(s"$name", currentPsiElem.getProject))
+      def matchRobotLibrary(name: String) =
+        Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
+      def matchClassWithLibraryName(name: String) = {
+        val qName = QualifiedName.fromDottedString(name)
+        val qNameName = qName.append(qName.getLastComponent)
+        Option(PyClassNameIndex.findClass(qNameName.toString, currentPsiElem.getProject))
+      }
+      def isPythonFile(name: String) = name.endsWith(".py")
     }
   })
 

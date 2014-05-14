@@ -11,10 +11,7 @@ package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
-  class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
-    //TODO improve check by looking up content of robot.libraries python module
-    def isRobotLibrary: Boolean = !getText.endsWith(".py")
-  }
+  class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node)
 
   class Tables(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
     def structureViewText: String = "AAA Tables structure view text"
