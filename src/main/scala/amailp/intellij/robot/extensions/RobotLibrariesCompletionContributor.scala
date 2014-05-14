@@ -9,10 +9,12 @@ import amailp.intellij.robot.psi.{KeywordDefinition, TestCaseDefinition}
 import com.jetbrains.python.psi.stubs.PyClassNameIndex
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
+import icons.PythonIcons.Python.Python
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
 import com.jetbrains.python.psi.{PyParameter, PyParameterList}
 import com.intellij.psi.util.QualifiedName
+import javax.swing.Icon
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -32,14 +34,14 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
             libName: String <- robotLibrariesInScope.toSet
-            pyBaseClass <- findRobotPyClass(libName)
-            pyClass <- pyBaseClass +: pyBaseClass.getAncestorClasses.toSeq
+            (baseClass, icon) <- findRobotPyClass(libName)
+            pyClass <- baseClass +: baseClass.getAncestorClasses.toSeq
             method <- pyClass.getMethods
             methodName = method.getName if !methodName.startsWith("_")
           } completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
                 .withCaseSensitivity(false)
-                .withIcon(Icons.robot)
-                .withTypeText(pyBaseClass.getName, true)
+                .withIcon(icon)
+                .withTypeText(libName, true)
                 .withTailText(formatMethodParameters(method.getParameterList))
                 .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
         case _ =>
@@ -48,7 +50,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         psiUtils.currentRobotFile.getImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
 
       def findRobotPyClass(name: String) =
-        if(isPythonFile(name))
+        if(looksLikePythonFile(name))
           matchLocalFile(name)
         else
           matchExactQName(name)
@@ -75,22 +77,27 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case p => p.getName
       }
 
-      def matchLocalFile(name: String) =
+      def matchLocalFile(name: String) = {
         for {
           file <- Option(psiUtils.currentDirectory.findFileByRelativePath(name))
           pyClass <- PyClassNameIndex.find(file.getNameWithoutExtension, currentPsiElem.getProject, false)
             .find(_.getContainingFile.getVirtualFile == file)
         } yield pyClass
+      }.map((_, Python))
       def matchExactQName(name: String) =
-        Option(PyClassNameIndex.findClass(s"$name", currentPsiElem.getProject))
+        searchForClass(s"$name", Python)
       def matchRobotLibrary(name: String) =
-        Option(PyClassNameIndex.findClass(s"robot.libraries.$name.$name", currentPsiElem.getProject))
+        searchForClass(s"robot.libraries.$name.$name", Icons.robot)
       def matchClassWithLibraryName(name: String) = {
         val qName = QualifiedName.fromDottedString(name)
         val qNameName = qName.append(qName.getLastComponent)
-        Option(PyClassNameIndex.findClass(qNameName.toString, currentPsiElem.getProject))
+        searchForClass(qNameName.toString, Python)
       }
-      def isPythonFile(name: String) = name.endsWith(".py")
+
+      def searchForClass(qName: String, icon: Icon) =
+        Option(PyClassNameIndex.findClass(qName, currentPsiElem.getProject)).map((_, icon))
+
+      def looksLikePythonFile(name: String) = name.endsWith(".py")
     }
   })
 
