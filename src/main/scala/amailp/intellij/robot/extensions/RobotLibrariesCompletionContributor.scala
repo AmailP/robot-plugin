@@ -12,9 +12,10 @@ import amailp.intellij.robot.file.Icons
 import icons.PythonIcons.Python.Python
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
-import com.jetbrains.python.psi.{PyParameter, PyParameterList}
+import com.jetbrains.python.psi.{PyFile, PyParameter, PyParameterList}
 import com.intellij.psi.util.QualifiedName
 import javax.swing.Icon
+import com.jetbrains.python.PythonFileType
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -77,9 +78,17 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case p => p.getName
       }
 
-      def matchLocalFile(name: String) = {
+      def matchLocalFile(pyFileName: String) = {
+//        for {
+//          pyFile <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
+//          psiFile <- Option(psiUtils.psiManager.findFile(pyFile))
+//          if psiFile.getFileType == PythonFileType
+//          psiFile.asInstanceOf[PyFile].
+//
+//        }
+
         for {
-          file <- Option(psiUtils.currentDirectory.findFileByRelativePath(name))
+          file <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
           pyClass <- PyClassNameIndex.find(file.getNameWithoutExtension, currentPsiElem.getProject, false)
             .find(_.getContainingFile.getVirtualFile == file)
         } yield pyClass

@@ -30,6 +30,7 @@
             <libraryjar file="${ideaLib.path}/annotations.jar" />
             <libraryjar file="${ideaLib.path}/extensions.jar" />
             <libraryjar file="${java.home}/lib/rt.jar" />
+            <libraryjar file="/Users/angelini/Desktop/python-community.jar" />
 
             <dontwarn filter="scala.**" />
 
