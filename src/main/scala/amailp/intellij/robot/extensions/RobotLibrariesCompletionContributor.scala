@@ -12,10 +12,11 @@ import amailp.intellij.robot.file.Icons
 import icons.PythonIcons.Python.Python
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
-import com.jetbrains.python.psi.{PyFile, PyParameter, PyParameterList}
+import com.jetbrains.python.psi._
 import com.intellij.psi.util.QualifiedName
 import javax.swing.Icon
-import com.jetbrains.python.PythonFileType
+import com.jetbrains.python.{PyNames, PythonFileType}
+import com.jetbrains.python.psi.impl.PyPsiUtils
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -26,6 +27,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
                                  completionParameters: CompletionParameters,
                                  processingContext: ProcessingContext,
                                  completionResultSet:  CompletionResultSet) = {
+      println(completionParameters)
       val currentPsiElem = completionParameters.getPosition
       val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
         def utilsPsiElement: PsiElement = completionParameters.getOriginalPosition
@@ -79,14 +81,6 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       }
 
       def matchLocalFile(pyFileName: String) = {
-//        for {
-//          pyFile <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
-//          psiFile <- Option(psiUtils.psiManager.findFile(pyFile))
-//          if psiFile.getFileType == PythonFileType
-//          psiFile.asInstanceOf[PyFile].
-//
-//        }
-
         for {
           file <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
           pyClass <- PyClassNameIndex.find(file.getNameWithoutExtension, currentPsiElem.getProject, false)
@@ -105,6 +99,18 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
       def searchForClass(qName: String, icon: Icon) =
         Option(PyClassNameIndex.findClass(qName, currentPsiElem.getProject)).map((_, icon))
+
+      def functionsFromAttributeAll(pyFileName: String): Seq[PyFunction] = {
+        import PyPsiUtils._
+        for {
+          pyFile <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
+          psiFile <- Option(psiUtils.psiManager.findFile(pyFile))
+          if psiFile.getFileType == PythonFileType.INSTANCE
+          psiPyFile = psiFile.asInstanceOf[PyFile]
+          functionNames <- Option(getStringValues(getAttributeValuesFromFile(psiPyFile, PyNames.ALL)
+            .toArray(Array[PyExpression]())))
+        } yield functionNames.map(name => Option(psiPyFile.findTopLevelFunction(name)))
+      }.getOrElse(Nil).flatten
 
       def looksLikePythonFile(name: String) = name.endsWith(".py")
     }
