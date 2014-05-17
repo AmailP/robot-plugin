@@ -6,12 +6,20 @@ import javax.swing.Icon
 import com.intellij.icons.AllIcons
 import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
+import amailp.intellij.robot.psi.utils.RobotPsiUtils
 
 package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
-  class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node)
+
+  trait Library {
+    def getText: String
+  }
+  class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node) with Library  with RobotPsiUtils
+  object BuiltInLibrary extends Library {
+    def getText: String = "BuiltIn"
+  }
 
   class Tables(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
     def structureViewText: String = "AAA Tables structure view text"

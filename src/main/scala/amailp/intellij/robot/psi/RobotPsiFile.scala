@@ -26,23 +26,24 @@ class RobotPsiFile(viewProvider: FileViewProvider)
     for (
       resourceValue: ResourceValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue]).toStream;
       linkedFile = currentDir.findFileByRelativePath(resourceValue.getText) if !(linkedFile == null);
-      robotFile = PsiManager.getInstance(getProject).findFile(linkedFile) if robotFile.isInstanceOf[RobotPsiFile]
+      robotFile = PsiManager.getInstance(getProject).findFile(linkedFile)
+      if robotFile.getFileType == robot.file.FileType
     ) yield robotFile.asInstanceOf[RobotPsiFile]
   }
 
-  def getImportedRobotLibraries: Iterable[LibraryValue] =
-    getLocallyImportedRobotLibraries ++ getRecursivelyImportedRobotLibraries
+  def getImportedLibraries: Iterable[Library] =
+    getLocallyImportedLibraries ++ getRecursivelyImportedLibraries
 
-  def getLocallyImportedRobotLibraries: Iterable[LibraryValue] = {
+  def getLocallyImportedLibraries: Iterable[Library] = {
     for {
-      lib: LibraryValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
+      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
     } yield lib
   }
 
-  def getRecursivelyImportedRobotLibraries: Iterable[LibraryValue] = {
+  def getRecursivelyImportedLibraries: Iterable[Library] = {
     for {
       file <- getRecursivelyImportedRobotFiles
-      lib <- file.getLocallyImportedRobotLibraries
+      lib <- file.getLocallyImportedLibraries
     } yield lib
   }
 

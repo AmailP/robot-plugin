@@ -3,9 +3,9 @@ package amailp.intellij.robot.extensions
 import com.intellij.codeInsight.completion._
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.util.ProcessingContext
-import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
+import com.intellij.codeInsight.lookup.{LookupElement, AutoCompletionPolicy, LookupElementBuilder}
 import amailp.intellij.robot.elements.RobotTokenTypes
-import amailp.intellij.robot.psi.{KeywordDefinition, TestCaseDefinition}
+import amailp.intellij.robot.psi._
 import com.jetbrains.python.psi.stubs.PyClassNameIndex
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
@@ -16,7 +16,7 @@ import com.jetbrains.python.psi._
 import com.intellij.psi.util.QualifiedName
 import javax.swing.Icon
 import com.jetbrains.python.{PyNames, PythonFileType}
-import com.jetbrains.python.psi.impl.PyPsiUtils
+import com.jetbrains.python.psi.impl.PyPsiUtils._
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -27,7 +27,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
                                  completionParameters: CompletionParameters,
                                  processingContext: ProcessingContext,
                                  completionResultSet:  CompletionResultSet) = {
-      println(completionParameters)
+      println(completionParameters.isExtendedCompletion)
       val currentPsiElem = completionParameters.getPosition
       val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
         def utilsPsiElement: PsiElement = completionParameters.getOriginalPosition
@@ -36,38 +36,114 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       currentPsiElem.getParent.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
-            libName: String <- robotLibrariesInScope.toSet
-            (baseClass, icon) <- findRobotPyClass(libName)
-            pyClass <- baseClass +: baseClass.getAncestorClasses.toSeq
-            method <- pyClass.getMethods
-            methodName = method.getName if !methodName.startsWith("_")
-          } completionResultSet.addElement(LookupElementBuilder.create(methodName.replace('_',' '))
-                .withCaseSensitivity(false)
-                .withIcon(icon)
-                .withTypeText(libName, true)
-                .withTailText(formatMethodParameters(method.getParameterList))
-                .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE))
+            library: Library <- Iterable(BuiltInLibrary) ++ librariesInScope
+            lookupElements = lookupElementsForLibrary(library)
+          } completionResultSet.addAllElements(lookupElements)
+
         case _ =>
       }
-      def robotLibrariesInScope =
-        psiUtils.currentRobotFile.getImportedRobotLibraries.map(_.getText) ++ Iterable("BuiltIn")
 
-      def findRobotPyClass(name: String) =
-        if(looksLikePythonFile(name))
-          matchLocalFile(name)
-        else
-          matchExactQName(name)
-          .orElse(matchRobotLibrary(name))
-          .orElse(matchClassWithLibraryName(name))
+      def librariesInScope =
+        psiUtils.currentRobotFile.getImportedLibraries
 
-      def formatMethodParameters(parameterList: PyParameterList) = {
-        val params = parameterList.getParameters.drop(1).reverseIterator
+      def lookupElementsForLibrary(library: Library): Seq[LookupElement] = {
+        val libraryName = library.getText
+
+        object WithSameNameClass {
+          def unapply(pyFile: PyFile): Option[PyClass] =
+            Option(pyFile.findTopLevelClass(pyFile.getVirtualFile.getNameWithoutExtension))
+        }
+
+        object PythonClassWithExactQName {
+          def unapply(name: String): Option[PyClass] = searchForClass(s"$name")
+        }
+
+        object PythonClassFromRobotLib {
+          def unapply(name: String): Option[PyClass] = searchForClass(s"robot.libraries.$name.$name")
+        }
+
+        object PythonClassSameNameAsModule {
+          def unapply(name: String): Option[PyClass] = {
+            val qName = QualifiedName.fromDottedString(name)
+            val qNameName = qName.append(qName.getLastComponent)
+            searchForClass(qNameName.toString)
+          }
+        }
+
+        object LocalPythonFile {
+          def unapply(library: LibraryValue): Option[PyFile] = {
+            for {
+              virtualFile <- Option(library.currentDirectory.findFileByRelativePath(library.getText))
+              psiFile <- Option(psiUtils.psiManager.findFile(virtualFile))
+              if psiFile.getFileType == PythonFileType.INSTANCE
+            } yield psiFile.asInstanceOf[PyFile]
+          }
+        }
+
+        object ClassName {
+          def unapply(library: Library): Option[String] =
+            Option(library.getText)
+        }
+
+        def searchForClass(qName: String) =
+          Option(PyClassNameIndex.findClass(qName, currentPsiElem.getProject))
+
+        library match {
+          case LocalPythonFile(WithSameNameClass(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Python)
+          case LocalPythonFile(pyFile) => lookupElementsFrom__all__(libraryName, pyFile, Python)
+          case ClassName(PythonClassWithExactQName(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Icons.robot)
+          case ClassName(PythonClassFromRobotLib(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Icons.robot)
+          case ClassName(PythonClassSameNameAsModule(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Icons.robot)
+          case _ => Nil
+        }
+      }
+
+      def formatParameterName(parameter: PyParameter) = parameter match {
+        case p if p.hasDefaultValue => s"${p.getName}=${p.getDefaultValue.getText}"
+        case p => p.getName
+      }
+
+      def lookupElementsFromMethods(libName: String, baseClass: PyClass, icon: Icon): Seq[LookupElement] =
+        for {
+          pyClass <- baseClass +: baseClass.getAncestorClasses.toSeq
+          method <- pyClass.getMethods
+          if !method.getName.startsWith("_")
+        } yield createLookupElement(method, libName, drop=1, icon)
+
+      def lookupElementsFrom__all__(libName: String, pyFile: PyFile, icon: Icon): Seq[LookupElement] =
+        for {
+          function <- getFunctionsFrom__all__(pyFile)
+          if !function.getName.startsWith("_")
+        } yield createLookupElement(function, libName, drop=0, icon)
+
+      def getFunctionsFrom__all__(pyFile: PyFile): Seq[PyFunction] = {
+        for {
+          functionNames <- Option(getStringValues(getAttributeValuesFromFile(pyFile, PyNames.ALL)
+            .toArray(Array[PyExpression]())))
+          if {println(functionNames); true}
+        } yield functionNames.map(name => Option(pyFile.findTopLevelFunction(name)))
+      }.getOrElse(Nil).flatten
+
+      def createLookupElement(function: PyFunction, libName: String, drop: Int, icon: Icon) = {
+        val paramList = function.getParameterList
+        LookupElementBuilder.create(function.getName.replace('_', ' '))
+          .withCaseSensitivity(false)
+          .withIcon(icon)
+          .withTypeText(libName, true)
+          .withTailText(formatMethodParameters(paramList.getParameters, paramList.hasPositionalContainer, paramList.hasKeywordContainer))
+          .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
+      }
+
+      def formatMethodParameters(parameters: Array[PyParameter],
+                                 hasPositionalContainer: Boolean,
+                                 hasKeywordContainer: Boolean) = {
+        val params = parameters.reverseIterator
         var paramNames: List[String] = Nil
 
-        if(params.hasNext && parameterList.hasKeywordContainer)
+        if(params.hasNext && hasKeywordContainer)
           paramNames = s"**${params.next().getName}" :: paramNames
 
-        if(params.hasNext && parameterList.hasPositionalContainer)
+        if(params.hasNext && hasPositionalContainer)
           paramNames = s"*${params.next().getName}" :: paramNames
 
         for (parameter <- params)
@@ -75,45 +151,6 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         paramNames
       }.mkString(" (", ", ", ")")
 
-      def formatParameterName(parameter: PyParameter) = parameter match {
-        case p if p.hasDefaultValue => s"${p.getName}=${p.getDefaultValue.getText}"
-        case p => p.getName
-      }
-
-      def matchLocalFile(pyFileName: String) = {
-        for {
-          file <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
-          pyClass <- PyClassNameIndex.find(file.getNameWithoutExtension, currentPsiElem.getProject, false)
-            .find(_.getContainingFile.getVirtualFile == file)
-        } yield pyClass
-      }.map((_, Python))
-      def matchExactQName(name: String) =
-        searchForClass(s"$name", Python)
-      def matchRobotLibrary(name: String) =
-        searchForClass(s"robot.libraries.$name.$name", Icons.robot)
-      def matchClassWithLibraryName(name: String) = {
-        val qName = QualifiedName.fromDottedString(name)
-        val qNameName = qName.append(qName.getLastComponent)
-        searchForClass(qNameName.toString, Python)
-      }
-
-      def searchForClass(qName: String, icon: Icon) =
-        Option(PyClassNameIndex.findClass(qName, currentPsiElem.getProject)).map((_, icon))
-
-      def functionsFromAttributeAll(pyFileName: String): Seq[PyFunction] = {
-        import PyPsiUtils._
-        for {
-          pyFile <- Option(psiUtils.currentDirectory.findFileByRelativePath(pyFileName))
-          psiFile <- Option(psiUtils.psiManager.findFile(pyFile))
-          if psiFile.getFileType == PythonFileType.INSTANCE
-          psiPyFile = psiFile.asInstanceOf[PyFile]
-          functionNames <- Option(getStringValues(getAttributeValuesFromFile(psiPyFile, PyNames.ALL)
-            .toArray(Array[PyExpression]())))
-        } yield functionNames.map(name => Option(psiPyFile.findTopLevelFunction(name)))
-      }.getOrElse(Nil).flatten
-
-      def looksLikePythonFile(name: String) = name.endsWith(".py")
     }
   })
-
 }
