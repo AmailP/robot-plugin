@@ -10,8 +10,9 @@
         <li>Syntax highlighting</li>
         <li>Code completion support:
           <ul>
-            <li>User defined keywords in .robot files</li>
-            <li>Robot Library keywords (requires PyCharm, Python plugin or Python CE plugin)</li>
+            <li>User defined keywords from .robot files</li>
+            <li>User defined keywords from Static Python libraries <sup>[*]</sup></li>
+            <li>Robot Library keywords <sup>[*]</sup></li>
           </ul>
         </li>
         <li>Jump to keyword definition, from local file and from the recursively imported resources</li>
@@ -19,9 +20,14 @@
         <li>Find usages / rename of keywords and resources</li>
         <li>Structure view for test cases and keywords</li>
       </ul>
+      [*] requires PyCharm or Python plugin from JetBrains
       ]]></description>
 
     <change-notes><![CDATA[
+      0.10 - 17 may 2014
+      <ul>
+        <li>User defined keywords from Static Python libraries support (requires Python or Python CE JetBrains plugin)</li>
+      </ul>
       0.9.2 - 12 may 2014
       <ul>
         <li>Bug fixed: Python libraries are only loaded from external resources</li>
