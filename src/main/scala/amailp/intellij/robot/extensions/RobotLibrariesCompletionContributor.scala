@@ -6,7 +6,7 @@ import com.intellij.util.ProcessingContext
 import com.intellij.codeInsight.lookup.{LookupElement, AutoCompletionPolicy, LookupElementBuilder}
 import amailp.intellij.robot.elements.RobotTokenTypes
 import amailp.intellij.robot.psi._
-import com.jetbrains.python.psi.stubs.PyClassNameIndex
+import com.jetbrains.python.psi.stubs.{PyModuleNameIndex, PyClassNameIndex}
 import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
 import icons.PythonIcons.Python.Python
@@ -27,7 +27,6 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
                                  completionParameters: CompletionParameters,
                                  processingContext: ProcessingContext,
                                  completionResultSet:  CompletionResultSet) = {
-      println(completionParameters.isExtendedCompletion) //TODO remove
       val currentPsiElem = completionParameters.getPosition
       val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
         def utilsPsiElement: PsiElement = completionParameters.getOriginalPosition
@@ -43,8 +42,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case _ =>
       }
 
-      def librariesInScope =
-        psiUtils.currentRobotFile.getImportedLibraries
+      def librariesInScope = psiUtils.currentRobotFile.getImportedLibraries
 
       def lookupElementsForLibrary(library: Library): Seq[LookupElement] = {
         val libraryName = library.getText
@@ -80,6 +78,12 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           }
         }
 
+        object InPathPythonFile {
+          def unapply(library: LibraryValue): Option[PyFile] = {
+            PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
+          }
+        }
+
         object ClassName {
           def unapply(library: Library): Option[String] =
             Option(library.getText)
@@ -91,9 +95,10 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         library match {
           case LocalPythonFile(WithSameNameClass(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Python)
           case LocalPythonFile(pyFile) => lookupElementsFrom__all__(libraryName, pyFile, Python)
-          case ClassName(PythonClassWithExactQName(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Icons.robot)
+          case ClassName(PythonClassWithExactQName(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Python)
           case ClassName(PythonClassFromRobotLib(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Icons.robot)
-          case ClassName(PythonClassSameNameAsModule(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Icons.robot)
+          case ClassName(PythonClassSameNameAsModule(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Python)
+          case InPathPythonFile(pyFile) => lookupElementsFrom__all__(libraryName, pyFile, Python)
           case _ => Nil
         }
       }
@@ -108,21 +113,20 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           pyClass <- baseClass +: baseClass.getAncestorClasses.toSeq
           method <- pyClass.getMethods
           if !method.getName.startsWith("_")
-        } yield createLookupElement(method, libName, drop=1, icon)
+        } yield createLookupElement(method, libName, drop = 1, icon)
 
       def lookupElementsFrom__all__(libName: String, pyFile: PyFile, icon: Icon): Seq[LookupElement] =
         for {
           function <- getFunctionsFrom__all__(pyFile)
           if !function.getName.startsWith("_")
-        } yield createLookupElement(function, libName, drop=0, icon)
+        } yield createLookupElement(function, libName, drop = 0, icon)
 
       def getFunctionsFrom__all__(pyFile: PyFile): Seq[PyFunction] = {
+        val attributesNamedAll = getAttributeValuesFromFile(pyFile, PyNames.ALL).toArray(Array[PyExpression]())
         for {
-          functionNames <- Option(getStringValues(getAttributeValuesFromFile(pyFile, PyNames.ALL)
-            .toArray(Array[PyExpression]())))
-          if {println(functionNames); true}
-        } yield functionNames.map(name => Option(pyFile.findTopLevelFunction(name)))
-      }.getOrElse(Nil).flatten
+          functionName <- getStringValues(attributesNamedAll).toIndexedSeq
+        } yield Option(pyFile.findTopLevelFunction(functionName))
+      }.flatten
 
       def createLookupElement(function: PyFunction, libName: String, drop: Int, icon: Icon) = {
         val paramList = function.getParameterList
@@ -130,7 +134,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           .withCaseSensitivity(false)
           .withIcon(icon)
           .withTypeText(libName, true)
-          .withTailText(formatMethodParameters(paramList.getParameters, paramList.hasPositionalContainer, paramList.hasKeywordContainer))
+          .withTailText(formatMethodParameters(paramList.getParameters.drop(drop), paramList.hasPositionalContainer, paramList.hasKeywordContainer))
           .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
       }
 
