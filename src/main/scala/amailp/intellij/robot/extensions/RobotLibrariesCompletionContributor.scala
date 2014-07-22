@@ -13,7 +13,6 @@ import icons.PythonIcons.Python.Python
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.psi.PsiElement
 import com.jetbrains.python.psi._
-import com.intellij.psi.util.QualifiedName
 import javax.swing.Icon
 import com.jetbrains.python.{PyNames, PythonFileType}
 import com.jetbrains.python.psi.impl.PyPsiUtils._
@@ -62,9 +61,9 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
         object PythonClassSameNameAsModule {
           def unapply(name: String): Option[PyClass] = {
-            val qName = QualifiedName.fromDottedString(name)
-            val qNameName = qName.append(qName.getLastComponent)
-            searchForClass(qNameName.toString)
+            val qNameComponents = name.split('.')
+            val className = (qNameComponents :+ qNameComponents.last).mkString(".")
+            searchForClass(className)
           }
         }
 
