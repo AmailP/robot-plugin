@@ -17,5 +17,8 @@
       </map>
     </option>
   </component>
+  <component name="SvnBranchConfigurationManager">
+    <option name="mySupportsUserInfoFilter" value="true" />
+  </component>
 </project>
 

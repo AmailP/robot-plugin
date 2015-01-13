@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PLUGIN_MODULE" version="4">
   <component name="DevKit.ModuleBuildProperties" url="file://$MODULE_DIR$/META-INF/plugin.xml" />
-  <component name="FacetManager">
-    <facet type="scala" name="Scala">
-      <configuration>
-        <option name="compileOrder" value="ScalaThenJava" />
-        <option name="compilerLibraryLevel" value="Project" />
-        <option name="compilerLibraryName" value="scala-compiler" />
-        <option name="languageLevel" value="Scala 2.11" />
-      </configuration>
-    </facet>
-  </component>
+  <component name="FacetManager" />
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -24,10 +15,10 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="scala-compiler" level="project" />
-    <orderEntry type="library" name="scala-library" level="project" />
     <orderEntry type="library" scope="TEST" name="scala-scalatest" level="project" />
     <orderEntry type="library" scope="TEST" name="scala-xml" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="python-community" level="application" />
+    <orderEntry type="library" name="scala-sdk" level="project" />
   </component>
 </module>
 

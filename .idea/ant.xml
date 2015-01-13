@@ -5,7 +5,5 @@
       <maximumHeapSize value="256" />
       <maximumStackSize value="4" />
     </buildFile>
-    <buildFile url="file://$PROJECT_DIR$/robotplugin.xml" />
   </component>
 </project>
-
