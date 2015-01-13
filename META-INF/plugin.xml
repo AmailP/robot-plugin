@@ -24,7 +24,12 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.10.1 - 3 July 2014
+      0.10.2 - 13 August 2014
+      <ul>
+        <li>Bug fixed: usage of class com.jetbrains.python.psi.stubs.PyModuleNameIndex removed to maintain
+        retro-compatibility with Idea 12</li>
+      </ul>
+      0.10.1 - 23 July 2014
       <ul>
         <li>Bug fixed: usage of class com.intellij.psi.util.QualifiedName removed to maintain retro-compatibility with
         Idea 12</li>

@@ -79,7 +79,12 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
         object InPathPythonFile {
           def unapply(library: LibraryValue): Option[PyFile] = {
-            PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
+            // Try was added to support old python plugins that don't support PyModuleNameIndex class
+            try {
+              PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
+            } catch {
+              case _: NoClassDefFoundError => None
+            }
           }
         }
 
