@@ -78,14 +78,8 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         object InPathPythonFile {
-          def unapply(library: LibraryValue): Option[PyFile] = {
-            // Try was added to support old python plugins that don't support PyModuleNameIndex class
-            try {
-              PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
-            } catch {
-              case _: NoClassDefFoundError => None
-            }
-          }
+          def unapply(library: LibraryValue): Option[PyFile] =
+            PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
         }
 
         object ClassName {
@@ -114,8 +108,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
       def lookupElementsFromMethods(libName: String, baseClass: PyClass, icon: Icon): Seq[LookupElement] =
         for {
-          pyClass <- baseClass +: baseClass.getAncestorClasses.toSeq
-          method <- pyClass.getMethods
+          method <- baseClass.getMethods(true)
           if !method.getName.startsWith("_")
         } yield createLookupElement(method, libName, drop = 1, icon)
 
