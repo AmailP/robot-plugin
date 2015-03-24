@@ -1,11 +1,12 @@
 <project name="Artifact Tasks" default="shrink-scala-library">
 
-    <property name="version" value="0.11"/>
+    <property name="version" value="0.12"/>
 
     <!-- The following properties are overridden by the artifact builder -->
     <property name="artifact.output.path" value="."/>
     <property name="pluginJar.path" value="out/artifacts/plugin_jar/robot-plugin.jar"/>
     <property name="ideaLib.path" value="/Applications/IntelliJ IDEA 14.app/Contents/lib"/>
+    <property name="ivy2Repo.path" value="/Users/angelini/.ivy2/cache"/>
 
     <target name="replace-version">
         <replace file="${artifact.output.path}/META-INF/plugin.xml" token="@SNAPSHOT@" value="${version}" />
@@ -21,7 +22,7 @@
                   shrink="true">
 
             <injar file="${pluginJar.path}" filter="!META-INF/**"/>
-            <injar  file="lib/scala-library.jar" />
+            <injar  file="${ivy2Repo.path}/org.scala-lang/scala-library/jars/scala-library-2.11.6.jar" />
             <outjar file="${artifact.output.path}/proguard/shrinked-scala-library.jar" filter="!amailp/**,!icons/**"/>
 
             <libraryjar file="${ideaLib.path}/openapi.jar" />

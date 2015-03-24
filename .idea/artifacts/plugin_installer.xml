@@ -14,6 +14,7 @@
         <build-properties>
           <build-property name="pluginJar.path" value="$PROJECT_DIR$/out/artifacts/plugin_jar/robot-plugin.jar" />
           <build-property name="ideaLib.path" value="$APPLICATION_HOME_DIR$/lib" />
+          <build-property name="ivy2Repo.path" value="$USER_HOME$/.ivy2/cache" />
         </build-properties>
       </options>
     </properties>

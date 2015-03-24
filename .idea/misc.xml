@@ -4,21 +4,10 @@
     <entry_points version="2.0" />
   </component>
   <component name="IdProvider" IDEtalkID="65FB64A4B21D34C521258F9B536D1661" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA IC-135.SNAPSHOT" project-jdk-type="IDEA JDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" default="false" assert-keyword="true" jdk-15="true" project-jdk-name="IDEA IU-135.690" project-jdk-type="IDEA JDK">
     <output url="file://$PROJECT_DIR$/out" />
-  </component>
-  <component name="SbtLocalSettings">
-    <option name="modificationStamps">
-      <map>
-        <entry key="$USER_HOME$/scala/actorbintree" value="1387009376000" />
-        <entry key="$USER_HOME$/scala/kvstore" value="1387747757000" />
-        <entry key="$USER_HOME$/scala/nodescala" value="1384772522000" />
-        <entry key="$USER_HOME$/scala/suggestions" value="1385902892000" />
-      </map>
-    </option>
   </component>
   <component name="SvnBranchConfigurationManager">
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
 </project>
-
