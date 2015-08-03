@@ -24,6 +24,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.13 -
+      <ul>
+        <li>Syntax highlighting support added for list and dictionary variables</li>
+      </ul>
       0.12 - 24 March 2015
       <ul>
         <li>Updated to support Idea 14.1</li>
