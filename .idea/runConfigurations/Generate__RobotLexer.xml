@@ -1,0 +1,10 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Generate _RobotLexer" type="JarApplication" factoryName="JAR Application">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+    <option name="JAR_PATH" value="$AMAILP_IDEA_SRC$/tools/lexer/jflex-1.4/lib/JFlex.jar" />
+    <option name="PROGRAM_PARAMETERS" value="--charat --skel $AMAILP_IDEA_SRC$/tools/lexer/idea-flex.skeleton -d $PROJECT_DIR$/src/main/java/amailp/intellij/robot/lexer $PROJECT_DIR$/src/main/resources/amailp/intellij/robot/lexer/Robot.flex" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+    <envs />
+    <method />
+  </configuration>
+</component>

@@ -86,6 +86,16 @@ class TestCells extends BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.LineTerminator)
   }
 
+  test("ListVariableCell") {
+    scanString("@{hello}")
+    nextTokenIs("@{hello}", RobotTokenTypes.ListVariable)
+  }
+
+  test("DictionaryVariableCell") {
+    scanString("&{hello}")
+    nextTokenIs("&{hello}", RobotTokenTypes.DictionaryVariable)
+  }
+
   test("Comment") {
     scanString("  #This is comment  ")
     nextTokenIsType(RobotTokenTypes.IrrelevantSpaces)

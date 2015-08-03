@@ -20,6 +20,7 @@ public interface RobotTokenTypes {
     final IElementType Ellipsis = new RobotIElementType("Ellipsis");
     final IElementType Variable = new RobotIElementType("Variable");
     final IElementType ListVariable = new RobotIElementType("ListVariable");
+    final IElementType DictionaryVariable = new RobotIElementType("DictionaryVariable");
     final IElementType TestCaseSetting = new RobotIElementType("TestCaseSetting");
     final IElementType Word = new RobotIElementType("Word");
     final IElementType Space = new RobotIElementType("Space");

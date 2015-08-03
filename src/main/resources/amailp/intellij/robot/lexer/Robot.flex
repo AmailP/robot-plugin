@@ -29,7 +29,7 @@ KeywordsHeader  = "*** Keywords ***" | "*** Keyword ***"
 VariablesHeader  = "*** Variables ***" | "*** Variable ***"
 
 
-WordChar = [^$@\ \t\f\r\n]
+WordChar = [^$@&\ \t\f\r\n]
 Word = {WordChar}+
 
 TestCaseSetting = "[Documentation]"
@@ -45,6 +45,7 @@ TestCaseSetting = "[Documentation]"
 
 Variable = "${" ~"}"
 ListVariable = "@{" ~"}"
+DictionaryVariable = "&{" ~"}"
 
 %state LINE
 
@@ -67,8 +68,9 @@ ListVariable = "@{" ~"}"
         {Ellipsis}                  { yybegin(LINE); return RobotTokenTypes.Ellipsis; }
         {Variable}                  { yybegin(LINE); return RobotTokenTypes.Variable; }
         {ListVariable}              { yybegin(LINE); return RobotTokenTypes.ListVariable; }
+        {DictionaryVariable}        { yybegin(LINE); return RobotTokenTypes.DictionaryVariable; }
         {TestCaseSetting}           { yybegin(LINE); return RobotTokenTypes.TestCaseSetting; }
-        {Word} | "$" | "@"          { yybegin(LINE); return RobotTokenTypes.Word; }
+        {Word} | "$" | "@" | "&"    { yybegin(LINE); return RobotTokenTypes.Word; }
         {Space}                     { yybegin(LINE); return RobotTokenTypes.Space; }
         {Separator}                 { yybegin(LINE); return RobotTokenTypes.Separator; }
     }
