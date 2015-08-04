@@ -16,7 +16,7 @@ object RobotParser extends PsiParser {
         case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(ast.SettingsTable)
         case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
         case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(ast.KeywordsTable)
-        case VariablesHeader => parseTableItemsWith(parseRowContent); Some(ast.VariablesTable)
+        case VariablesHeader => parseTableItemsWith(parseVariableDefinition); Some(ast.VariablesTable)
         case _ => None
       }
       tableType match {
@@ -46,14 +46,14 @@ object RobotParser extends PsiParser {
     }
 
     def parseTestCaseDefinition() {
-      parseDefinition(ast.TestCaseName, ast.TestCaseDefinition)
+      parseMultilineDefinition(ast.TestCaseName, ast.TestCaseDefinition)
     }
 
     def parseKeywordDefinition() {
-      parseDefinition(ast.KeywordName, ast.KeywordDefinition)
+      parseMultilineDefinition(ast.KeywordName, ast.KeywordDefinition)
     }
 
-    def parseDefinition(nameType: IElementType, definitionType: IElementType) {
+    def parseMultilineDefinition(nameType: IElementType, definitionType: IElementType) {
       if(currentIsSpace) error(s"$nameType expected, not space")
       val definitionMark = mark
       parseCell(nameType)
@@ -63,13 +63,21 @@ object RobotParser extends PsiParser {
         val rowMarker = mark
         currentType match {
           case TestCaseSetting => parseRowContent()
-          case Variable => parseRowContent()
+          case ScalarVariable | ListVariable | DictionaryVariable  => parseRowContent() // Maybe parseVariableDefinition?
           case Ellipsis => parseCell(Ellipsis); parseRowContent()
           case _ => parseAction()
         }
         rowMarker done ast.TableRow
       }
       definitionMark done definitionType
+    }
+
+    def parseVariableDefinition() {
+      val definitionMark = mark
+      parseExpectedTypeCell(ast.VariableName, Set(ScalarVariable, ListVariable, DictionaryVariable))
+      parseRemainingCells()
+      definitionMark done ast.VariableDefinition
+      consumeLineTerminator()
     }
 
     def parseAction() {

@@ -43,7 +43,7 @@ TestCaseSetting = "[Documentation]"
     | "[Arguments]"
     | "[Return]"
 
-Variable = "${" ~"}"
+ScalarVariable = "${" ~"}"
 ListVariable = "@{" ~"}"
 DictionaryVariable = "&{" ~"}"
 
@@ -66,7 +66,7 @@ DictionaryVariable = "&{" ~"}"
         {VariablesHeader}           { yybegin(LINE); return RobotTokenTypes.VariablesHeader; }
 
         {Ellipsis}                  { yybegin(LINE); return RobotTokenTypes.Ellipsis; }
-        {Variable}                  { yybegin(LINE); return RobotTokenTypes.Variable; }
+        {ScalarVariable}            { yybegin(LINE); return RobotTokenTypes.ScalarVariable; }
         {ListVariable}              { yybegin(LINE); return RobotTokenTypes.ListVariable; }
         {DictionaryVariable}        { yybegin(LINE); return RobotTokenTypes.DictionaryVariable; }
         {TestCaseSetting}           { yybegin(LINE); return RobotTokenTypes.TestCaseSetting; }

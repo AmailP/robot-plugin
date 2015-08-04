@@ -11,14 +11,14 @@ import amailp.intellij.robot.psi.utils.RobotPsiUtils
 
 class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils {
   def getDefinition: KeywordDefinition = element.getParent.asInstanceOf[KeywordDefinition]
-  def variables = getNode.getChildren(TokenSet.create(Variable))
+  def scalarVariables = getNode.getChildren(TokenSet.create(ScalarVariable))
 
-  def textCaseInsensitiveExcludingVariables = {
+  def textCaseInsensitiveExcludingScalarVariables = {
     val text = this.currentRobotFile.getText
     def quoteRange(range: TextRange): String = Pattern.quote(range.substring(text))
     val result = new StringBuilder("(?i)")
     var doneOffset = getTextRange.getStartOffset
-    for ( variable <- variables.sortWith((v1, v2) => v1.getTextRange.getStartOffset < v2.getTextRange.getStartOffset)) {
+    for ( variable <- scalarVariables.sortWith((v1, v2) => v1.getTextRange.getStartOffset < v2.getTextRange.getStartOffset)) {
       val variableRange = variable.getTextRange
       result.append(quoteRange(new TextRange(doneOffset, variableRange.getStartOffset)))
       result.append(".*")
@@ -26,6 +26,6 @@ class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
     }
     result.append(quoteRange(new TextRange(doneOffset, getTextRange.getEndOffset))).toString()
   }
-  def matches(string: String) = string matches textCaseInsensitiveExcludingVariables
+  def matches(string: String) = string matches textCaseInsensitiveExcludingScalarVariables
   val element: PsiElement = this
 }

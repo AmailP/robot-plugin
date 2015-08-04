@@ -7,9 +7,9 @@ import amailp.intellij.robot.elements.RobotTokenTypes
 
 
 class TestCells extends BaseLexerTest {
-  test("Variable") {
+  test("ScalarVariable") {
     scanString("${a_Variable}")
-    nextTokenIsType(RobotTokenTypes.Variable)
+    nextTokenIsType(RobotTokenTypes.ScalarVariable)
   }
 
   test("ListVariable") {
@@ -40,7 +40,7 @@ class TestCells extends BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.Separator)
     nextTokenIs("This", RobotTokenTypes.Word)
     nextTokenIsType(RobotTokenTypes.Space)
-    nextTokenIs("${is}", RobotTokenTypes.Variable)
+    nextTokenIs("${is}", RobotTokenTypes.ScalarVariable)
     nextTokenIsType(RobotTokenTypes.Space)
     nextTokenIs("cell", RobotTokenTypes.Word)
     nextTokenIsType(RobotTokenTypes.IrrelevantSpaces)
@@ -53,7 +53,7 @@ class TestCells extends BaseLexerTest {
     nextTokenIs("This", RobotTokenTypes.Word)
     nextTokenIsType(RobotTokenTypes.Space)
     nextTokenIs("'", RobotTokenTypes.Word)
-    nextTokenIs("${is}", RobotTokenTypes.Variable)
+    nextTokenIs("${is}", RobotTokenTypes.ScalarVariable)
     nextTokenIs("'", RobotTokenTypes.Word)
     nextTokenIsType(RobotTokenTypes.Space)
     nextTokenIs("cell", RobotTokenTypes.Word)

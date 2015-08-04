@@ -20,7 +20,7 @@ class SyntaxHighlighter extends SyntaxHighlighterBase {
 
     tokenType match {
       case token if HeaderTokens.contains(token) => arrayOfAttributesKeys(METADATA)
-      case Variable | ListVariable | DictionaryVariable => arrayOfAttributesKeys(STRING)
+      case ScalarVariable | ListVariable | DictionaryVariable => arrayOfAttributesKeys(STRING)
       case TestCaseSetting => arrayOfAttributesKeys(INSTANCE_FIELD)
       case Comment => arrayOfAttributesKeys(LINE_COMMENT)
       case BadCharacter => arrayOfAttributesKeys(BAD_CHARACTER)

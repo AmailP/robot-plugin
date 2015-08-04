@@ -24,6 +24,8 @@ package object ast {
   object Keyword extends RobotIElementType("Keyword")
 
   object VariablesTable extends RobotIElementType("VariablesTable")
+  object VariableDefinition extends RobotIElementType("VariableDefinition")
+  object VariableName extends RobotIElementType("VariableName")
   object TableRow extends RobotIElementType("TableRow")
   object NonEmptyCell extends RobotIElementType("NonEmptyCell")
 

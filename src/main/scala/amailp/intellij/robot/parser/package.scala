@@ -22,6 +22,11 @@ package object parser {
       consumeLineTerminator()
     }
 
+    def parseExpectedTypeCell(cellType: IElementType, expectedTypes: Set[IElementType]): IElementType = {
+      if(!expectedTypes.contains(currentType)) error("Expected: " + expectedTypes.mkString(" | "))
+      parseCell(cellType)
+    }
+
     def parseCell(cellType: IElementType = ast.NonEmptyCell): IElementType = {
       parseCell((m, _) => {m done cellType; cellType})
     }
