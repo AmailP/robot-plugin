@@ -10,3 +10,6 @@ lib
 # Gradle
 .gradle
 build
+
+src/test/resources/.idea
+*.py[cod]
