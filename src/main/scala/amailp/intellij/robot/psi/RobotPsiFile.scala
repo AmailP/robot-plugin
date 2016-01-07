@@ -3,7 +3,6 @@ package amailp.intellij.robot.psi
 import com.intellij.psi.{PsiManager, FileViewProvider}
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
-import java.lang.String
 import javax.swing.Icon
 import scala.annotation.tailrec
 import com.intellij.psi.util.PsiTreeUtil
@@ -32,7 +31,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
 
   def getLocallyImportedLibraries: Iterable[Library] = {
     for {
-      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
+      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[Library])
     } yield lib
   }
 
