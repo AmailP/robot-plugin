@@ -1,5 +1,6 @@
 *** Settings ***
 Library       OperatingSystem
+Library       library
 
 *** Variables ***
 ${MESSAGE}    Hello, world!
@@ -23,6 +24,10 @@ Second Test
 
 Another Test
     Should Be Equal    ${MESSAGE}    Hello, world!
+
+One More Test
+    Hello    world
+    Do Nothing
 
 *** Keywords ***
 My Keyword
