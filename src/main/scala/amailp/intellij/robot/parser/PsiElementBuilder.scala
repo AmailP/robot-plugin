@@ -14,7 +14,7 @@ class PsiElementBuilder(node: ASTNode) {
       case ast.SettingsTable => new psi.Settings(node)
       case ast.SettingName | ast.ResourceKey | ast.LibraryKey => new psi.SettingName(node)
       case ast.ResourceValue => new psi.ResourceValue(node)
-      case ast.LibraryValue => new psi.LibraryValue(node)
+      case ast.LibraryValue => new psi.Library(node)
       case ast.TestCasesTable => new psi.TestCases(node)
       case ast.TestCaseDefinition => new psi.TestCaseDefinition(node)
       case ast.TestCaseName => new psi.TestCaseName(node)

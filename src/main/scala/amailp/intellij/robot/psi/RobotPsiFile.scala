@@ -33,7 +33,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
 
   private def getLocallyImportedLibraries: Iterable[Library] = {
     for {
-      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
+      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[Library])
     } yield lib
   }
 

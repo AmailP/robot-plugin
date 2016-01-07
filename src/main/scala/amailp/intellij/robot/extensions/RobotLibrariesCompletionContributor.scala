@@ -36,7 +36,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       currentPsiElem.getParent.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
-            library: Library <- Iterable(BuiltInLibrary) ++ librariesInScope
+            library: Library <- librariesInScope
             lookupElements = lookupElementsForLibrary(library)
           } completionResultSet.addAllElements(lookupElements)
 
@@ -70,7 +70,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         object LocalPythonFile {
-          def unapply(library: LibraryValue): Option[PyFile] = {
+          def unapply(library: Library): Option[PyFile] = {
             for {
               virtualFile <- Option(library.currentDirectory.findFileByRelativePath(library.getText))
               psiFile <- Option(psiUtils.psiManager.findFile(virtualFile))
@@ -80,7 +80,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         object InPathPythonFile {
-          def unapply(library: LibraryValue): Option[PyFile] =
+          def unapply(library: Library): Option[PyFile] =
             PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
         }
 
