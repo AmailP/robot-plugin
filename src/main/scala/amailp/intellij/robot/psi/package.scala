@@ -29,4 +29,12 @@ package object psi {
     def structureViewIcon = Icons.keywords
     def structureViewChildrenTokenTypes = List(ast.KeywordDefinition)
   }
+
+  trait Library{
+    def getText: String
+  }
+
+  object BuiltInLibrary extends Library {
+    def getText: String = "BuiltIn"
+  }
 }

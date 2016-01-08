@@ -26,12 +26,12 @@ class RobotPsiFile(viewProvider: FileViewProvider)
       .flatMap(_.getReference.resolveReferenceValue())
   }
 
-  def getImportedLibraries: Iterable[Library] =
-    getLocallyImportedLibraries ++ getRecursivelyImportedLibraries
+  def getImportedLibraries: Iterable[Library] = getLocallyImportedLibraries ++ getRecursivelyImportedLibraries ++
+    Iterable[Library](BuiltInLibrary)
 
   def getLocallyImportedLibraries: Iterable[Library] = {
     for {
-      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[Library])
+      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
     } yield lib
   }
 

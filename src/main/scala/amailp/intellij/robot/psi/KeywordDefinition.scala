@@ -52,7 +52,7 @@ object KeywordDefinition {
   def findMatchingInLibraries(files: Iterable[Library], project: Project, reference: String) = {
     for {
       library <- files
-      pyFile <- PyModuleNameIndex.find(library.getDescriptiveName, project, true)
+      pyFile <- PyModuleNameIndex.find(library.getText, project, true)
       keyword <- findInPythonFile(pyFile)
       if keyword.getName.toLowerCase matches reference.replaceAll(" ", "_").toLowerCase
     } yield keyword
