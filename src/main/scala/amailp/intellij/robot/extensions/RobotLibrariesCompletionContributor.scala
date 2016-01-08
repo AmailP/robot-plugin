@@ -70,7 +70,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         object LocalPythonFile {
-          def unapply(library: Library): Option[PyFile] = {
+          def unapply(library: LibraryValue): Option[PyFile] = {
             for {
               virtualFile <- Option(library.currentDirectory.findFileByRelativePath(library.getText))
               psiFile <- Option(psiUtils.psiManager.findFile(virtualFile))
@@ -80,12 +80,12 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         object InPathPythonFile {
-          def unapply(library: Library): Option[PyFile] =
+          def unapply(library: LibraryValue): Option[PyFile] =
             PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
         }
 
         object ClassName {
-          def unapply(library: Library): Option[String] =
+          def unapply(library: LibraryValue): Option[String] =
             Option(library.getText)
         }
 

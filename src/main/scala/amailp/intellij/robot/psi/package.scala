@@ -35,5 +35,12 @@ package object psi {
     override def structureViewText = "Variables"
     override def structureViewIcon: Icon = Icons.variables
     override def structureViewChildrenTokenTypes = List(ast.VariableDefinition)
+
+  trait Library{
+    def getText: String
+  }
+
+  object BuiltInLibrary extends Library {
+    def getText: String = "BuiltIn"
   }
 }
