@@ -1,0 +1,161 @@
+<idea-plugin version="2">
+    <id>amailp.intellij.robot</id>
+    <name>Robot Framework Support</name>
+    <version>@SNAPSHOT@</version>
+    <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
+
+    <description><![CDATA[
+      Robot Framework support plugin for IntelliJ Idea
+      <ul>
+        <li>Syntax highlighting</li>
+        <li>Code completion support:
+          <ul>
+            <li>User defined keywords from .robot files</li>
+            <li>User defined keywords from Static Python libraries <sup>[*]</sup></li>
+            <li>Robot Library keywords <sup>[*]</sup></li>
+          </ul>
+        </li>
+        <li>Jump to keyword definition, from local file and from the recursively imported resources</li>
+        <li>Jump to resource</li>
+        <li>Find usages / rename of keywords and resources</li>
+        <li>Structure view for test cases and keywords</li>
+      </ul>
+      [*] requires PyCharm or Python plugin from JetBrains
+      ]]></description>
+
+    <change-notes><![CDATA[
+      0.13 -
+      <ul>
+        <li>Syntax highlighting support added for list and dictionary variables</li>
+      </ul>
+      0.12 - 24 March 2015
+      <ul>
+        <li>Updated to support Idea 14.1</li>
+      </ul>
+      0.11 - 18 January 2015
+      <ul>
+        <li>Updated to support Idea 14</li>
+      </ul>
+      0.10.2 - 13 August 2014
+      <ul>
+        <li>Bug fixed: usage of class com.jetbrains.python.psi.stubs.PyModuleNameIndex removed to maintain
+        retro-compatibility with Idea 12</li>
+      </ul>
+      0.10.1 - 23 July 2014
+      <ul>
+        <li>Bug fixed: usage of class com.intellij.psi.util.QualifiedName removed to maintain retro-compatibility with
+        Idea 12</li>
+      </ul>
+      0.10 - 17 May 2014
+      <ul>
+        <li>User defined keywords from Static Python libraries support (requires Python or Python CE JetBrains plugin)</li>
+      </ul>
+      0.9.2 - 12 May 2014
+      <ul>
+        <li>Bug fixed: Python libraries are only loaded from external resources</li>
+      </ul>
+      0.9.1 - 8 May 2014
+      <ul>
+        <li>Robot framework library keywords completion support enabled in PyCharm</li>
+      </ul>
+      0.9 - 7 May 2014
+      <ul>
+        <li>Robot framework library keywords completion support (requires Python or Python CE JetBrains plugin)</li>
+        <li>Navigate to source support in structure view</li>
+      </ul>
+      0.8.1 - 4 May 2014
+      <ul>
+        <li>Bug #3 fixed: Embedded variables surrounded with quotes raises fatal error</li>
+      </ul>
+      0.8 - 27 Apr 2014
+      <ul>
+        <li>Find usages support</li>
+        <li>Structure view support</li>
+        <li>Refactor/rename support</li>
+        <li>Support for comment/uncomment lines</li>
+        <li>Jump to definition supports multiple definitions</li>
+        <li>Jump to definition supports ignorable Given/When/Then/And</li>
+        <li>Jump to definition supports embedded variables</li>
+      </ul>
+      0.7.1 - 12 Mar 2014
+      <ul>
+        <li>Fixed trivial bug</li>
+      </ul>
+      0.7 - 12 Mar 2014
+      <ul>
+        <li>Given/When/Then/And are ignored in jump to definition</li>
+        <li>Given/When/Then/And are proposed in autocompletion for any keyword</li>
+      </ul>
+      0.6 - 11 Mar 2014
+      <ul>
+        <li>Robot File templates added</li>
+        <li>Support added for JetBrains products other than IntelliJ</li>
+        <li>First version published on repo</li>
+      </ul>
+      0.5 - 3 Mar 2014
+      <ul>
+        <li>Rewritten build scripts, the plugin size is 10% compared to the old one (~6MB to 650KB)</li>
+      </ul>
+      0.3 - 12 Feb 2014
+      <ul>
+        <li>Keyword autocompletion support (not working still for python defined keywords)</li>
+        <li>Jump to definition support (ctrl-click) for keywords and resources</li>
+        <li>Quick preview support (ctrl-shift-i)</li>
+        <li>Improved highlighting: Ellipsis</li>
+      </ul>
+      0.2 - 6 Feb 2014
+      <ul>
+        <li>Improved highlighting: Comments, Settings, Ellipsis</li>
+        <li>Minor bugs fixed</li>
+      </ul>
+      ]]>
+    </change-notes>
+
+    <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
+    <idea-version since-build="141.1" until-build="143.*"/>
+
+    <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
+    <depends>com.intellij.modules.lang</depends>
+    <depends optional="true" config-file="robot-python.xml">PythonCore</depends> <!-- Python plugin CE-->
+    <depends optional="true" config-file="robot-python.xml">Pythonid</depends> <!-- Python plugin -->
+    <depends optional="true" config-file="robot-python.xml">com.intellij.modules.python</depends> <!-- PyCharm -->
+
+    <application-components/>
+
+    <project-components/>
+
+    <actions>
+        <action id="Robot.NewFile" class="amailp.intellij.robot.actions.NewRobotFileAction" text="Robot File" description="Create a new Robot file">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+    </actions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Language support -->
+        <annotator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Annotator"/>
+        <fileTypeFactory implementation="amailp.intellij.robot.extensions.FileTypeFactory"/>
+        <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Commenter"/>
+        <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.manipulator.Keyword"/>
+        <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.manipulator.ResourceValue"/>
+        <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.extensions.ParserDefinition"/>
+        <lang.syntaxHighlighterFactory key="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
+
+        <!-- Find Usages -->
+        <elementDescriptionProvider implementation="amailp.intellij.robot.extensions.ElementDescriptionProvider"/>
+        <lang.findUsagesProvider language="Robotframework" implementationClass="amailp.intellij.robot.extensions.FindUsagesProvider"/>
+        <pom.declarationSearcher implementation="amailp.intellij.robot.extensions.DeclarationSearcher"/>
+        <usageTypeProvider implementation="amailp.intellij.robot.extensions.UsageTypeProvider"/>
+
+        <!-- Rename -->
+        <lang.namesValidator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.NamesValidator"/>
+
+        <!-- File templates -->
+        <internalFileTemplate name="Robot Test Suite"/>
+        <internalFileTemplate name="Robot Keywords"/>
+
+        <!-- Structure view -->
+        <lang.psiStructureViewFactory language="Robotframework" implementationClass="amailp.intellij.robot.extensions.RobotPsiStructureViewFactory"/>
+    </extensions>
+
+
+</idea-plugin>

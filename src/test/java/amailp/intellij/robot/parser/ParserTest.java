@@ -24,6 +24,8 @@ public class ParserTest extends ParsingTestCase {
         super.setUp();
     }
 
+    public void testNothing() {}
+
     public static void main(String[] args) throws Exception {
         new ParserTest().setUp();
         ParserDefinition pd = new amailp.intellij.robot.extensions.ParserDefinition();

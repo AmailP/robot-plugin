@@ -1,10 +1,10 @@
 package amailp.intellij.robot.lexer
 
 import amailp.intellij.robot.elements.RobotTokenTypes
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
 
-/**
- * Created by virva on 04/05/2014.
- */
+@RunWith(classOf[JUnitRunner])
 class TestHeaders extends BaseLexerTest {
   test("Header") {
     scanString("*** Setting ***")

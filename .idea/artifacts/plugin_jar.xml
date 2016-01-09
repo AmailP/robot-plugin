@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="plugin-jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/plugin_jar</output-path>
-    <root id="archive" name="robot-plugin.jar">
-      <element id="module-output" name="robot-plugin" />
-      <element id="artifact" artifact-name="replace-version" />
-    </root>
-  </artifact>
-</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.jetbrains:tools:15.0.2">
+    <CLASSES>
+      <root url="jar:///Library/Java/JavaVirtualMachines/jdk1.8.0_51.jdk/Contents/Home/lib/tools.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/15.0.2/8a299e28f0046e87a7993856c80ad9481e8113/ideaIC-15.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

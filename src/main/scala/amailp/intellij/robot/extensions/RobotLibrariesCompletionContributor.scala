@@ -2,7 +2,7 @@ package amailp.intellij.robot.extensions
 
 import com.intellij.codeInsight.completion._
 import com.intellij.patterns.PlatformPatterns
-import com.intellij.util.ProcessingContext
+import com.intellij.util.{Processor, ProcessingContext}
 import com.intellij.codeInsight.lookup.{LookupElement, AutoCompletionPolicy, LookupElementBuilder}
 import amailp.intellij.robot.elements.RobotTokenTypes
 import amailp.intellij.robot.psi._
@@ -16,6 +16,8 @@ import com.jetbrains.python.psi._
 import javax.swing.Icon
 import com.jetbrains.python.{PyNames, PythonFileType}
 import com.jetbrains.python.psi.impl.PyPsiUtils._
+
+import scala.collection.mutable
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -88,7 +90,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         def searchForClass(qName: String) =
-          Option(PyClassNameIndex.findClass(qName, currentPsiElem.getProject))
+          Option(PyPsiFacade.getInstance(currentPsiElem.getProject).createClassByQName(qName, currentPsiElem))
 
         library match {
           case LocalPythonFile(WithSameNameClass(pyClass)) => lookupElementsFromMethods(libraryName, pyClass, Python)
@@ -106,11 +108,19 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case p => p.getName
       }
 
-      def lookupElementsFromMethods(libName: String, baseClass: PyClass, icon: Icon): Seq[LookupElement] =
-        for {
-          method <- baseClass.getMethods(true)
-          if !method.getName.startsWith("_")
-        } yield createLookupElement(method, libName, drop = 1, icon)
+      def lookupElementsFromMethods(libName: String, baseClass: PyClass, icon: Icon): Seq[LookupElement] = {
+        class CollectLookupElementsIfPublic extends Processor[PyFunction] {
+          val lookupElements: mutable.MutableList[LookupElement] = mutable.MutableList()
+          override def process(method: PyFunction): Boolean = {
+            if(!method.getName.startsWith("_"))
+              lookupElements += createLookupElement(method, libName, drop = 1, icon)
+            true
+          }
+        }
+        val processor = new CollectLookupElementsIfPublic()
+        baseClass.visitMethods(processor, true, null)
+        processor.lookupElements
+      }
 
       def lookupElementsFrom__all__(libName: String, pyFile: PyFile, icon: Icon): Seq[LookupElement] =
         for {

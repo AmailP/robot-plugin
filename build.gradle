@@ -1,0 +1,73 @@
+
+plugins {
+    id 'org.jetbrains.intellij' version '0.0.37'
+    id "de.undercouch.download" version '2.1.0'
+}
+
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+configurations {
+    ideaPlugins
+    compile.extendsFrom(ideaPlugins)
+}
+
+apply plugin: 'scala'
+apply plugin: 'org.jetbrains.intellij'
+
+sourceSets.main.scala.srcDir 'src/main/java'
+sourceSets.main.java.srcDirs = []
+sourceSets.test.scala.srcDir 'src/test/java'
+sourceSets.test.java.srcDirs = []
+
+
+dependencies {
+    compile 'org.scala-lang:scala-library:2.11.7'
+    ideaPlugins files("${buildDir}/plugins/python/lib/python.jar")
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.scalatest:scalatest_2.11:2.2.5'
+}
+
+// Build number ranges: http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
+// Python CE plugin:    https://plugins.jetbrains.com/plugin/7322?pr=idea_ce
+// Python plugin:       https://plugins.jetbrains.com/plugin/631?pr=idea
+def pythonPluginForVersion = [
+        'IC-LATEST-EAP-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=23050',
+        'IC-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=22400',
+        'IC-14.1.6': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=20879',
+        'IU-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=22399'
+]
+
+intellij {
+    version project.hasProperty('ideaVersion') ? ideaVersion : 'IC-15.0.2'
+    intellijFiles.addAll(configurations.ideaPlugins.files)
+}
+
+import de.undercouch.gradle.tasks.download.Download
+task downloadPython(type: Download) {
+    println("${intellij.version}")
+    src pythonPluginForVersion["${intellij.type}-${intellij.version}"]
+    dest "${buildDir}/downloads/python.zip"
+    onlyIfNewer true
+}
+
+task unzipPython(dependsOn: downloadPython, type: Copy) {
+    from zipTree(downloadPython.dest)
+    into "${buildDir}/plugins/"
+}
+
+task copyPythonToSandbox(dependsOn: unzipPython, type: Copy) {
+    from "${buildDir}/plugins/python"
+    into "${intellij.sandboxDirectory}/plugins/python"
+}
+
+compileScala.dependsOn(unzipPython)
+
+afterEvaluate {
+    tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox
+}
+
