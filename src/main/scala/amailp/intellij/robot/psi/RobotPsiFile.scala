@@ -22,13 +22,9 @@ class RobotPsiFile(viewProvider: FileViewProvider)
   override def getIcon(flags: Int): Icon = super.getIcon(flags)
 
   def getImportedRobotFiles: Stream[RobotPsiFile] = {
-    val currentDir = getOriginalFile.getVirtualFile.getParent
-    for (
-      resourceValue: ResourceValue <- PsiTreeUtil.findChildrenOfType(getNode.getPsi,classOf[ResourceValue]).toStream;
-      linkedFile = currentDir.findFileByRelativePath(resourceValue.getText) if !(linkedFile == null);
-      robotFile = PsiManager.getInstance(getProject).findFile(linkedFile)
-      if robotFile.getFileType == robot.file.FileType
-    ) yield robotFile.asInstanceOf[RobotPsiFile]
+    PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
+      .toStream
+      .flatMap(_.getReference.resolveReferenceValue())
   }
 
   def getImportedLibraries: Iterable[Library] =
@@ -49,16 +45,22 @@ class RobotPsiFile(viewProvider: FileViewProvider)
 
   def getRecursivelyImportedRobotFiles: Stream[RobotPsiFile] = {
     @tailrec
-    def visit(toVisit: Stream[RobotPsiFile], visited: Set[RobotPsiFile], accumulator: Stream[RobotPsiFile]): Stream[RobotPsiFile] = {
+    def visit(toVisit: Stream[RobotPsiFile],
+              visited: Set[RobotPsiFile],
+              cumulated: Set[RobotPsiFile],
+              accumulator: Stream[RobotPsiFile]): Stream[RobotPsiFile] = {
       toVisit match {
         case head #:: tail if visited.contains(head) =>
-          visit(toVisit.tail, visited, accumulator)
+          visit(toVisit.tail, visited, cumulated, accumulator)
         case head #:: tail if !visited.contains(head) =>
           val importedFromHead = head.getImportedRobotFiles
-          visit(toVisit.tail #::: importedFromHead, visited + head, accumulator #::: importedFromHead )
+          visit(toVisit.tail #::: importedFromHead,
+            visited + head,
+            cumulated ++ importedFromHead,
+            accumulator #::: importedFromHead.filterNot(cumulated.contains) )
         case Empty => accumulator
       }
     }
-    visit(Stream(this), Set(), Stream())
+    visit(Stream(this), Set(), Set(), Stream())
   }
 }

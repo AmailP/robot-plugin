@@ -14,6 +14,11 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
+      <excludeFolder url="file://$MODULE_DIR$/build/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/downloads" />
+      <excludeFolder url="file://$MODULE_DIR$/build/idea-sandbox" />
+      <excludeFolder url="file://$MODULE_DIR$/build/resources" />
+      <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -128,7 +133,7 @@
     <orderEntry type="module-library">
       <library name="Gradle: python">
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/build/plugins/python/lib/python.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/python.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

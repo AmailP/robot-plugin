@@ -24,9 +24,14 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.13 -
+      0.14 -
       <ul>
         <li>Syntax highlighting support added for list and dictionary variables</li>
+        <li>Resources are now resolved also relatively to the module source roots
+      </ul>
+      0.13 - 16 December 2015
+      <ul>
+        <li>Updated to support Idea 15</li>
       </ul>
       0.12 - 24 March 2015
       <ul>
@@ -112,7 +117,7 @@
     </change-notes>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
-    <idea-version since-build="141.1" until-build="143.*"/>
+    <idea-version since-build="143.1"/>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>

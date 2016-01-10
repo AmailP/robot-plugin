@@ -27,7 +27,7 @@ sourceSets.test.java.srcDirs = []
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.7'
-    ideaPlugins files("${buildDir}/plugins/python/lib/python.jar")
+    ideaPlugins files("${projectDir}/lib/python.jar")
     testCompile 'junit:junit:4.12'
     testCompile 'org.scalatest:scalatest_2.11:2.2.5'
 }
@@ -49,7 +49,6 @@ intellij {
 
 import de.undercouch.gradle.tasks.download.Download
 task downloadPython(type: Download) {
-    println("${intellij.version}")
     src pythonPluginForVersion["${intellij.type}-${intellij.version}"]
     dest "${buildDir}/downloads/python.zip"
     onlyIfNewer true
@@ -65,7 +64,12 @@ task copyPythonToSandbox(dependsOn: unzipPython, type: Copy) {
     into "${intellij.sandboxDirectory}/plugins/python"
 }
 
-compileScala.dependsOn(unzipPython)
+task copyPythonJarToLib(dependsOn: unzipPython, type: Copy) {
+    from "${buildDir}/plugins/python/lib/python.jar"
+    into "${projectDir}/lib"
+}
+
+compileScala.dependsOn(copyPythonJarToLib)
 
 afterEvaluate {
     tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox

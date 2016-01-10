@@ -9,7 +9,8 @@ import scala.collection.JavaConversions._
 trait ExtRobotPsiUtils {
   def utilsPsiElement: PsiElement
   def currentRobotFile = PsiTreeUtil.getParentOfType(utilsPsiElement, classOf[RobotPsiFile])
-  def currentFile = currentRobotFile.getVirtualFile
+  def originalRobotFile = currentRobotFile.getOriginalFile.asInstanceOf[RobotPsiFile]
+  def currentFile = originalRobotFile.getVirtualFile
   def currentDirectory = currentFile.getParent
   def psiManager = PsiManager.getInstance(utilsPsiElement.getProject)
 
