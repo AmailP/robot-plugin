@@ -53,7 +53,7 @@ object KeywordDefinition {
       library <- files
       pyFile <- PyModuleNameIndex.find(library.getText, project, true)
       keyword <- findInPythonFile(pyFile)
-      if keyword.getName.toLowerCase matches reference.replaceAll(" ", "_").toLowerCase
+      if (keyword.getName.toLowerCase matches reference.replaceAll(" ", "_").toLowerCase) && Option(keyword.getContainingClass).isEmpty
     } yield keyword
   }
 

@@ -28,6 +28,7 @@ Another Test
 One More Test
     Hello    world
     Do Nothing
+    Keyword From Class
 
 *** Keywords ***
 My Keyword
