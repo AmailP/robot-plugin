@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
-    <version>@SNAPSHOT@</version>
+    <version>0.14.1</version>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
@@ -24,7 +24,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.14 -
+      0.14.1 - 11 January 2016
+      <ul>
+        <li>Rebuilt using JDK 7</li>
+      </ul>
+      0.14 - 11 January 2016
       <ul>
         <li>Syntax highlighting support added for list and dictionary variables</li>
         <li>Resources are now resolved also relatively to the module source roots
@@ -117,7 +121,7 @@
     </change-notes>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
-    <idea-version since-build="143.1"/>
+    <idea-version since-build="143"/>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>

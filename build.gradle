@@ -6,9 +6,6 @@ plugins {
 
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'lib'
-    }
 }
 
 configurations {
@@ -45,6 +42,11 @@ def pythonPluginForVersion = [
 intellij {
     version project.hasProperty('ideaVersion') ? ideaVersion : 'IC-15.0.2'
     intellijFiles.addAll(configurations.ideaPlugins.files)
+
+    publish {
+        username 'AmailP'
+        pluginId '7415'
+    }
 }
 
 import de.undercouch.gradle.tasks.download.Download

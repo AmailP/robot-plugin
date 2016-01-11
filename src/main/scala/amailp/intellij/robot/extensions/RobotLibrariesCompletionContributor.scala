@@ -43,7 +43,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         case _ =>
       }
 
-      def librariesInScope = psiUtils.currentRobotFile.getImportedLibraries
+      def librariesInScope = psiUtils.originalRobotFile.getImportedLibraries
 
       def lookupElementsForLibrary(library: Library): Seq[LookupElement] = {
         val libraryName = library.getText

@@ -1,3 +1,9 @@
 # IntelliJ
 /.idea/workspace.xml
+
+# Downloaded plugin dependencies
 lib
+
+# Gradle
+.gradle
+build
