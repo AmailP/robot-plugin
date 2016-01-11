@@ -1,6 +1,7 @@
 *** Settings ***
 Library       OperatingSystem
 Library       library
+Library       library.MyLibrary
 
 *** Variables ***
 ${MESSAGE}    Hello, world!
