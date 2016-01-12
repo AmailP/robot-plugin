@@ -4,5 +4,8 @@ scala:
    - 2.11.7
 
 jdk:
-  - oraclejdk8
   - oraclejdk7
+
+env:
+  - IDEA_VERSION=IC-15.0.2
+  - IDEA_VERSION=IU-15.0.2

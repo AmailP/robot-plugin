@@ -40,7 +40,8 @@ def pythonPluginForVersion = [
 ]
 
 intellij {
-    version project.hasProperty('ideaVersion') ? ideaVersion : 'IC-15.0.2'
+    def ideaVersion = System.getenv("IDEA_VERSION")
+    version ideaVersion ? ideaVersion : 'IC-15.0.2'
     intellijFiles.addAll(configurations.ideaPlugins.files)
 
     publish {
