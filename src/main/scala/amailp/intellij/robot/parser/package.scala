@@ -9,17 +9,18 @@ import com.intellij.lang.PsiBuilder.Marker
 package object parser {
 
   trait SubParser {
-    def parse(implicit builder: RobotPsiBuilder)
+    def parse(builder: RobotPsiBuilder)
   }
 
   implicit class RobotPsiBuilder(builder: PsiBuilder) extends PsiBuilderAdapter(builder) {
     def currentType = getTokenType
     def currentText = getTokenText
 
-    def parseRowContent() {
+    def parseRowContent(includingTerminator: Boolean = true) {
       if(!currentIsSeparator) parseCell()
       parseRemainingCells()
-      consumeLineTerminator()
+      if(includingTerminator)
+        consumeLineTerminator()
     }
 
     def parseExpectedTypeCell(cellType: IElementType, expectedTypes: Set[IElementType]): IElementType = {
@@ -47,6 +48,14 @@ package object parser {
         consumeSeparator()
         parseCell()
       }
+    }
+
+    def parseEllipsis(): IElementType = {
+      val ellipsisMark = mark
+      if(currentType != Ellipsis) error("Ellipsis expected")
+      advanceLexer()
+      ellipsisMark done Ellipsis
+      Ellipsis
     }
 
     def hasMoreTokens = !eof

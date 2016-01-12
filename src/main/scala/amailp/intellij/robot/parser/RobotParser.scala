@@ -7,7 +7,7 @@ import amailp.intellij.robot.ast
 
 object RobotParser extends PsiParser {
   def parse(root: IElementType, builder: PsiBuilder): ASTNode = {
-    implicit val robotBuilder = new RobotPsiBuilder(builder)
+    val robotBuilder = new RobotPsiBuilder(builder)
     import robotBuilder._
 
     def parseTable() {
@@ -37,7 +37,7 @@ object RobotParser extends PsiParser {
 
     def parseTableItemsWithSubParser(subParser: SubParser) {
       while(hasMoreTokens && !isHeader(currentType))
-        subParser.parse
+        subParser.parse(robotBuilder)
     }
 
     def parseTableItemsWith(parseItem: () => Unit) {
@@ -64,7 +64,7 @@ object RobotParser extends PsiParser {
         currentType match {
           case TestCaseSetting => parseRowContent()
           case ScalarVariable | ListVariable | DictionaryVariable  => parseRowContent() // Maybe parseVariableDefinition?
-          case Ellipsis => parseCell(Ellipsis); parseRowContent()
+          case Ellipsis => parseEllipsis(); parseRowContent()
           case _ => parseAction()
         }
         rowMarker done ast.TableRow
@@ -76,8 +76,22 @@ object RobotParser extends PsiParser {
       val definitionMark = mark
       parseExpectedTypeCell(ast.VariableName, Set(ScalarVariable, ListVariable, DictionaryVariable))
       parseRemainingCells()
+      while(continuesInNextLine()) {
+        consumeLineTerminator()
+        if(currentIsSpace) advanceLexer()
+        parseEllipsis()
+        parseRowContent(includingTerminator = false)
+      }
       definitionMark done ast.VariableDefinition
       consumeLineTerminator()
+    }
+
+    def continuesInNextLine(): Boolean = {
+      val first = lookAhead(1)
+      val second = lookAhead(2)
+      (first == Ellipsis
+        || (first == Separator && second == Ellipsis)
+        || (first == Space && second == Ellipsis))
     }
 
     def parseAction() {

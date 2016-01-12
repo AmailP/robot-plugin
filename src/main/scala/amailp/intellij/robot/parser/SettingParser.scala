@@ -7,19 +7,16 @@ import amailp.intellij.robot.ast
 
 object SettingParser extends SubParser {
 
-  val otherSettingNames = Set[String]("Variables", "Documentation", "Metadata", "Suite Setup",
+  private val otherSettingNames = Set[String]("Variables", "Documentation", "Metadata", "Suite Setup",
     "Suite Teardown", "Suite Precondition", "Suite Postcondition", "Force Tags", "Default Tags", "Test Setup",
     "Test Teardown", "Test Precondition", "Test Postcondition", "Test Template", "Test Timeout")
   
-  def parse(implicit builder: RobotPsiBuilder) = {
+  def parse(builder: RobotPsiBuilder) = {
     import builder._
 
     def parseSettingFirstCell(): IElementType = {
-      if(currentType == Ellipsis) {
-        val ellipsisMarker = mark
-        advanceLexer()
-        ellipsisMarker done Ellipsis; Ellipsis
-      }
+      if(currentType == Ellipsis)
+        parseEllipsis()
       else parseCell((marker: Marker, content: String) => {
         content match {
           case "Resource" => marker done ast.ResourceKey ; ast.ResourceKey
