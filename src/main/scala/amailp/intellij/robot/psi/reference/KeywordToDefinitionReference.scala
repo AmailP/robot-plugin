@@ -36,7 +36,8 @@ class KeywordToDefinitionReference(keyword: Keyword)
   override def multiResolve(incompleteCode: Boolean): Array[ResolveResult] = {
     for {
       keywordName <- List(getElement.getText) ++ getElement.getTextStrippedFromIgnored.toList
-      keywordDefinition <- KeywordDefinition.findMatchingInFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, keywordName)
+      keywordDefinition <- KeywordDefinition.findMatchingInFiles(currentRobotFile #:: currentRobotFile.getRecursivelyImportedRobotFiles, keywordName) ++
+                           KeywordDefinition.findMatchingInLibraries(currentRobotFile.getImportedLibraries, utilsPsiElement.getProject, keywordName)
     } yield new PsiElementResolveResult(keywordDefinition)
   }.toArray
 

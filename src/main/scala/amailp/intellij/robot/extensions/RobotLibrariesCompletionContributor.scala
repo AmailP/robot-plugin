@@ -36,7 +36,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
       currentPsiElem.getParent.getParent.getParent match {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
-            library: Library <- Iterable(BuiltInLibrary) ++ librariesInScope
+            library: Library <- librariesInScope
             lookupElements = lookupElementsForLibrary(library)
           } completionResultSet.addAllElements(lookupElements)
 
@@ -85,7 +85,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
         }
 
         object ClassName {
-          def unapply(library: Library): Option[String] =
+          def unapply(library: LibraryValue): Option[String] =
             Option(library.getText)
         }
 

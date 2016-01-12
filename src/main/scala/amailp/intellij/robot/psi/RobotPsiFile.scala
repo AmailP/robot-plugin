@@ -3,7 +3,6 @@ package amailp.intellij.robot.psi
 import com.intellij.psi.{PsiManager, FileViewProvider}
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
-import java.lang.String
 import javax.swing.Icon
 import scala.annotation.tailrec
 import com.intellij.psi.util.PsiTreeUtil
@@ -27,8 +26,8 @@ class RobotPsiFile(viewProvider: FileViewProvider)
       .flatMap(_.getReference.resolveReferenceValue())
   }
 
-  def getImportedLibraries: Iterable[Library] =
-    getLocallyImportedLibraries ++ getRecursivelyImportedLibraries
+  def getImportedLibraries: Iterable[Library] = getLocallyImportedLibraries ++ getRecursivelyImportedLibraries ++
+    Iterable[Library](BuiltInLibrary)
 
   def getLocallyImportedLibraries: Iterable[Library] = {
     for {
