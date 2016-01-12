@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
-    <version>0.14.1</version>
+    <version>0.14.2</version>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
@@ -24,6 +24,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.14.2 - 12 January 2016
+      <ul>
+        <li>Variables can be now defined in multiple lines</li>
+        <li>Rebuilt again using JDK 7, this time for real :)</li>
+      </ul>
       0.14.1 - 11 January 2016
       <ul>
         <li>Rebuilt using JDK 7</li>
