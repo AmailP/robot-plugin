@@ -109,5 +109,10 @@ compileScala.dependsOn(generateLexer)
 
 afterEvaluate {
     tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox
+    tasks.getByPath('publishPlugin').doFirst {
+        def requiredVersion = JavaVersion.VERSION_1_7
+        if(JavaVersion.current() != requiredVersion)
+            throw new GradleException("The plugin should be published using JavaVersion $requiredVersion" )
+    }
 }
 
