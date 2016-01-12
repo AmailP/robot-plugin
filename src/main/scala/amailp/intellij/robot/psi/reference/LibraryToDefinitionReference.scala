@@ -36,8 +36,7 @@ class LibraryToDefinitionReference(library: LibraryValue) extends PsiPolyVariant
       modules ++= PyModuleNameIndex.find(library.getText, utilsPsiElement.getProject, true)
     }
     for {
-      psiFile <- modules ++ PyClassNameIndex.find(library.getText, utilsPsiElement.getProject, true) ++
-        Option(PyClassNameIndex.findClass(library.getText, utilsPsiElement.getProject))
+      psiFile <- modules ++ PyClassNameIndex.find(library.getText, utilsPsiElement.getProject, true)
     } yield new PsiElementResolveResult(psiFile)
   }.toArray
 

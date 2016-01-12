@@ -65,7 +65,7 @@ object KeywordDefinition {
   def findInPythonClasses(libraries: Iterable[Library], project: Project, reference: String) = {
     for {
       library <- libraries
-      pyClass <- PyClassNameIndex.find(library.getText, project, true) ++ Option(PyClassNameIndex.findClass(library.getText, project))
+      pyClass <- PyClassNameIndex.find(library.getText, project, true)
       keyword <- pyClass.getMethods
       if keyword.getName.toLowerCase matches reference.replaceAll(" ", "_").toLowerCase
     } yield keyword
