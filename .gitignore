@@ -4,6 +4,9 @@
 # Downloaded plugin dependencies
 lib
 
+# Generated sources
+/src/main/java-gen
+
 # Gradle
 .gradle
 build

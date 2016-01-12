@@ -1,9 +1,7 @@
+# robot-plugin
+_Robot Framework Support plugin for the IntelliJ Idea platform_
+
 [![Build Status](https://travis-ci.org/AmailP/robot-plugin.svg?branch=master)](https://travis-ci.org/AmailP/robot-plugin)
-
-robot-plugin
-============
-
-Robot Framework support plugin for IntelliJ Idea
 
 1. Syntax highlighting
 1. Code completion support:

@@ -16,11 +16,13 @@ configurations {
 apply plugin: 'scala'
 apply plugin: 'org.jetbrains.intellij'
 
-sourceSets.main.scala.srcDir 'src/main/java'
+// Following two assignments are necessary to let the scala plugin handle both java and scala compilation
 sourceSets.main.java.srcDirs = []
-sourceSets.test.scala.srcDir 'src/test/java'
 sourceSets.test.java.srcDirs = []
 
+sourceSets.main.scala.srcDir 'src/main/java'
+sourceSets.main.scala.srcDir 'src/main/java-gen'
+sourceSets.test.scala.srcDir 'src/test/java'
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.7'
@@ -51,6 +53,30 @@ intellij {
 }
 
 import de.undercouch.gradle.tasks.download.Download
+task downloadJFlex(type: Download) {
+    src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/jflex-1.4/lib/JFlex.jar'
+    dest "${buildDir}/downloads/JFlex.jar"
+    onlyIfNewer true
+}
+
+task downloadSkeleton(dependsOn: downloadJFlex, type: Download) {
+    src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/idea-flex.skeleton'
+    dest "${buildDir}/downloads/idea-flex.skeleton"
+    onlyIfNewer true
+}
+
+task generateLexer(dependsOn: downloadSkeleton, type: JavaExec) {
+    main '-jar'
+    args """${buildDir}/downloads/JFlex.jar
+           |--nobak
+           |--charat
+           |--skel
+           |${buildDir}/downloads/idea-flex.skeleton
+           |-d
+           |${projectDir}/src/main/java-gen/amailp/intellij/robot/lexer
+           |${projectDir}/src/main/resources/amailp/intellij/robot/lexer/Robot.flex""".stripMargin().split('\n').toList()
+}
+
 task downloadPython(type: Download) {
     src pythonPluginForVersion["${intellij.type}-${intellij.version}"]
     dest "${buildDir}/downloads/python.zip"
@@ -73,6 +99,7 @@ task copyPythonJarToLib(dependsOn: unzipPython, type: Copy) {
 }
 
 compileScala.dependsOn(copyPythonJarToLib)
+compileScala.dependsOn(generateLexer)
 
 afterEvaluate {
     tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox
