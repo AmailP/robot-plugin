@@ -16,6 +16,8 @@ configurations {
 apply plugin: 'scala'
 apply plugin: 'org.jetbrains.intellij'
 
+sourceCompatibility = JavaVersion.VERSION_1_7
+
 // Following two assignments are necessary to let the scala plugin handle both java and scala compilation
 sourceSets.main.java.srcDirs = []
 sourceSets.test.java.srcDirs = []
@@ -27,7 +29,6 @@ sourceSets.test.scala.srcDir 'src/test/java'
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.7'
     ideaPlugins files("${projectDir}/lib/python.jar")
-    testCompile 'junit:junit:4.12'
     testCompile 'org.scalatest:scalatest_2.11:2.2.5'
 }
 
