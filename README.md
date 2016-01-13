@@ -1,4 +1,6 @@
 # robot-plugin
+
+[![Join the chat at https://gitter.im/AmailP/robot-plugin](https://badges.gitter.im/AmailP/robot-plugin.svg)](https://gitter.im/AmailP/robot-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 _Robot Framework Support plugin for the IntelliJ Idea platform_
 
 [![Build Status](https://travis-ci.org/AmailP/robot-plugin.svg?branch=master)](https://travis-ci.org/AmailP/robot-plugin)
