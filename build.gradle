@@ -53,6 +53,10 @@ intellij {
     }
 }
 
+test {
+    exclude 'amailp/intellij/robot/testFramework'
+}
+
 import de.undercouch.gradle.tasks.download.Download
 task downloadJFlex(type: Download) {
     src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/jflex-1.4/lib/JFlex.jar'
