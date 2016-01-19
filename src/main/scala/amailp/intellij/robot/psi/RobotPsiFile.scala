@@ -1,16 +1,17 @@
 package amailp.intellij.robot.psi
 
-import com.intellij.psi.{PsiManager, FileViewProvider}
-import com.intellij.extapi.psi.PsiFileBase
-import com.intellij.openapi.fileTypes.FileType
-import java.lang.String
 import javax.swing.Icon
-import scala.annotation.tailrec
-import com.intellij.psi.util.PsiTreeUtil
-import scala.collection.JavaConversions._
-import scala.collection.immutable.Stream.Empty
+
 import amailp.intellij.robot
 import amailp.intellij.robot.lang.RobotLanguage
+import com.intellij.extapi.psi.PsiFileBase
+import com.intellij.openapi.fileTypes.FileType
+import com.intellij.psi.FileViewProvider
+import com.intellij.psi.util.PsiTreeUtil
+
+import scala.annotation.tailrec
+import scala.collection.JavaConversions._
+import scala.collection.immutable.Stream.Empty
 
 class RobotPsiFile(viewProvider: FileViewProvider)
   extends PsiFileBase(viewProvider, RobotLanguage) {
@@ -21,7 +22,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
 
   override def getIcon(flags: Int): Icon = super.getIcon(flags)
 
-  def getImportedRobotFiles: Stream[RobotPsiFile] = {
+  private def getImportedRobotFiles: Stream[RobotPsiFile] = {
     PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
       .toStream
       .flatMap(_.getReference.resolveReferenceValue())
@@ -30,13 +31,13 @@ class RobotPsiFile(viewProvider: FileViewProvider)
   def getImportedLibraries: Iterable[Library] =
     getLocallyImportedLibraries ++ getRecursivelyImportedLibraries
 
-  def getLocallyImportedLibraries: Iterable[Library] = {
+  private def getLocallyImportedLibraries: Iterable[Library] = {
     for {
       lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
     } yield lib
   }
 
-  def getRecursivelyImportedLibraries: Iterable[Library] = {
+  private def getRecursivelyImportedLibraries: Iterable[Library] = {
     for {
       file <- getRecursivelyImportedRobotFiles
       lib <- file.getLocallyImportedLibraries
