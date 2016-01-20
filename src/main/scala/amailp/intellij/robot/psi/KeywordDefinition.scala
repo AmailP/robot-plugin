@@ -56,7 +56,7 @@ object KeywordDefinition {
       library <- libraries
       pyFile <- PyModuleNameIndex.find(library.getText, project, true)
       keyword <- findInPythonFile(pyFile)
-      if (keyword.getName.toLowerCase matches reference.replaceAll(" ", "_").toLowerCase) && Option(keyword.getContainingClass).isEmpty
+      if pyFunctionMatches(keyword, reference) && Option(keyword.getContainingClass).isEmpty
     } yield keyword
   }
 
@@ -67,7 +67,9 @@ object KeywordDefinition {
       library <- libraries
       pyClass <- PyClassNameIndex.find(library.getText, project, true)
       keyword <- pyClass.getMethods
-      if keyword.getName.toLowerCase matches reference.replaceAll(" ", "_").toLowerCase
+      if pyFunctionMatches(keyword, reference)
     } yield keyword
   }
+
+  def pyFunctionMatches(pyFunc: PyFunction, ref: String) : Boolean = pyFunc.getName.toLowerCase matches ref.replaceAll(" ", "_").toLowerCase
 }
