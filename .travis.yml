@@ -11,4 +11,4 @@ env:
   - IDEA_VERSION=IU-15.0.2
 
 script:
-  - ./gradlew check --info
+  - ./gradlew check --debug
