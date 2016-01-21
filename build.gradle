@@ -108,7 +108,9 @@ compileScala.dependsOn(copyPythonJarToLib)
 compileScala.dependsOn(generateLexer)
 
 afterEvaluate {
-    tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox
+    def runWithPython = System.getenv("RUN_WITH_PYTHON")
+    if(runWithPython ? runWithPython.toBoolean() : true)
+        tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox
     tasks.getByPath('publishPlugin').doFirst {
         def requiredVersion = JavaVersion.VERSION_1_7
         if(JavaVersion.current() != requiredVersion)

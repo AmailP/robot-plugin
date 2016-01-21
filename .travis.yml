@@ -9,6 +9,8 @@ jdk:
 env:
   - IDEA_VERSION=IC-15.0.2
   - IDEA_VERSION=IU-15.0.2
+  - RUN_WITH_PYTHON=true
+  - RUN_WITH_PYTHON=false
 
 script:
-  - ./gradlew check --debug
+  - ./gradlew --console plain check
