@@ -44,8 +44,8 @@ def pythonPluginForVersion = [
 
 intellij {
     def ideaVersion = System.getenv("IDEA_VERSION")
-    version ideaVersion ? ideaVersion : 'IC-15.0.2'
-    plugins 'coverage'
+    version = ideaVersion ? ideaVersion : 'IC-15.0.2'
+    plugins = ['coverage', 'yaml']
     intellijFiles.addAll(configurations.ideaPlugins.files)
 
     publish {
