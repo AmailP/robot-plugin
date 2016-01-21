@@ -18,7 +18,9 @@ test:
 
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
-    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;:
+      parallel: true
     - mkdir -p $CIRCLE_TEST_REPORTS/html/
-    - cp -r build/reports/tests/* $CIRCLE_TEST_REPORTS/html/
+    - cp -r build/reports/tests/* $CIRCLE_TEST_REPORTS/html/:
+      parallel: true
     - cp build/distributions/robot-plugin.zip $CIRCLE_ARTIFACTS
