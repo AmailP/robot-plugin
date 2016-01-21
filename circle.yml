@@ -4,12 +4,17 @@ machine:
 
 test:
   override:
-    - >
-  case $CIRCLE_NODE_INDEX in
-  0) IDEA_VERSION=IC-15.0.2 ./gradlew --console plain check buildPlugin ;;
-  1) IDEA_VERSION=IU-15.0.2 ./gradlew --console plain check ;;
-  esac:
-      parallel: true
+    - ? |
+        case $CIRCLE_NODE_INDEX in
+          0)
+            IDEA_VERSION=IC-15.0.2 ./gradlew --console plain check buildPlugin
+            ;;
+          1)
+            IDEA_VERSION=IU-15.0.2 ./gradlew --console plain check
+            ;;
+        esac
+      :
+        parallel: true
 
   post:
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
