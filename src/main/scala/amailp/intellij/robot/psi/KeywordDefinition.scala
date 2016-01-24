@@ -19,9 +19,8 @@ class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNa
     this.getNode.replaceChild(keywordName.getNode, dummyKeyword.keywordName.getNode)
     this
   }
-  override val element: PsiElement = this
 
-  def getType: String = "Keyword definition"
+  def getType: String = "keyword"
   def getDescriptiveName: String = getName
 
   def structureViewText = getName

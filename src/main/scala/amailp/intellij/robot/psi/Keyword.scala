@@ -23,7 +23,6 @@ class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUti
       stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
     } yield stripped
   }.headOption
-  override val element: PsiElement = this
   def setNewName(name: String): PsiElement = {
     val dummyKeyword = createKeyword(name)
     this.getNode.getTreeParent.replaceChild(this.getNode, dummyKeyword.getNode)

@@ -22,6 +22,8 @@ class PsiElementBuilder(node: ASTNode) {
       case ast.KeywordDefinition => new psi.KeywordDefinition(node)
       case ast.KeywordName => new psi.KeywordName(node)
       case ast.Keyword => new psi.Keyword(node)
+      case ast.VariablesTable => new psi.Variables(node)
+      case ast.VariableDefinition => new psi.VariableDefinition(node)
       case _ => new ASTWrapperPsiElement(node)
     }
   }

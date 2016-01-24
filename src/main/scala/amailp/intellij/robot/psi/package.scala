@@ -24,7 +24,7 @@ package object psi {
   class Tables(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
     def structureViewText: String = "AAA Tables structure view text"
     def structureViewIcon: Icon = null
-    def structureViewChildrenTokenTypes = List(ast.TestCasesTable, ast.KeywordsTable)
+    def structureViewChildrenTokenTypes = List(ast.TestCasesTable, ast.KeywordsTable, ast.VariablesTable)
   }
 
   class TestCases(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
@@ -37,6 +37,12 @@ package object psi {
     def structureViewText = "Keywords"
     def structureViewIcon = Icons.keywords
     def structureViewChildrenTokenTypes = List(ast.KeywordDefinition)
+  }
+
+  class Variables(node: ASTNode) extends RobotPsiElement(node) with InStructureView {
+    override def structureViewText = "Variables"
+    override def structureViewIcon: Icon = Icons.variables
+    override def structureViewChildrenTokenTypes = List(ast.VariableDefinition)
   }
 }
 
