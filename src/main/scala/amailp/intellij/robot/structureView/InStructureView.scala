@@ -8,6 +8,7 @@ import amailp.intellij.robot.lexer.RobotIElementType
 import amailp.intellij.robot.psi.RobotPsiElement
 import com.intellij.ide.util.PsiNavigationSupport
 import com.intellij.pom.Navigatable
+import scala.collection.breakOut
 
 trait InStructureView extends RobotPsiElement {
   def structureViewText: String
@@ -15,12 +16,11 @@ trait InStructureView extends RobotPsiElement {
   def structureViewChildrenTokenTypes: List[RobotIElementType]
 
   val structureTreeElement: StructureViewTreeElement = new StructureViewTreeElement {
-    def getChildren: Array[TreeElement] = {
-      for {
+    def getChildren: Array[TreeElement] = (for {
         //TODO Use PsiTreeUtil and get rid of intermediate class RobotPsiElement
         child <- findChildrenByType[InStructureView](structureViewChildrenTokenTypes)
-      } yield child.structureTreeElement
-    }.toArray
+      } yield child.structureTreeElement)(breakOut)
+
     def getPresentation: ItemPresentation = new ItemPresentation {
       def getPresentableText: String = structureViewText
       def getLocationString: String = null

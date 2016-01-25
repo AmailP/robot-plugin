@@ -1,0 +1,2 @@
+*** Variables ***
+${first}    first value
