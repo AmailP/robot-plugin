@@ -21,6 +21,7 @@ public interface RobotTokenTypes {
     final IElementType ScalarVariable = new RobotIElementType("ScalarVariable");
     final IElementType ListVariable = new RobotIElementType("ListVariable");
     final IElementType DictionaryVariable = new RobotIElementType("DictionaryVariable");
+    final IElementType EnvironmentVariable = new RobotIElementType("EnvironmentVariable");
     final IElementType TestCaseSetting = new RobotIElementType("TestCaseSetting");
     final IElementType Word = new RobotIElementType("Word");
     final IElementType Space = new RobotIElementType("Space");

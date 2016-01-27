@@ -12,6 +12,7 @@ package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
   class Settings(node: ASTNode) extends ASTWrapperPsiElement(node)
   class SettingName(node: ASTNode) extends ASTWrapperPsiElement(node)
+  class Variable(node: ASTNode) extends RobotPsiElement(node)
 
   trait Library {
     def getText: String

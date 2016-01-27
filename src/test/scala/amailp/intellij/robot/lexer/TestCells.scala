@@ -19,6 +19,11 @@ class TestCells extends BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.ListVariable)
   }
 
+  test("EnvironmentVariable") {
+    scanString("%{anEnvVariable}")
+    nextTokenIsType(RobotTokenTypes.EnvironmentVariable)
+  }
+
   test("Word") {
     scanString("ThisIsAWord")
     nextTokenIsType(RobotTokenTypes.Word)
