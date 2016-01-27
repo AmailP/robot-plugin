@@ -17,24 +17,22 @@ object SettingParser extends SubParser {
     def parseSettingFirstCell(): IElementType = {
       if(currentType == Ellipsis)
         parseEllipsis()
-      else parseCell((marker: Marker, content: String) => {
-        content match {
-          case "Resource" => marker done ast.ResourceKey ; ast.ResourceKey
-          case "Library" => marker done ast.LibraryKey ; ast.LibraryKey
-          case cnt if otherSettingNames contains cnt => marker done ast.SettingName ; ast.SettingName
-          case _ => marker error "Settings name not known" ; ast.NonEmptyCell
-        }
-      })
+      else parseCellThen {
+        case "Resource" => doneWithType(ast.ResourceKey)
+        case "Library" => doneWithType(ast.LibraryKey)
+        case cnt if otherSettingNames contains cnt => doneWithType(ast.SettingName)
+        case _ => asError("Settings name not known")
+      }
     }
 
     def parseResouceValue() {
       consumeSeparator()
-      parseCell(ast.ResourceValue)
+      parseCellOfType(ast.ResourceValue)
     }
 
     def parseLibraryValueAndParameters() {
       consumeSeparator()
-      parseCell(ast.LibraryValue)
+      parseCellOfType(ast.LibraryValue)
       parseRemainingCells()
     }
 

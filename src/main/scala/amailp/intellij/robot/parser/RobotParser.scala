@@ -56,7 +56,7 @@ object RobotParser extends PsiParser {
     def parseMultilineDefinition(nameType: IElementType, definitionType: IElementType) {
       if(currentIsSpace) error(s"$nameType expected, not space")
       val definitionMark = mark
-      parseCell(nameType)
+      parseCellOfType(nameType)
       consumeLineTerminator()
       while(currentIsSeparator) {
         advanceLexer()
@@ -95,7 +95,7 @@ object RobotParser extends PsiParser {
     }
 
     def parseAction() {
-      parseCell(ast.Keyword)
+      parseCellOfType(ast.Keyword)
       parseRowContent()
     }
 

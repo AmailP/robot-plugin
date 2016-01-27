@@ -1,10 +1,12 @@
 package amailp.intellij.robot
 
-import com.intellij.lang.PsiBuilder
-import com.intellij.psi.tree.IElementType
 import amailp.intellij.robot.elements.RobotTokenTypes._
-import com.intellij.lang.impl.PsiBuilderAdapter
+import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiBuilder.Marker
+import com.intellij.lang.impl.PsiBuilderAdapter
+import com.intellij.psi.tree.IElementType
+
+import scala.language.implicitConversions
 
 package object parser {
 
@@ -17,36 +19,44 @@ package object parser {
     def currentText = getTokenText
 
     def parseRowContent(includingTerminator: Boolean = true) {
-      if(!currentIsSeparator) parseCell()
+      if(!currentIsSeparator) parseCellOfType(ast.NonEmptyCell)
       parseRemainingCells()
       if(includingTerminator)
         consumeLineTerminator()
     }
 
-    def parseExpectedTypeCell(cellType: IElementType, expectedTypes: Set[IElementType]): IElementType = {
-      if(!expectedTypes.contains(currentType)) error("Expected: " + expectedTypes.mkString(" | "))
-      parseCell(cellType)
-    }
+    def parseExpectedTypeCell(parseType: IElementType, expectedTypes: Set[IElementType]): IElementType =
+      if(expectedTypes.contains(currentType))
+        parseCellThen(collapseWithType(parseType))
+      else
+        parseCellThen(asError("Expected: " + expectedTypes.mkString(" | ")))
 
-    def parseCell(cellType: IElementType = ast.NonEmptyCell): IElementType = {
-      parseCell((m, _) => {m done cellType; cellType})
-    }
+    def parseCellOfType(cellType: IElementType): IElementType =
+      parseCellThen(doneWithType(cellType))
 
-    def parseCell(terminateMarker: (Marker, String) => IElementType): IElementType = {
+    def parseCellThen(action: ParametricActionOnMarker): IElementType = {
       val cellMarker = mark
       val contentBuilder = new StringBuilder
       while(!currentIsLineTerminator && currentType != Separator) {
         contentBuilder append currentText
         advanceLexer()
       }
-      terminateMarker(cellMarker, contentBuilder.result())
+      action(contentBuilder.result())(cellMarker)
     }
+
+    type ActionOnMarker = Marker => IElementType
+    def doneWithType(t: IElementType): ActionOnMarker = m => { m done t; t }
+    def collapseWithType(t: IElementType): ActionOnMarker = m => { m collapse t; t }
+    def asError(message: String): ActionOnMarker = {error(message); doneWithType(ast.NonEmptyCell)}
+
+    type ParametricActionOnMarker = String => ActionOnMarker
+    implicit def ignoreParameter(a:ActionOnMarker): ParametricActionOnMarker = s => a
 
     def parseRemainingCells() {
       while(currentIsSeparator)
       {
         consumeSeparator()
-        parseCell()
+        parseCellOfType(ast.NonEmptyCell)
       }
     }
 
