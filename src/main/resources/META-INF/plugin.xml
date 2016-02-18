@@ -169,6 +169,9 @@
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="Robotframework" implementationClass="amailp.intellij.robot.extensions.RobotPsiStructureViewFactory"/>
+
+        <!-- Robot keyword reference -->
+        <psi.referenceContributor implementation="amailp.intellij.robot.psi.reference.KeywordReferenceContributor"/>
     </extensions>
 
 
