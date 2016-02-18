@@ -66,6 +66,7 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
 
   def findInPyClass(pyClass: PyClass, reference: String) = {
     for {
+      pyClass <- Iterable[PyClass](pyClass) ++ pyClass.getSuperClasses(null)
       keyword <- pyClass.getMethods
       if pyFunctionMatches(keyword, reference)
     } yield keyword
