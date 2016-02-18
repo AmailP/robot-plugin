@@ -57,24 +57,21 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
       )
   }
 
-  def findInPyFile(pyFile: PyFile, reference: String = null) = {
+  def findInPyFile(pyFile: PyFile, reference: String) = {
     for {
       keyword <- PsiTreeUtil.findChildrenOfType(pyFile, classOf[PyFunction])
       if pyFunctionMatches(keyword, reference) && Option(keyword.getContainingClass).isEmpty
     } yield keyword
   }
 
-  def findInPyClass(pyClass: PyClass, reference: String = null) = {
+  def findInPyClass(pyClass: PyClass, reference: String) = {
     for {
       keyword <- pyClass.getMethods
       if pyFunctionMatches(keyword, reference)
     } yield keyword
   }
 
-  def pyFunctionMatches(pyFunc: PyFunction, ref: String = null) : Boolean = {
-    if (Option(ref).isDefined) pyFunc.getName.toLowerCase matches ref.replaceAll(" ", "_").toLowerCase
-    else true
-  }
+  def pyFunctionMatches(pyFunc: PyFunction, ref: String) : Boolean = pyFunc.getName.toLowerCase matches ref.replaceAll(" ", "_").toLowerCase
 
   def utilsPsiElement: PsiElement = element
 }
