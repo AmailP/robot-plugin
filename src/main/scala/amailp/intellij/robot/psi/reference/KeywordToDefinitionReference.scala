@@ -1,15 +1,16 @@
 package amailp.intellij.robot.psi.reference
 
 import com.intellij.psi.{PsiElementResolveResult, ResolveResult, PsiElement, PsiPolyVariantReferenceBase}
-import amailp.intellij.robot.psi.{Keyword, KeywordDefinition}
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
+import amailp.intellij.robot.psi.{Keyword, KeywordDefinition}
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import amailp.intellij.robot.file.Icons
+
 
 class KeywordToDefinitionReference(keyword: Keyword)
   extends PsiPolyVariantReferenceBase[Keyword](keyword) with ExtRobotPsiUtils {
 
-  override def handleElementRename(newElementName: String): PsiElement = getElement.setNewName(newElementName)
+  override def handleElementRename(newElementName: String): PsiElement = getElement.setName(newElementName)
 
   override def getVariants = {
     val externalKeywordDefinitions = KeywordDefinition.findInFiles(currentRobotFile.getRecursivelyImportedRobotFiles).toSet
