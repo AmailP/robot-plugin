@@ -12,9 +12,8 @@ class LibraryReferenceContributor extends PsiReferenceContributor {
   override def registerReferenceProviders(registrar: PsiReferenceRegistrar) {
     registrar.registerReferenceProvider(PlatformPatterns.psiElement(LibraryValue),
     new PsiReferenceProvider() {
-      override def getReferencesByElement(element: PsiElement, context: ProcessingContext) : Array[PsiReference] = {
-        List[PsiReference](new LibraryToDefinitionReference(element, new TextRange(0, element.getText.length)))
-      }.toArray
+      override def getReferencesByElement(element: PsiElement, context: ProcessingContext) : Array[PsiReference] =
+        Array[PsiReference](new LibraryToDefinitionReference(element))
     })
   }
 }

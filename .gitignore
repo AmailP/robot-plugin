@@ -1,5 +1,6 @@
 # IntelliJ
 /.idea/workspace.xml
+/.idea/libraries/Gradle__*
 
 # Downloaded plugin dependencies
 lib

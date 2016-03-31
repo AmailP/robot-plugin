@@ -4,6 +4,7 @@ import com.intellij.psi._
 import com.intellij.lang.ASTNode
 import com.intellij.extapi.psi.ASTWrapperPsiElement
 import amailp.intellij.robot.findUsage.UsageFindable
+import amailp.intellij.robot.psi.reference.KeywordToDefinitionReference
 import amailp.intellij.robot.psi.utils.RobotPsiUtils
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
@@ -13,7 +14,8 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
  */
 class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils with UsageFindable with PsiNameIdentifierOwner {
 
-  override def getReferences: Array[PsiReference] = ReferenceProvidersRegistry.getReferencesFromProviders(this)
+  override def getReferences: Array[PsiReference] = Array[PsiReference](new KeywordToDefinitionReference(this)) ++
+    ReferenceProvidersRegistry.getReferencesFromProviders(this)
 
   def getTextStrippedFromIgnored = {
     for {
