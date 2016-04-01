@@ -8,20 +8,25 @@ repositories {
     mavenCentral()
 }
 
+def runWithPython = System.getenv().getOrDefault("RUN_WITH_PYTHON", "true").toBoolean()
 configurations {
     ideaPlugins
-    compile.extendsFrom(ideaPlugins)
+    if(runWithPython)
+        compile.extendsFrom(ideaPlugins)
 }
 
 apply plugin: 'scala'
 apply plugin: 'org.jetbrains.intellij'
 
-sourceCompatibility = JavaVersion.VERSION_1_7
+sourceCompatibility = JavaVersion.VERSION_1_8
 
 // Following two assignments are necessary to let the scala plugin handle both java and scala compilation
 sourceSets.main.java.srcDirs = []
 sourceSets.test.java.srcDirs = []
 
+// Python plugin is still necesessary to compile, even if not used at runtime
+if(!runWithPython)
+    sourceSets.main.compileClasspath += configurations.ideaPlugins
 sourceSets.main.scala.srcDir 'src/main/java'
 sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
@@ -45,8 +50,7 @@ def pythonPluginForVersion = [
 ]
 
 intellij {
-    def ideaVersion = System.getenv("IDEA_VERSION")
-    version = ideaVersion ? ideaVersion : 'IC-2016.1'
+    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2016.1')
     plugins = ['coverage', 'yaml']  // Dependent plugins are added for Python IU plugin
     intellijFiles.addAll(configurations.ideaPlugins.files)
 
@@ -58,6 +62,9 @@ intellij {
 
 test {
     exclude 'amailp/intellij/robot/testFramework'
+    if(!runWithPython) {
+        exclude 'amailp/intellij/robot/psi/reference/LibraryReferencesTest.class'
+    }
 }
 
 import de.undercouch.gradle.tasks.download.Download
@@ -65,12 +72,14 @@ task downloadJFlex(type: Download) {
     src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/jflex-1.4/lib/JFlex.jar'
     dest "${buildDir}/downloads/JFlex.jar"
     onlyIfNewer true
+    overwrite false
 }
 
 task downloadSkeleton(dependsOn: downloadJFlex, type: Download) {
     src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/idea-flex.skeleton'
     dest "${buildDir}/downloads/idea-flex.skeleton"
     onlyIfNewer true
+    overwrite false
 }
 
 task generateLexer(dependsOn: downloadSkeleton, type: JavaExec) {
@@ -83,12 +92,15 @@ task generateLexer(dependsOn: downloadSkeleton, type: JavaExec) {
            |-d
            |${projectDir}/src/main/java-gen/amailp/intellij/robot/lexer
            |${projectDir}/src/main/resources/amailp/intellij/robot/lexer/Robot.flex""".stripMargin().split('\n').toList()
+    inputs.file "${projectDir}/src/main/resources/amailp/intellij/robot/lexer/Robot.flex"
+    outputs.dir "${projectDir}/src/main/java-gen/amailp/intellij/robot/lexer"
 }
 
 task downloadPython(type: Download) {
     src pythonPluginForVersion["${intellij.type}-${intellij.version}"]
     dest "${buildDir}/downloads/python.zip"
     onlyIfNewer true
+    overwrite false
 }
 
 task unzipPython(dependsOn: downloadPython, type: Copy) {
@@ -110,8 +122,7 @@ compileScala.dependsOn(copyPythonJarToLib)
 compileScala.dependsOn(generateLexer)
 
 afterEvaluate {
-    def runWithPython = System.getenv("RUN_WITH_PYTHON")
-    if(runWithPython ? runWithPython.toBoolean() : true)
+    if(runWithPython)
         tasks.getByPath('prepareSandbox').dependsOn copyPythonToSandbox
     tasks.getByPath('publishPlugin').doFirst {
         def requiredVersion = JavaVersion.VERSION_1_8
