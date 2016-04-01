@@ -28,8 +28,8 @@ class RobotPsiFile(viewProvider: FileViewProvider)
       .flatMap(_.getReference.resolveReferenceValue())
   }
 
-  def getImportedLibraries: Iterable[Library] =
-    getLocallyImportedLibraries ++ getRecursivelyImportedLibraries
+  def getImportedLibraries: Iterable[Library] = getLocallyImportedLibraries ++ getRecursivelyImportedLibraries ++
+    Iterable[Library](BuiltInLibrary)
 
   private def getLocallyImportedLibraries: Iterable[Library] = {
     for {

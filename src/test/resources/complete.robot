@@ -1,5 +1,7 @@
 *** Settings ***
 Library       OperatingSystem
+Library       library
+Library       library.MyLibrary
 
 *** Variables ***
 ${MESSAGE}    Hello, world!
@@ -23,6 +25,11 @@ Second Test
 
 Another Test
     Should Be Equal    ${MESSAGE}    Hello, world!
+
+One More Test
+    Hello    world
+    Do Nothing
+    Keyword From Class
 
 *** Keywords ***
 My Keyword
