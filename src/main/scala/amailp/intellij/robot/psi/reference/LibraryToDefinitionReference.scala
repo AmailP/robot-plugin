@@ -14,15 +14,7 @@ import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 class LibraryToDefinitionReference(element: PsiElement, textRange: TextRange) extends PsiReferenceBase[PsiElement](element, textRange)
   with PsiPolyVariantReference with ExtRobotPsiUtils {
 
-  override def getVariants = {
-    for {
-      lib <- currentRobotFile.getImportedLibraries
-    } yield LookupElementBuilder.create(lib.getText)
-      .withCaseSensitivity(false)
-      .withTypeText("Library", true)
-      .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
-      .asInstanceOf[AnyRef]
-  }.toArray
+  override def getVariants = Array[AnyRef]()
 
   override def multiResolve(incompleteCode: Boolean): Array[ResolveResult] = {
     val qName = QualifiedName.fromDottedString(element.getText)
