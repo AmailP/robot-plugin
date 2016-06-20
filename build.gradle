@@ -70,7 +70,7 @@ test {
 
 import de.undercouch.gradle.tasks.download.Download
 task downloadJFlex(type: Download) {
-    src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/jflex-1.4/lib/JFlex.jar'
+    src 'https://github.com/JetBrains/intellij-community/raw/master/tools/lexer/jflex-1.7.0-SNAPSHOT.jar'
     dest "${buildDir}/downloads/JFlex.jar"
     onlyIfNewer true
     overwrite false
