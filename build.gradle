@@ -25,8 +25,10 @@ sourceSets.main.java.srcDirs = []
 sourceSets.test.java.srcDirs = []
 
 // Python plugin is still necesessary to compile, even if not used at runtime
-if(!runWithPython)
+if(!runWithPython) {
     sourceSets.main.compileClasspath += configurations.ideaPlugins
+    sourceSets.test.compileClasspath += configurations.ideaPlugins
+}
 sourceSets.main.scala.srcDir 'src/main/java'
 sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
