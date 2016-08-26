@@ -44,6 +44,7 @@ dependencies {
 // Python plugin:       https://plugins.jetbrains.com/plugin/631?pr=idea
 def pythonPluginForVersion = [
         'IC-LATEST-EAP-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=23050',
+        'IC-2016.2.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.1.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=22400',
@@ -53,7 +54,7 @@ def pythonPluginForVersion = [
 ]
 
 intellij {
-    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2016.1')
+    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2016.2.2')
     plugins = ['coverage', 'yaml']  // Dependent plugins are added for Python IU plugin
     intellijFiles.addAll(configurations.ideaPlugins.files)
 
