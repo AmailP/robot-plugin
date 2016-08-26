@@ -7,10 +7,10 @@ test:
     - ? |
         case $CIRCLE_NODE_INDEX in
           0)
-            IDEA_VERSION=IC-2016.1 ./gradlew --console plain check buildPlugin
+            IDEA_VERSION=IC-2016.2.2 ./gradlew --console plain check buildPlugin
             ;;
           1)
-            IDEA_VERSION=IU-2016.1 ./gradlew --console plain check
+            IDEA_VERSION=IU-2016.2.2 ./gradlew --console plain check
             ;;
         esac
       :

@@ -49,6 +49,7 @@ def pythonPluginForVersion = [
         'IC-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=22400',
         'IC-14.1.6': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=20879',
+        'IU-2016.2.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=27089',
         'IU-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=24602',
         'IU-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=22399'
 ]
