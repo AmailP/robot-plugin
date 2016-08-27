@@ -161,7 +161,7 @@
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.manipulator.Keyword"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.manipulator.ResourceValue"/>
         <lang.parserDefinition language="Robotframework" implementationClass="amailp.intellij.robot.extensions.ParserDefinition"/>
-        <lang.syntaxHighlighterFactory ="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
+        <lang.syntaxHighlighterFactory language="Robotframework" implementationClass="amailp.intellij.robot.extensions.SyntaxHighlighterFactory"/>
 
         <!-- Find Usages -->
         <elementDescriptionProvider implementation="amailp.intellij.robot.extensions.ElementDescriptionProvider"/>
