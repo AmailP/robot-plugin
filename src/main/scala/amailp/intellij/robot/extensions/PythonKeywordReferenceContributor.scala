@@ -1,6 +1,7 @@
-package amailp.intellij.robot.psi.reference
+package amailp.intellij.robot.extensions
 
 import amailp.intellij.robot.ast.Keyword
+import amailp.intellij.robot.psi.reference.PythonKeywordToDefinitionReference
 import com.intellij.openapi.util.TextRange
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi._

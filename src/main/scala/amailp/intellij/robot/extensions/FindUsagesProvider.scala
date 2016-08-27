@@ -7,7 +7,9 @@ import amailp.intellij.robot
 import amailp.intellij.robot.psi.RobotPsiFile
 
 class FindUsagesProvider extends com.intellij.lang.findUsages.FindUsagesProvider {
-  override def getNodeText(element: PsiElement, useFullName: Boolean): String = element.asInstanceOf[UsageFindable].getNodeText(useFullName)
+  override def getNodeText(element: PsiElement, useFullName: Boolean): String =
+    element.asInstanceOf[UsageFindable].getNodeText(useFullName)
+
   override def getDescriptiveName(element: PsiElement): String = element match {
     case usageFindable: UsageFindable => usageFindable.getDescriptiveName
     case file: RobotPsiFile => file.getName

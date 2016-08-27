@@ -1,10 +1,10 @@
-package amailp.intellij.robot.psi.reference
+package amailp.intellij.robot.extensions
 
-import com.intellij.openapi.util.TextRange
+import amailp.intellij.robot.ast.LibraryValue
+import amailp.intellij.robot.psi.reference.LibraryToDefinitionReference
 import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi._
 import com.intellij.util.ProcessingContext
-import amailp.intellij.robot.ast.LibraryValue
 
 
 class LibraryReferenceContributor extends PsiReferenceContributor {
