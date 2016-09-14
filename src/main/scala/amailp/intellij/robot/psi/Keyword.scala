@@ -17,14 +17,15 @@ class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUti
   override def getReferences: Array[PsiReference] = Array[PsiReference](new KeywordToDefinitionReference(this)) ++
     ReferenceProvidersRegistry.getReferencesFromProviders(this)
 
-  def getTextStrippedFromIgnored = {
+  def getTextStrippedFromIgnoredPrefixes = {
+    val textLowerCase = getText.toLowerCase
     for {
-      prefix <- Keyword.ignoredPrefixes
-      loweredPrefix = prefix.toLowerCase
-      if getText.toLowerCase.startsWith(loweredPrefix)
-      stripped = getText.toLowerCase.replaceFirst(loweredPrefix, "").trim
+      prefix <- Keyword.lowerCaseIgnoredPrefixes
+      if textLowerCase.startsWith(prefix)
+      stripped = textLowerCase.replaceFirst(prefix, "").trim
     } yield stripped
-  }.headOption
+  } ensuring {_.size < 2}
+
   override def setName(name: String): PsiElement = {
     val dummyKeyword = createKeyword(name)
     this.getNode.getTreeParent.replaceChild(this.getNode, dummyKeyword.getNode)
@@ -38,4 +39,5 @@ class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUti
 
 object Keyword {
   val ignoredPrefixes = List("Given", "When", "Then", "And")
+  val lowerCaseIgnoredPrefixes = ignoredPrefixes.map(_.toLowerCase)
 }

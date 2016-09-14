@@ -16,7 +16,7 @@ class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
   def textCaseInsensitiveExcludingScalarVariables = {
     val text = this.currentRobotFile.getText
     def quoteRange(range: TextRange): String = Pattern.quote(range.substring(text))
-    val result = new StringBuilder("(?i)")
+    val result = new StringBuilder("(?i)") // Set case insensitivity for regex
     var doneOffset = getTextRange.getStartOffset
     for ( variable <- scalarVariables.sortWith((v1, v2) => v1.getTextRange.getStartOffset < v2.getTextRange.getStartOffset)) {
       val variableRange = variable.getTextRange
@@ -26,6 +26,7 @@ class KeywordName (node: ASTNode) extends ASTWrapperPsiElement(node) with RobotP
     }
     result.append(quoteRange(new TextRange(doneOffset, getTextRange.getEndOffset))).toString()
   }
+
   def matches(string: String) = string matches textCaseInsensitiveExcludingScalarVariables
   val element: PsiElement = this
 }
