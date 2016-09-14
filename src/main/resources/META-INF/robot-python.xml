@@ -2,14 +2,20 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Robot libraries completion -->
-        <completion.contributor language="Robotframework"
-                                implementationClass="amailp.intellij.robot.extensions.RobotLibrariesCompletionContributor"/>
-        <psi.referenceContributor implementation="amailp.intellij.robot.extensions.LibraryReferenceContributor"/>
-        <lang.elementManipulator forClass="amailp.intellij.robot.psi.LibraryValue"
-                                 implementationClass="amailp.intellij.robot.psi.manipulator.LibraryValue"/>
+        <completion.contributor
+                language="Robotframework"
+                implementationClass="amailp.intellij.robot.extensions.RobotLibrariesCompletionContributor"/>
+        <psi.referenceContributor
+                language="Robotframework"
+                implementation="amailp.intellij.robot.extensions.LibraryReferenceContributor"/>
+        <lang.elementManipulator
+                forClass="amailp.intellij.robot.psi.LibraryValue"
+                implementationClass="amailp.intellij.robot.psi.manipulator.LibraryValue"/>
 
         <!-- Python keyword reference -->
-        <psi.referenceContributor implementation="amailp.intellij.robot.extensions.PythonKeywordReferenceContributor"/>
+        <psi.referenceContributor
+                language="Robotframework"
+                implementation="amailp.intellij.robot.extensions.PythonKeywordReferenceContributor"/>
     </extensions>
 
 </idea-plugin>
