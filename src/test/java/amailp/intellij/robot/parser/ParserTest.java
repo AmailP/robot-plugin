@@ -16,7 +16,6 @@ public class ParserTest extends ParsingTestCase {
 
     public ParserTest() {
         super("", "robot", new amailp.intellij.robot.extensions.ParserDefinition());
-        PlatformTestCase.initPlatformLangPrefix();
     }
 
     @Override
