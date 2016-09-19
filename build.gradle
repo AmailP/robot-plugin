@@ -68,7 +68,8 @@ intellij {
 test {
     exclude 'amailp/intellij/robot/testFramework'
     if(!runWithPython) {
-        exclude 'amailp/intellij/robot/psi/reference/LibraryReferencesTest.class'
+        exclude 'amailp/intellij/robot/psi/reference/LibraryToDefinitionReferenceTest.class'
+        exclude 'amailp/intellij/robot/psi/reference/PythonKeywordToDefinitionReferenceTest.class'
     }
 }
 
