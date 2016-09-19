@@ -139,8 +139,6 @@
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
-    <depends optional="true" config-file="robot-python.xml">PythonCore</depends> <!-- Python plugin CE-->
-    <depends optional="true" config-file="robot-python.xml">Pythonid</depends> <!-- Python plugin -->
     <depends optional="true" config-file="robot-python.xml">com.intellij.modules.python</depends> <!-- PyCharm -->
 
     <application-components/>
