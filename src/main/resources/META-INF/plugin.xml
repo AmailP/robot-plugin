@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
-    <version>0.16</version>
+    <version>0.16.1</version>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
@@ -24,6 +24,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.16.1 - 19 September 2016
+      <ul>
+        <li>Bug fixed: PatternSyntaxException for keywords containing variables</li>
+        <li>Updated to support from Idea 2016.1 until 2016.2</li>
+      </ul>
       0.16 - 26 August 2016
       <ul>
         <li>Jump to definition partial support for python keywords and libraries</li>
@@ -135,7 +140,7 @@
     </change-notes>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
-    <idea-version since-build="143"/>
+    <idea-version since-build="145" until-build="163.*"/>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>

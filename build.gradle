@@ -39,11 +39,15 @@ dependencies {
     testCompile 'org.scalatest:scalatest_2.11:2.2.5'
 }
 
-// Build number ranges: http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
-// Python CE plugin:    https://plugins.jetbrains.com/plugin/7322?pr=idea_ce
-// Python plugin:       https://plugins.jetbrains.com/plugin/631?pr=idea
+// Build number ranges:   http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
+// Python CE plugin:      https://plugins.jetbrains.com/plugin/7322?pr=idea_ce
+// Python plugin:         https://plugins.jetbrains.com/plugin/631?pr=idea
+// Intellij repositories: https://www.jetbrains.com/intellij-repository/releases
+//                        https://www.jetbrains.com/intellij-repository/snapshots
+
 def pythonPluginForVersion = [
         'IC-LATEST-EAP-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=23050',
+        'IC-2016.2.4': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.2.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.1.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
@@ -55,9 +59,10 @@ def pythonPluginForVersion = [
 ]
 
 intellij {
-    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2016.2.2')
+    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2016.2.4')
     plugins = ['coverage', 'yaml']  // Dependent plugins are added for Python IU plugin
     intellijFiles.addAll(configurations.ideaPlugins.files)
+    updateSinceUntilBuild = false
 
     publish {
         username 'AmailP'
