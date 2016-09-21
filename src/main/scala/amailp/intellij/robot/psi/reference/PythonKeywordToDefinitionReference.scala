@@ -31,7 +31,7 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
   override def resolve: PsiElement = multiResolve(false).headOption.map(_.getElement).orNull
 
   def findMatchingInLibraries(reference: String) = {
-    val referenceRegex = Pattern.quote(reference.replaceAll(" ", "_").toLowerCase).r
+    val referenceRegex = Pattern.quote(reference.replaceAll(" ", "").toLowerCase).r
     val libraryQNames = currentRobotFile.getImportedLibraries.map(l => QualifiedName.fromDottedString(l.getText))
 
     type find[T] = (String, Project, Boolean) => util.Collection[T]
@@ -60,11 +60,13 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
       if pyFunctionMatches(keyword, reference)
     } yield keyword
 
-  def pyFunctionMatches(pyFunc: PyFunction, reference: Regex) : Boolean =
-    pyFunc.getName.toLowerCase match {
+  def pyFunctionMatches(pyFunc: PyFunction, reference: Regex) : Boolean = {
+    val functionName = pyFunc.getName
+    !functionName.startsWith("_") && (functionName.replaceAll("_", "").toLowerCase match {
       case reference() => true
       case _ => false
-    }
+    })
+  }
 
   def utilsPsiElement: PsiElement = element
 }
