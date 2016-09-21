@@ -55,6 +55,19 @@ class PythonKeywordToDefinitionReferenceTest extends RobotCodeInsightFixtureTest
     resolvedPsis should have size 0
   }
 
+  def testReferenceToClassMethod(): Unit = {
+    copyFilesToProjectSkipDir(
+      "PythonKeywordToDefinitionReferenceTest/caret_inside_keyword_from_class_method.robot",
+      "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+
+    val resolvedPsis = getResolvedPsisAtCaret
+
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a [PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "action_one"
+  }
+
   def testCurlyBracesDoNotRaiseException(): Unit = {
     copyFilesToProjectSkipDir(
       "PythonKeywordToDefinitionReferenceTest/keyword_with_curly_braces.robot"

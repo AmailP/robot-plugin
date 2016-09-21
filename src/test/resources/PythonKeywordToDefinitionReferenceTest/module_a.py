@@ -12,3 +12,11 @@ def nounderscores():
 
 def _to_be_ignored():
     pass
+
+
+class SampleClass:
+    def __init__(self):
+        pass
+
+    def action_one(self):
+        pass
