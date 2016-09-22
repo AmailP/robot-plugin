@@ -47,6 +47,7 @@ dependencies {
 
 def pythonPluginForVersion = [
         'IC-LATEST-EAP-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=23050',
+        'IC-163.4396.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.2.4': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.2.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.1.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
