@@ -2,7 +2,7 @@
 <module external.linked.project.id="robot-plugin:test" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Python" name="Python">
-      <configuration sdkName="Python 2.7.10 (/opt/local/bin/python)" />
+      <configuration sdkName="Python 2.7.10" />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
@@ -153,6 +153,7 @@
     <orderEntry type="library" name="Gradle: org.scala-lang.modules:scala-xml_2.11:1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.scala-lang:scala-reflect:2.11.2" level="project" />
     <orderEntry type="library" name="Gradle: org.scalatest:scalatest_2.11:2.2.5" level="project" />
+    <orderEntry type="library" name="Python 2.7.10 interpreter library" level="application" />
   </component>
   <component name="TestModuleProperties" production-module="robot-plugin_main" />
 </module>
