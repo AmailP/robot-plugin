@@ -24,6 +24,9 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      <ul>
+        <li>Bug fixed: Jump to python definition does not ignore spaces</li>
+      </ul>
       0.16.1 - 19 September 2016
       <ul>
         <li>Bug fixed: PatternSyntaxException for keywords containing variables</li>
