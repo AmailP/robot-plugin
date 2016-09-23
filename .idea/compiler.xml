@@ -19,6 +19,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="here-routing-plugin_main" target="1.8" />
+      <module name="here-routing-plugin_test" target="1.8" />
       <module name="robot-plugin_main" target="1.8" />
       <module name="robot-plugin_test" target="1.8" />
     </bytecodeTargetLevel>

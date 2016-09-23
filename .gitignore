@@ -1,16 +1,15 @@
 # IntelliJ
-/.idea/workspace.xml
-/.idea/libraries/Gradle__*
+/.idea
 
 # Downloaded plugin dependencies
-lib
+/lib
 
 # Generated sources
 /src/main/java-gen
 
 # Gradle
-.gradle
-build
+/.gradle
+/build
 
-src/test/resources/.idea
+/src/test/resources/.idea
 *.py[cod]
