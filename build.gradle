@@ -35,33 +35,34 @@ sourceSets.test.scala.srcDir 'src/test/java'
 
 dependencies {
     compile 'org.scala-lang:scala-library:2.11.7'
-    ideaPlugins files("${projectDir}/lib/python.jar")
+    ideaPlugins fileTree("${projectDir}/lib/") {
+        include 'python*/lib/python*.jar'
+    }
     testCompile 'org.scalatest:scalatest_2.11:2.2.5'
 }
 
 // Build number ranges:   http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
-// Python CE plugin:      https://plugins.jetbrains.com/plugin/7322?pr=idea_ce
-// Python plugin:         https://plugins.jetbrains.com/plugin/631?pr=idea
+// Python CE plugin:      https://plugins.jetbrains.com/plugin/7322-python-community-edition
+// Python plugin:         https://plugins.jetbrains.com/plugin/631-python
 // Intellij repositories: https://www.jetbrains.com/intellij-repository/releases
 //                        https://www.jetbrains.com/intellij-repository/snapshots
 
 def pythonPluginForVersion = [
-        'IC-LATEST-EAP-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=23050',
+        'IC-171.3780-EAP-CANDIDATE-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?updateId=33293',
+        'IC-163.13906.18' : 'https://plugins.jetbrains.com/plugin/download?updateId=32326',
         'IC-163.4396.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
-        'IC-2016.2.4': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
-        'IC-2016.2.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=27090',
         'IC-2016.1.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=22400',
         'IC-14.1.6': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=20879',
-        'IU-2016.2.4': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=27089',
-        'IU-2016.2.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=27089',
+        'IU-171.3780-EAP-CANDIDATE-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?updateId=33292',
+        'IU-2016.2.5': 'https://plugins.jetbrains.com/plugin/download?updateId=32327',
         'IU-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=24602',
         'IU-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=22399'
 ]
 
 intellij {
-    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2016.2.4')
+    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-163.13906.18')
     plugins = ['coverage', 'yaml']  // Dependent plugins are added for Python IU plugin
     intellijFiles.addAll(configurations.ideaPlugins.files)
     updateSinceUntilBuild = false
@@ -126,7 +127,9 @@ task copyPythonToSandbox(dependsOn: unzipPython, type: Copy) {
 }
 
 task copyPythonJarToLib(dependsOn: unzipPython, type: Copy) {
-    from "${buildDir}/plugins/python/lib/python.jar"
+    from ("${buildDir}/plugins") {
+        include 'python*/lib/python*.jar'
+    }
     into "${projectDir}/lib"
 }
 
