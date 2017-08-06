@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
-    <version>0.16.2</version>
+    <version>0.16.3</version>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
@@ -24,10 +24,14 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.16.3 - 10 August 2017
+      <ul>
+        <li>Updated to support Idea 2017.2</li>
+      </ul>
       0.16.2 - 12 March 2017
       <ul>
         <li>Bug fixed: Jump to python definition does not ignore spaces</li>
-        <li>Updated to support Idea 2016.1</li>
+        <li>Updated to support Idea 2017.1</li>
       </ul>
       0.16.1 - 19 September 2016
       <ul>
@@ -145,7 +149,7 @@
     </change-notes>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
-    <idea-version since-build="145" until-build="171.*"/>
+    <idea-version since-build="145" until-build="172.*"/>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
