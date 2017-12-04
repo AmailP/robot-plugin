@@ -24,7 +24,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.16.3 - 10 August 2017
+      0.16.4 - 4 December 2017
+      <ul>
+        <li>Updated to support Idea 2017.3</li>
+      </ul>
+	0.16.3 - 10 August 2017
       <ul>
         <li>Updated to support Idea 2017.2</li>
       </ul>
@@ -149,7 +153,7 @@
     </change-notes>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
-    <idea-version since-build="145" until-build="172.*"/>
+    <idea-version since-build="145" until-build="173.*"/>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
