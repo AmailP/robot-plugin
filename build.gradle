@@ -48,6 +48,7 @@ dependencies {
 //                        https://www.jetbrains.com/intellij-repository/snapshots
 
 def pythonPluginForVersion = [
+        'IC-2017.3.2': 'https://plugins.jetbrains.com/plugin/download?updateId=41833',
         'IC-2017.2.1': 'https://plugins.jetbrains.com/plugin/download?updateId=37356',
         'IC-171.3780-EAP-CANDIDATE-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?updateId=33293',
         'IC-163.13906.18' : 'https://plugins.jetbrains.com/plugin/download?updateId=32326',
@@ -56,6 +57,7 @@ def pythonPluginForVersion = [
         'IC-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=24604',
         'IC-15.0.2': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=22400',
         'IC-14.1.6': 'https://plugins.jetbrains.com/plugin/download?pr=idea_ce&updateId=20879',
+        'IU-2017.3.2': 'https://plugins.jetbrains.com/plugin/download?updateId=41832',
         'IU-171.3780-EAP-CANDIDATE-SNAPSHOT': 'https://plugins.jetbrains.com/plugin/download?updateId=33292',
         'IU-2016.2.5': 'https://plugins.jetbrains.com/plugin/download?updateId=32327',
         'IU-2016.1': 'https://plugins.jetbrains.com/plugin/download?pr=idea&updateId=24602',
@@ -63,7 +65,7 @@ def pythonPluginForVersion = [
 ]
 
 intellij {
-    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2017.2.1')
+    version = System.getenv().getOrDefault('IDEA_VERSION', 'IC-2017.3.2')
     plugins = ['coverage', 'yaml']  // Dependent plugins are added for Python IU plugin
     intellijFiles.addAll(configurations.ideaPlugins.files)
     updateSinceUntilBuild = false
