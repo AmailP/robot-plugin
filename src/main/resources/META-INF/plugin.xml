@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
-    <version>0.16.3</version>
+    <version>0.16.4</version>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
 
     <description><![CDATA[
@@ -24,6 +24,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.16.4 - 2 January 2018
+      <ul>
+        <li>Updated to support Idea 2017.3 and future versions</li>
+      </ul>
       0.16.3 - 10 August 2017
       <ul>
         <li>Updated to support Idea 2017.2</li>
@@ -148,8 +152,8 @@
       ]]>
     </change-notes>
 
-    <!-- http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges -->
-    <idea-version since-build="145" until-build="172.*"/>
+    <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->
+    <idea-version since-build="145" until-build="173.*"/>
 
     <!-- http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products -->
     <depends>com.intellij.modules.lang</depends>
