@@ -3,6 +3,8 @@ _Robot Framework Support plugin for the IntelliJ Idea platform_
 
 [![Circle CI](https://circleci.com/gh/AmailP/robot-plugin.svg?style=svg)](https://circleci.com/gh/AmailP/robot-plugin) [![Build Status](https://travis-ci.org/AmailP/robot-plugin.svg?branch=master)](https://travis-ci.org/AmailP/robot-plugin) [![Join the chat at https://gitter.im/AmailP/robot-plugin](https://badges.gitter.im/AmailP/robot-plugin.svg)](https://gitter.im/AmailP/robot-plugin?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/amailp/donate)
+
 1. Syntax highlighting
 1. Code completion support:
   - User defined keywords from .robot files
