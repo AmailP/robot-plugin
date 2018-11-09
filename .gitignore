@@ -1,5 +1,6 @@
 # IntelliJ
 /.idea
+*.iml
 
 # Downloaded plugin dependencies
 /lib
@@ -11,5 +12,9 @@
 /.gradle
 /build
 
+#Mac
+.DS_store
+
 /src/test/resources/.idea
 *.py[cod]
+
