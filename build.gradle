@@ -19,13 +19,11 @@ version = 0.17
 intellij {
     version = System.getenv().getOrDefault("IDEA_VERSION", "IC-2017.3.5")
     plugins = ["PythonCore:2017.3.173.4674.59"]
-//    updateSinceUntilBuild = false
 }
 
 
 publishPlugin {
     username 'AmailP'
-//    password 'wrong'
 } doFirst {
     def requiredVersion = JavaVersion.VERSION_1_8
     if(JavaVersion.current() != requiredVersion)
