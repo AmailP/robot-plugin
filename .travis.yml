@@ -8,6 +8,8 @@ jdk:
 
 env:
   - IDEA_VERSION=IC-2017.3.5
+  - IDEA_VERSION=IC-2018.1.6
+  - IDEA_VERSION=IC-183.4284.36
 
 script:
   - ./gradlew --console plain check

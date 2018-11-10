@@ -16,9 +16,19 @@ repositories {
 
 version = 0.17
 
+def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-183.4284.36")
+
+def pythonPluginForVersion = [
+        "IC-2017.3.5": "PythonCore:2017.3.173.4674.59",
+        "IC-2018.1.6": "PythonCore:2018.1.181.5087.50",
+        "IC-2018.2.4": "PythonCore:2018.2.182.4505.22",
+        "IC-183.4284.36": "PythonCore:2018.3.183.4284.36",
+        "LATEST-EAP-SNAPSHOT": "PythonCore:2018.3.183.4284.36",
+]
+
 intellij {
-    version = System.getenv().getOrDefault("IDEA_VERSION", "IC-2017.3.5")
-    plugins = ["PythonCore:2017.3.173.4674.59"]
+    version = intellijVersion
+    plugins = [pythonPluginForVersion.get(intellijVersion)]
 }
 
 
@@ -28,6 +38,11 @@ publishPlugin {
     def requiredVersion = JavaVersion.VERSION_1_8
     if(JavaVersion.current() != requiredVersion)
         throw new GradleException("The plugin should be published using JavaVersion $requiredVersion" )
+}
+
+patchPluginXml {
+    sinceBuild "173"
+    untilBuild "183.*"
 }
 
 apply plugin: 'scala'
