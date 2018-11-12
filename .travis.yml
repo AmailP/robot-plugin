@@ -13,3 +13,10 @@ env:
 
 script:
   - ./gradlew --console plain check
+
+jobs:
+  include:
+    - stage: release
+      if: tag IS present
+      script:
+        - ./gradlew --console plain publishPlugin
