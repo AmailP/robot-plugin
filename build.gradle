@@ -35,6 +35,8 @@ intellij {
 
 publishPlugin {
     username 'AmailP'
+    password System.getenv().getOrDefault("INTELLIJ_PUBLISH_PASSWORD", "")
+//    token System.getenv().getOrDefault("INTELLIJ_PUBLISH_TOKEN", "")
 } doFirst {
     def requiredVersion = JavaVersion.VERSION_1_8
     if(JavaVersion.current() != requiredVersion)
