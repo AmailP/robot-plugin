@@ -12,7 +12,7 @@ env:
   - IDEA_VERSION=IC-183.4284.36
 
 script:
-  - ./gradlew --console plain check
+  - ./gradlew --console plain check verifyPlugin
 
 jobs:
   include:
