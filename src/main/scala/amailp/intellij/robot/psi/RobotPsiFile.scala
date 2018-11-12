@@ -25,7 +25,7 @@ class RobotPsiFile(viewProvider: FileViewProvider)
   private def getImportedRobotFiles: Stream[RobotPsiFile] = {
     PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
       .toStream
-      .flatMap(_.getReference.resolveReferenceValue())
+      .flatMap(c => Option(c.getReference).flatMap(_.resolveReferenceValue()))
   }
 
   def getImportedLibraries: Iterable[Library] = getLocallyImportedLibraries ++ getRecursivelyImportedLibraries ++

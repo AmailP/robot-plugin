@@ -21,6 +21,8 @@ import scala.collection.mutable
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
+  private def getParent(p: PsiElement): Option[PsiElement] = Option(p.getParent)
+
   extend(CompletionType.BASIC,
   PlatformPatterns.psiElement(RobotTokenTypes.Word),
   new CompletionProvider[CompletionParameters]() {
@@ -30,16 +32,16 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
                                  completionResultSet:  CompletionResultSet) = {
       val currentPsiElem = completionParameters.getPosition
       val psiUtils: ExtRobotPsiUtils = new ExtRobotPsiUtils {
-        def utilsPsiElement: PsiElement = completionParameters.getOriginalPosition
+        def utilsPsiElement: PsiElement = Option(completionParameters.getOriginalPosition)
+          .getOrElse(completionParameters.getPosition)
       }
       //TODO rethink filtering, this maybe does not work well enough
-      currentPsiElem.getParent.getParent.getParent match {
+      getParent(currentPsiElem).flatMap(getParent).flatMap(getParent).foreach {
         case _: TestCaseDefinition | _: KeywordDefinition =>
           for {
             library: Library <- librariesInScope
             lookupElements = lookupElementsForLibrary(library)
           } completionResultSet.addAllElements(lookupElements)
-
         case _ =>
       }
 
@@ -50,7 +52,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
         object WithSameNameClass {
           def unapply(pyFile: PyFile): Option[PyClass] =
-            Option(pyFile.findTopLevelClass(pyFile.getVirtualFile.getNameWithoutExtension))
+            Option(pyFile.getVirtualFile).flatMap(vf => Option(pyFile.findTopLevelClass(vf.getNameWithoutExtension)))
         }
 
         object PythonClassWithExactQName {
