@@ -9,11 +9,16 @@ import com.intellij.psi.{PsiNamedElement, PsiElement}
 
 
 class VariableDefinition(node: ASTNode) extends RobotPsiElement(node) with InStructureView with PsiNamedElement with UsageFindable {
-  private def variableName = getNode.findChildByType(ast.VariableName)
-  override def getName: String = variableName.getText
+  private def variableName = Option(getNode.findChildByType(ast.VariableName))
+  override def getName: String = variableName.map(_.getText).orNull
   override def setName(name: String): PsiElement = {
     val dummyKeyword = createVariableDefinition(name)
-    this.getNode.replaceChild(variableName, dummyKeyword.variableName)
+
+    variableName.foreach(vN =>
+      dummyKeyword.variableName.foreach(dVN =>
+        this.getNode.replaceChild(vN, dVN)
+      )
+    )
     this
   }
 
