@@ -23,6 +23,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.17 - 13 November 2018
+      <ul>
+        <li>Updated to support Idea 2018.1, 2018.2 and 2018.3<li>
+        <li>Bug mitigated: NullPointerException</li>
+      </ul>
       0.16.4 - 2 January 2018
       <ul>
         <li>Updated to support Idea 2017.3<li>
