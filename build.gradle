@@ -1,6 +1,6 @@
 
 plugins {
-    id'org.jetbrains.intellij' version "0.3.12"
+    id 'org.jetbrains.intellij' version "0.4.7"
     id "de.undercouch.download" version '2.1.0'
     id "com.palantir.git-version" version "0.12.0-rc2"
 }
@@ -17,14 +17,15 @@ repositories {
 
 version = gitVersion()
 
-def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-183.4284.36")
+def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-191.6183.87")
 
 def pythonPluginForVersion = [
         "IC-2017.3.5": "PythonCore:2017.3.173.4674.59",
         "IC-2018.1.6": "PythonCore:2018.1.181.5087.50",
         "IC-2018.2.4": "PythonCore:2018.2.182.4505.22",
         "IC-183.4284.36": "PythonCore:2018.3.183.4284.36",
-        "LATEST-EAP-SNAPSHOT": "PythonCore:2018.3.183.4284.36",
+        "IC-191.6183.87": "PythonCore:2019.1.191.6183.53",
+        "LATEST-EAP-SNAPSHOT": "PythonCore:2019.1.191.6183.53",
 ]
 
 intellij {
@@ -45,7 +46,7 @@ publishPlugin {
 
 patchPluginXml {
     sinceBuild "173"
-    untilBuild "183.*"
+    untilBuild "191.*"
 }
 
 apply plugin: 'scala'
@@ -62,8 +63,8 @@ sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.7'
-    testCompile 'org.scalatest:scalatest_2.11:2.2.5'
+    compile 'org.scala-lang:scala-library:2.11.12'
+    testCompile 'org.scalatest:scalatest_2.11:2.2.6'
 }
 
 import de.undercouch.gradle.tasks.download.Download
