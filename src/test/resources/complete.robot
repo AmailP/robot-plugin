@@ -35,3 +35,9 @@ One More Test
 My Keyword
     [Arguments]    ${path}
     Directory Should Exist    ${path}
+
+*** Tasks ***
+Process invoice
+    Read information from PDF
+    Validate information
+

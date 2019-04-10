@@ -27,6 +27,7 @@ SettingsHeader = "*** Settings ***" | "*** Setting ***"
 TestCasesHeader  = "*** Test Cases ***" | "*** Test Case ***"
 KeywordsHeader  = "*** Keywords ***" | "*** Keyword ***"
 VariablesHeader  = "*** Variables ***" | "*** Variable ***"
+TasksHeader  = "*** Tasks ***" | "*** Task ***"
 
 
 WordChar = [^$@&%\ \t\f\r\n]
@@ -65,6 +66,7 @@ EnvironmentVariable = "%{" ~"}"
         {TestCasesHeader}               { yybegin(LINE); return RobotTokenTypes.TestCasesHeader; }
         {KeywordsHeader}                { yybegin(LINE); return RobotTokenTypes.KeywordsHeader; }
         {VariablesHeader}               { yybegin(LINE); return RobotTokenTypes.VariablesHeader; }
+        {TasksHeader}                   { yybegin(LINE); return RobotTokenTypes.TasksHeader; }
 
         {Ellipsis}                      { yybegin(LINE); return RobotTokenTypes.Ellipsis; }
         {ScalarVariable}                { yybegin(LINE); return RobotTokenTypes.ScalarVariable; }
