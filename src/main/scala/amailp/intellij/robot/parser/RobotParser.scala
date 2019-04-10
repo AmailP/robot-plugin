@@ -14,7 +14,7 @@ object RobotParser extends PsiParser {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
         case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(ast.SettingsTable)
-        case TestCasesHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
+        case TestCasesHeader | TasksHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
         case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(ast.KeywordsTable)
         case VariablesHeader => parseTableItemsWith(parseVariableDefinition); Some(ast.VariablesTable)
         case _ => None
