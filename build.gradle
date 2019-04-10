@@ -62,7 +62,7 @@ sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.7'
+    compile 'org.scala-lang:scala-library:2.11.12'
     testCompile 'org.scalatest:scalatest_2.11:2.2.5'
 }
 
