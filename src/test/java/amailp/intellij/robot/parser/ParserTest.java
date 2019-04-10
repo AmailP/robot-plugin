@@ -12,6 +12,8 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.testFramework.ParsingTestCase;
 import com.intellij.testFramework.PlatformTestCase;
 
+import java.io.IOException;
+
 public class ParserTest extends ParsingTestCase {
 
     public ParserTest() {
@@ -19,21 +21,19 @@ public class ParserTest extends ParsingTestCase {
     }
 
     @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    protected String getTestDataPath() {
+        return "testData";
     }
 
-    public void testNothing() {}
-
-    public static void main(String[] args) throws Exception {
-        new ParserTest().setUp();
+    // Smoke test
+    public void testCompleteParsing() throws IOException {
         ParserDefinition pd = new amailp.intellij.robot.extensions.ParserDefinition();
-        String robotTestCase = StreamUtil.readText(pd.getClass().getResourceAsStream("complete.robot"), "utf-8");
+        String robotTestCase = StreamUtil.readText(pd.getClass().getClassLoader().getResourceAsStream("complete.robot"), "utf-8");
         PsiBuilder builder = new PsiBuilderFactoryImpl().createBuilder(pd, pd.createLexer(null), robotTestCase);
         builder.setDebugMode(true);
         final PsiParser parser = RobotParser$.MODULE$;
         IFileElementType fileElem = new IFileElementType(RobotLanguage$.MODULE$);
         ASTNode root = parser.parse(fileElem, builder);
-        System.out.println(DebugUtil.treeToString(root, true));
+//        System.out.println(DebugUtil.treeToString(root, true));
     }
 }
