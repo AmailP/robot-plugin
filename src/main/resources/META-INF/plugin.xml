@@ -23,6 +23,10 @@
       ]]></description>
 
     <change-notes><![CDATA[
+      0.18 - 10 April 2019
+      <ul>
+        <li>Updated to support Idea 2019.*<li>
+      </ul>
       0.17 - 13 November 2018
       <ul>
         <li>Updated to support Idea 2018.1, 2018.2 and 2018.3<li>
