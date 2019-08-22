@@ -4,7 +4,7 @@ scala:
    - 2.11.7
 
 jdk:
-  - oraclejdk8
+  - openjdk8
 
 env:
   - IDEA_VERSION=IC-2017.3.5
