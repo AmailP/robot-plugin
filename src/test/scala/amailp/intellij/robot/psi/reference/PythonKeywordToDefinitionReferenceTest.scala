@@ -1,7 +1,7 @@
 package amailp.intellij.robot.psi.reference
 
 import amailp.intellij.robot.testFramework.RobotCodeInsightFixtureTestCase
-import com.jetbrains.python.psi.PyFunction
+import com.jetbrains.python.psi.{PyClass, PyFile, PyFunction}
 
 class PythonKeywordToDefinitionReferenceTest extends RobotCodeInsightFixtureTestCase {
 
@@ -66,6 +66,38 @@ class PythonKeywordToDefinitionReferenceTest extends RobotCodeInsightFixtureTest
     resolvedPsis should have size 1
     resolvedPsis.head.getElement shouldBe a[PyFunction]
     resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "action_one"
+  }
+
+  def testReferenceToDerivedClassMethod(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/caret_inside_derived_class_keyword.robot",
+        "PythonKeywordToDefinitionReferenceTest/DerivedClass.py"
+    )
+
+    val resolvedPsis = getResolvedPsisAtCaret
+
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a[PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "keyword_a"
+  }
+
+  def testReferenceToMultipleDefinedMethods(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/caret_inside_multiple_defined.robot",
+        "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+
+    val resolvedPsis = getResolvedPsisAtCaret
+    resolvedPsis should have size 2
+
+    val moduleMethod = resolvedPsis.apply(0)
+    val classMethod = resolvedPsis.apply(1)
+    moduleMethod.getElement shouldBe a[PyFunction]
+    moduleMethod.getElement.asInstanceOf[PyFunction].getName shouldBe "multiple_defined"
+    moduleMethod.getElement.getParent.asInstanceOf[PyFile].getName shouldBe "module_a.py"
+    classMethod.getElement shouldBe a[PyFunction]
+    classMethod.getElement.asInstanceOf[PyFunction].getName shouldBe "multiple_defined"
+    classMethod.getElement.getParent.getParent.asInstanceOf[PyClass].getName shouldBe "SampleClass"
   }
 
   def testCurlyBracesDoNotRaiseException(): Unit = {

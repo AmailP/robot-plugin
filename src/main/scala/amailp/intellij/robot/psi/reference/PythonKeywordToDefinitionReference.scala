@@ -1,8 +1,8 @@
 package amailp.intellij.robot.psi.reference
 
 import java.util
-import java.util.regex.Pattern
 
+import amailp.intellij.robot.psi.reference.MethodFinderWithoutUnderscoresAndSpaces.pyElementMatches
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.navigation.NavigationItem
 import com.intellij.openapi.project.Project
@@ -14,7 +14,6 @@ import com.jetbrains.python.psi.{PyClass, PyFile, PyFunction}
 
 import scala.collection.JavaConversions._
 import scala.language.reflectiveCalls
-import scala.util.matching.Regex
 
 class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRange)
     extends PsiReferenceBase[PsiElement](element, textRange)
@@ -32,7 +31,6 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
   override def resolve: PsiElement = multiResolve(false).headOption.map(_.getElement).orNull
 
   def findMatchingInLibraries(reference: String) = {
-    val referenceRegex = Pattern.quote(reference.replaceAll(" ", "").toLowerCase).r
     val libraryQNames = currentRobotFile.getImportedLibraries.map(l => QualifiedName.fromDottedString(l.getText))
 
     type find[T] = (String, Project, Boolean) => util.Collection[T]
@@ -41,36 +39,27 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
       qName.getComponentCount == 1 || ((pySomething.getPresentation.getLocationString != null) &&
         (pySomething.getPresentation.getLocationString contains qName.removeLastComponent().toString))
 
-    def findWith[T <: NavigationItem](index: find[T], find: (T, Regex) => Iterable[PsiElement]) =
+    def findWith[T <: NavigationItem](index: find[T], find: (T, String) => Iterable[PsiElement]) =
       for {
         qName <- libraryQNames
         elem <- index(qName.getLastComponent, element.getProject, true)
         if mmm(qName, elem)
-        psiElement <- find(elem, referenceRegex)
+        psiElement <- find(elem, reference)
       } yield psiElement
 
     findWith(PyModuleNameIndex.find, findInPyFile) ++ findWith(PyClassNameIndex.find, findInPyClass)
   }
 
-  def findInPyFile(pyFile: PyFile, reference: Regex) =
+  def findInPyFile(pyFile: PyFile, reference: String) =
     for {
       keyword <- PsiTreeUtil.findChildrenOfType(pyFile, classOf[PyFunction])
-      if pyFunctionMatches(keyword, reference) && Option(keyword.getContainingClass).isEmpty
+      if Option(keyword.getContainingClass).isEmpty && pyElementMatches(keyword, reference)
     } yield keyword
 
-  def findInPyClass(pyClass: PyClass, reference: Regex) =
-    for {
-      pyClass <- pyClass +: pyClass.getSuperClasses(null)
-      keyword <- pyClass.getMethods
-      if pyFunctionMatches(keyword, reference)
-    } yield keyword
-
-  def pyFunctionMatches(pyFunc: PyFunction, reference: Regex): Boolean = {
-    val functionName = pyFunc.getName
-    !functionName.startsWith("_") && (functionName.replaceAll("_", "").toLowerCase match {
-      case reference() => true
-      case _ => false
-    })
+  def findInPyClass(pyClass: PyClass, name: String): Iterable[PyFunction] = {
+    val process = new MethodFinderWithoutUnderscoresAndSpaces(name)
+    pyClass.visitMethods(process, true, null)
+    process.getResult
   }
 
   def utilsPsiElement: PsiElement = element
