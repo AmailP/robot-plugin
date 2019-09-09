@@ -8,6 +8,8 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.{PsiElement, PsiReferenceBase}
 
 class ResourceValueReference(element: ResourceValue) extends PsiReferenceBase[ResourceValue](element) with ExtRobotPsiUtils {
+  def resourceFilePath: String = getElement.getText.replace("${/}", "/")
+
   override def resolve() = resolveReferenceValue().orNull
   override def getVariants: Array[AnyRef] = Array()
   override def utilsPsiElement: PsiElement = getElement
@@ -16,14 +18,14 @@ class ResourceValueReference(element: ResourceValue) extends PsiReferenceBase[Re
     resolveLocalFile orElse resolveAbsoluteFile orElse resolveFromSourceRoots
 
   private def resolveLocalFile: Option[RobotPsiFile] =
-    maybeToRobotPsiFile(Option(currentDirectory.findFileByRelativePath(getElement.getText)))
+    maybeToRobotPsiFile(Option(currentDirectory.findFileByRelativePath(resourceFilePath)))
 
   private def resolveAbsoluteFile: Option[RobotPsiFile] =
-    maybeToRobotPsiFile(Option(currentFile.getFileSystem.findFileByPath(getElement.getText)))
+    maybeToRobotPsiFile(Option(currentFile.getFileSystem.findFileByPath(resourceFilePath)))
 
   private def resolveFromSourceRoots: Option[RobotPsiFile] = {
     def sourceRoots = ModuleRootManager.getInstance(ModuleUtilCore.findModuleForPsiElement(getElement)).getSourceRoots(true).toList
-    sourceRoots.map(s => maybeToRobotPsiFile(Option(s.findFileByRelativePath(getElement.getText))))
+    sourceRoots.map(s => maybeToRobotPsiFile(Option(s.findFileByRelativePath(resourceFilePath))))
       .foldLeft(None: Option[RobotPsiFile])((a, b) => a orElse b)
   }
 
