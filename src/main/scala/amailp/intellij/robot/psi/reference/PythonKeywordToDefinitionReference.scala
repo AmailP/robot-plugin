@@ -38,9 +38,8 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
     type find[T] = (String, Project, Boolean) => util.Collection[T]
 
     def mmm(qName: QualifiedName, pySomething: NavigationItem) =
-      qName.getComponentCount == 1 || (pySomething.getPresentation.getLocationString contains qName
-        .removeLastComponent()
-        .toString)
+      qName.getComponentCount == 1 || ((pySomething.getPresentation.getLocationString != null) &&
+        (pySomething.getPresentation.getLocationString contains qName.removeLastComponent().toString))
 
     def findWith[T <: NavigationItem](index: find[T], find: (T, Regex) => Iterable[PsiElement]) =
       for {
