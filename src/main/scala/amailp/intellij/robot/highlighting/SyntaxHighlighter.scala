@@ -24,7 +24,7 @@ class SyntaxHighlighter extends SyntaxHighlighterBase {
       case TestCaseSetting => arrayOfAttributesKeys(INSTANCE_FIELD)
       case Comment => arrayOfAttributesKeys(LINE_COMMENT)
       case BadCharacter => arrayOfAttributesKeys(BAD_CHARACTER)
-      case _ =>  Array()
+      case _ => Array()
     }
   }
 }

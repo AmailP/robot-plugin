@@ -8,14 +8,18 @@ import amailp.intellij.robot.psi.reference.KeywordToDefinitionReference
 import amailp.intellij.robot.psi.utils.RobotPsiUtils
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
-
 /**
  * An instance of a keyword when is used
  */
-class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils with UsageFindable with PsiNameIdentifierOwner {
+class Keyword(node: ASTNode)
+    extends ASTWrapperPsiElement(node)
+    with RobotPsiUtils
+    with UsageFindable
+    with PsiNameIdentifierOwner {
 
-  override def getReferences: Array[PsiReference] = Array[PsiReference](new KeywordToDefinitionReference(this)) ++
-    ReferenceProvidersRegistry.getReferencesFromProviders(this)
+  override def getReferences: Array[PsiReference] =
+    Array[PsiReference](new KeywordToDefinitionReference(this)) ++
+      ReferenceProvidersRegistry.getReferencesFromProviders(this)
 
   def getTextStrippedFromIgnoredPrefixes = {
     val textLowerCase = getText.toLowerCase
@@ -24,7 +28,7 @@ class Keyword(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUti
       if textLowerCase.startsWith(prefix)
       stripped = textLowerCase.replaceFirst(prefix, "").trim
     } yield stripped
-  } ensuring {_.size < 2}
+  } ensuring { _.size < 2 }
 
   override def setName(name: String): PsiElement = {
     val dummyKeyword = createKeyword(name)

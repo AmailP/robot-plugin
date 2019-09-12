@@ -12,13 +12,16 @@ import com.jetbrains.python.psi.{PyElement, PyFile}
 import scala.collection.JavaConversions._
 import scala.collection.breakOut
 
+class LibraryToDefinitionReference(element: PsiElement)
+    extends PsiReferenceBase[PsiElement](element)
+    with PsiPolyVariantReference
+    with ExtRobotPsiUtils {
 
-class LibraryToDefinitionReference(element: PsiElement) extends PsiReferenceBase[PsiElement](element)
-  with PsiPolyVariantReference with ExtRobotPsiUtils {
-
-  override def getVariants = (for {
+  override def getVariants =
+    (for {
       lib <- currentRobotFile.getImportedLibraries
-    } yield LookupElementBuilder.create(lib.getText)
+    } yield LookupElementBuilder
+      .create(lib.getText)
       .withCaseSensitivity(false)
       .withTypeText("Library", true)
       .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
@@ -30,10 +33,12 @@ class LibraryToDefinitionReference(element: PsiElement) extends PsiReferenceBase
       Option(file.findTopLevelClass(qNameLast)).getOrElse(file)
 
     def findModuleOrClass(name: String) =
-      PyModuleNameIndex.find(name, element.getProject, true)
+      PyModuleNameIndex
+        .find(name, element.getProject, true)
         .filter(PyElementPresentation.getPackageForFile(_) == element.getText)
         .map(getClassIfHasSameName) ++
-        PyClassNameIndex.find(name, element.getProject, true)
+        PyClassNameIndex
+          .find(name, element.getProject, true)
           .filter(QualifiedNameFinder.getQualifiedName(_) == element.getText)
 
     findModuleOrClass(qNameLast).map(new PsiElementResolveResult(_))(breakOut)

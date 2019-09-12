@@ -9,14 +9,18 @@ import org.scalatest.Matchers
 import org.scalatest.junit.AssertionsForJUnit
 
 @Ignore
-class RobotCodeInsightFixtureTestCase extends LightPlatformCodeInsightFixtureTestCase with Matchers with AssertionsForJUnit  {
+class RobotCodeInsightFixtureTestCase
+    extends LightPlatformCodeInsightFixtureTestCase
+    with Matchers
+    with AssertionsForJUnit {
   override def getTestDataPath =
     new File(this.getClass.getClassLoader.getResource("complete.robot").toURI).getParent
 
-  def copyFilesToProjectSkipDir(files: String*): Unit = files
-    .map(f => myFixture.copyFileToProject(f, f.substring(f.indexOf('/'))))
-    .headOption
-    .foreach(myFixture.configureFromExistingVirtualFile)
+  def copyFilesToProjectSkipDir(files: String*): Unit =
+    files
+      .map(f => myFixture.copyFileToProject(f, f.substring(f.indexOf('/'))))
+      .headOption
+      .foreach(myFixture.configureFromExistingVirtualFile)
 
   def getResolvedPsisAtCaret: Array[ResolveResult] =
     myFixture.getFile

@@ -16,13 +16,13 @@ class TestHeaders extends BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.SettingsHeader)
   }
 
-test("LineBeforeHeader") {
+  test("LineBeforeHeader") {
     scanString("\n*** Test Cases ***")
     nextTokenIsType(RobotTokenTypes.BlankLine)
     nextTokenIsType(RobotTokenTypes.TestCasesHeader)
   }
 
-test("LineBetweenHeaders") {
+  test("LineBetweenHeaders") {
     scanString("*** Settings ***\n*** Setting ***")
     nextTokenIsType(RobotTokenTypes.SettingsHeader)
     nextTokenIsType(RobotTokenTypes.LineTerminator)

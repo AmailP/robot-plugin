@@ -16,9 +16,10 @@ import scala.collection.JavaConversions._
 import scala.language.reflectiveCalls
 import scala.util.matching.Regex
 
-
-class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRange) extends PsiReferenceBase[PsiElement](element, textRange)
-  with PsiPolyVariantReference with ExtRobotPsiUtils {
+class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRange)
+    extends PsiReferenceBase[PsiElement](element, textRange)
+    with PsiPolyVariantReference
+    with ExtRobotPsiUtils {
 
   override def getVariants = Array.empty
 
@@ -37,9 +38,12 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
     type find[T] = (String, Project, Boolean) => util.Collection[T]
 
     def mmm(qName: QualifiedName, pySomething: NavigationItem) =
-      qName.getComponentCount == 1 || (pySomething.getPresentation.getLocationString contains qName.removeLastComponent().toString)
+      qName.getComponentCount == 1 || (pySomething.getPresentation.getLocationString contains qName
+        .removeLastComponent()
+        .toString)
 
-    def findWith[T<:NavigationItem](index: find[T], find: (T, Regex) => Iterable[PsiElement]) = for {
+    def findWith[T <: NavigationItem](index: find[T], find: (T, Regex) => Iterable[PsiElement]) =
+      for {
         qName <- libraryQNames
         elem <- index(qName.getLastComponent, element.getProject, true)
         if mmm(qName, elem)
@@ -49,18 +53,20 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
     findWith(PyModuleNameIndex.find, findInPyFile) ++ findWith(PyClassNameIndex.find, findInPyClass)
   }
 
-  def findInPyFile(pyFile: PyFile, reference: Regex) = for {
+  def findInPyFile(pyFile: PyFile, reference: Regex) =
+    for {
       keyword <- PsiTreeUtil.findChildrenOfType(pyFile, classOf[PyFunction])
       if pyFunctionMatches(keyword, reference) && Option(keyword.getContainingClass).isEmpty
     } yield keyword
 
-  def findInPyClass(pyClass: PyClass, reference: Regex) = for {
+  def findInPyClass(pyClass: PyClass, reference: Regex) =
+    for {
       pyClass <- pyClass +: pyClass.getSuperClasses(null)
       keyword <- pyClass.getMethods
       if pyFunctionMatches(keyword, reference)
     } yield keyword
 
-  def pyFunctionMatches(pyFunc: PyFunction, reference: Regex) : Boolean = {
+  def pyFunctionMatches(pyFunc: PyFunction, reference: Regex): Boolean = {
     val functionName = pyFunc.getName
     !functionName.startsWith("_") && (functionName.replaceAll("_", "").toLowerCase match {
       case reference() => true

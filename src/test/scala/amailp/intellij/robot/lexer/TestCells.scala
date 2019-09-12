@@ -5,8 +5,6 @@ import java.util.Scanner
 import amailp.intellij.robot.elements.RobotTokenTypes
 import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
-
-
 @RunWith(classOf[JUnitRunner])
 class TestCells extends BaseLexerTest {
   test("ScalarVariable") {
@@ -122,7 +120,8 @@ class TestCells extends BaseLexerTest {
   }
 
   test("All") {
-    val s: String = new Scanner(this.getClass.getClassLoader.getResourceAsStream("complete.robot")).useDelimiter("\\A").next
+    val s: String =
+      new Scanner(this.getClass.getClassLoader.getResourceAsStream("complete.robot")).useDelimiter("\\A").next
     scanString(s)
     while (robotLexer.getTokenType != null) {
       System.out.println(robotLexer.getTokenType + "\t\t" + robotLexer.getTokenText)

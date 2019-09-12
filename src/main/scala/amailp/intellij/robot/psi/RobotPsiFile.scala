@@ -13,8 +13,7 @@ import scala.annotation.tailrec
 import scala.collection.JavaConversions._
 import scala.collection.immutable.Stream.Empty
 
-class RobotPsiFile(viewProvider: FileViewProvider)
-  extends PsiFileBase(viewProvider, RobotLanguage) {
+class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvider, RobotLanguage) {
 
   def getFileType: FileType = robot.file.FileType
 
@@ -23,13 +22,15 @@ class RobotPsiFile(viewProvider: FileViewProvider)
   override def getIcon(flags: Int): Icon = super.getIcon(flags)
 
   private def getImportedRobotFiles: Stream[RobotPsiFile] = {
-    PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
+    PsiTreeUtil
+      .findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
       .toStream
       .flatMap(c => Option(c.getReference).flatMap(_.resolveReferenceValue()))
   }
 
-  def getImportedLibraries: Iterable[Library] = getLocallyImportedLibraries ++ getRecursivelyImportedLibraries ++
-    Iterable[Library](BuiltInLibrary)
+  def getImportedLibraries: Iterable[Library] =
+    getLocallyImportedLibraries ++ getRecursivelyImportedLibraries ++
+      Iterable[Library](BuiltInLibrary)
 
   private def getLocallyImportedLibraries: Iterable[Library] = {
     for {
@@ -56,9 +57,9 @@ class RobotPsiFile(viewProvider: FileViewProvider)
         case head #:: tail if !visited.contains(head) =>
           val importedFromHead = head.getImportedRobotFiles
           visit(toVisit.tail #::: importedFromHead,
-            visited + head,
-            cumulated ++ importedFromHead,
-            accumulator #::: importedFromHead.filterNot(cumulated.contains) )
+                visited + head,
+                cumulated ++ importedFromHead,
+                accumulator #::: importedFromHead.filterNot(cumulated.contains))
         case Empty => accumulator
       }
     }

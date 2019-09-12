@@ -19,14 +19,14 @@ package object parser {
     def currentText = getTokenText
 
     def parseRowContent(includingTerminator: Boolean = true) {
-      if(!currentIsSeparator) parseCellOfType(ast.NonEmptyCell)
+      if (!currentIsSeparator) parseCellOfType(ast.NonEmptyCell)
       parseRemainingCells()
-      if(includingTerminator)
+      if (includingTerminator)
         consumeLineTerminator()
     }
 
     def parseExpectedTypeCell(parseType: IElementType, expectedTypes: Set[IElementType]): IElementType =
-      if(expectedTypes.contains(currentType))
+      if (expectedTypes.contains(currentType))
         parseCellThen(collapseWithType(parseType))
       else
         parseCellThen(asError("Expected: " + expectedTypes.mkString(" | ")))
@@ -37,7 +37,7 @@ package object parser {
     def parseCellThen(action: ParametricActionOnMarker): IElementType = {
       val cellMarker = mark
       val contentBuilder = new StringBuilder
-      while(!currentIsLineTerminator && currentType != Separator) {
+      while (!currentIsLineTerminator && currentType != Separator) {
         contentBuilder append currentText
         advanceLexer()
       }
@@ -47,14 +47,13 @@ package object parser {
     type ActionOnMarker = Marker => IElementType
     def doneWithType(t: IElementType): ActionOnMarker = m => { m done t; t }
     def collapseWithType(t: IElementType): ActionOnMarker = m => { m collapse t; t }
-    def asError(message: String): ActionOnMarker = {error(message); doneWithType(ast.NonEmptyCell)}
+    def asError(message: String): ActionOnMarker = { error(message); doneWithType(ast.NonEmptyCell) }
 
     type ParametricActionOnMarker = String => ActionOnMarker
-    implicit def ignoreParameter(a:ActionOnMarker): ParametricActionOnMarker = s => a
+    implicit def ignoreParameter(a: ActionOnMarker): ParametricActionOnMarker = s => a
 
     def parseRemainingCells() {
-      while(currentIsSeparator)
-      {
+      while (currentIsSeparator) {
         consumeSeparator()
         parseCellOfType(ast.NonEmptyCell)
       }
@@ -62,7 +61,7 @@ package object parser {
 
     def parseEllipsis(): IElementType = {
       val ellipsisMark = mark
-      if(currentType != Ellipsis) error("Ellipsis expected")
+      if (currentType != Ellipsis) error("Ellipsis expected")
       advanceLexer()
       ellipsisMark done Ellipsis
       Ellipsis
@@ -77,7 +76,7 @@ package object parser {
     def currentIsLineTerminator = currentType == LineTerminator || eof
 
     def consumeSeparator() {
-      if(!currentIsSeparator) error("Cell separator expected")
+      if (!currentIsSeparator) error("Cell separator expected")
       advanceLexer()
     }
 
