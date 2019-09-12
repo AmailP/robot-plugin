@@ -7,18 +7,17 @@ import amailp.intellij.robot.structureView.InStructureView
 import com.intellij.lang.ASTNode
 import com.intellij.psi.{PsiNamedElement, PsiElement}
 
-
-class VariableDefinition(node: ASTNode) extends RobotPsiElement(node) with InStructureView with PsiNamedElement with UsageFindable {
+class VariableDefinition(node: ASTNode)
+    extends RobotPsiElement(node)
+    with InStructureView
+    with PsiNamedElement
+    with UsageFindable {
   private def variableName = Option(getNode.findChildByType(ast.VariableName))
   override def getName: String = variableName.map(_.getText).orNull
   override def setName(name: String): PsiElement = {
     val dummyKeyword = createVariableDefinition(name)
 
-    variableName.foreach(vN =>
-      dummyKeyword.variableName.foreach(dVN =>
-        this.getNode.replaceChild(vN, dVN)
-      )
-    )
+    variableName.foreach(vN => dummyKeyword.variableName.foreach(dVN => this.getNode.replaceChild(vN, dVN)))
     this
   }
 

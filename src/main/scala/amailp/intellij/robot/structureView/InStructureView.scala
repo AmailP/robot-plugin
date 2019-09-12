@@ -16,7 +16,8 @@ trait InStructureView extends RobotPsiElement {
   def structureViewChildrenTokenTypes: List[RobotIElementType]
 
   val structureTreeElement: StructureViewTreeElement = new StructureViewTreeElement {
-    def getChildren: Array[TreeElement] = (for {
+    def getChildren: Array[TreeElement] =
+      (for {
         //TODO Use PsiTreeUtil and get rid of intermediate class RobotPsiElement
         child <- findChildrenByType[InStructureView](structureViewChildrenTokenTypes)
       } yield child.structureTreeElement)(breakOut)

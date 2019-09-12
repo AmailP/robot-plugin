@@ -5,6 +5,10 @@ import amailp.intellij.robot.lexer.RobotLexer
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.elements.RobotTokenTypes
 
-class WordsScanner extends DefaultWordsScanner(new RobotLexer,
-  TokenSet.create(RobotTokenTypes.Word, RobotTokenTypes.Space, RobotTokenTypes.ScalarVariable),
-  RobotTokenTypes.CommentsTokens, TokenSet.EMPTY )
+class WordsScanner
+    extends DefaultWordsScanner(
+        new RobotLexer,
+        TokenSet.create(RobotTokenTypes.Word, RobotTokenTypes.Space, RobotTokenTypes.ScalarVariable),
+        RobotTokenTypes.CommentsTokens,
+        TokenSet.EMPTY
+    )

@@ -6,7 +6,9 @@ import amailp.intellij.robot.psi
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 
 class ResourceValue extends AbstractElementManipulator[psi.ResourceValue] {
-  override def handleContentChange(element: psi.ResourceValue, range: TextRange, newContent: String): psi.ResourceValue = {
+  override def handleContentChange(element: psi.ResourceValue,
+                                   range: TextRange,
+                                   newContent: String): psi.ResourceValue = {
     val newElement = new ExtRobotPsiUtils {
       def utilsPsiElement: PsiElement = element
     }.createResourceValue(newContent)

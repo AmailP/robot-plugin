@@ -9,8 +9,12 @@ import amailp.intellij.robot.findUsage.UsageFindable
 import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
 
-
-class KeywordDefinition (node: ASTNode) extends RobotPsiElement(node) with PsiNamedElement with UsageFindable with InStructureView with PsiTarget {
+class KeywordDefinition(node: ASTNode)
+    extends RobotPsiElement(node)
+    with PsiNamedElement
+    with UsageFindable
+    with InStructureView
+    with PsiTarget {
   private def keywordName = getNode.findChildByType(ast.KeywordName).getPsi(classOf[KeywordName])
   override def getNodeText(useFullName: Boolean) = getName
   override def getName: String = keywordName.getText
@@ -43,5 +47,6 @@ object KeywordDefinition {
     } yield keywordDefinition
   }
 
-  def findInFile(file: RobotPsiFile) = PsiTreeUtil.findChildrenOfType(file.getNode.getPsi, classOf[KeywordDefinition]).toSet
+  def findInFile(file: RobotPsiFile) =
+    PsiTreeUtil.findChildrenOfType(file.getNode.getPsi, classOf[KeywordDefinition]).toSet
 }

@@ -7,9 +7,11 @@ import amailp.intellij.robot.testFramework.RobotCodeInsightFixtureTestCase
 class RobotStructureTest extends RobotCodeInsightFixtureTestCase {
 
   def testVariablesInStructure(): Unit = {
-    val files = myFixture.configureByFiles(
-      "RobotStructureTest/one_variable.robot"
-    ).map(_.asInstanceOf[RobotPsiFile])
+    val files = myFixture
+      .configureByFiles(
+          "RobotStructureTest/one_variable.robot"
+      )
+      .map(_.asInstanceOf[RobotPsiFile])
 
     val oneVariable = files.head
 
@@ -20,11 +22,11 @@ class RobotStructureTest extends RobotCodeInsightFixtureTestCase {
     root.getChildren should have size 1
 
     val variables = root.getChildren()(0)
-    variables.getPresentation.getPresentableText should equal ("Variables")
+    variables.getPresentation.getPresentableText should equal("Variables")
     variables.getChildren should have size 1
 
     val firstVariable = variables.getChildren()(0)
-    firstVariable.getPresentation.getPresentableText should equal ("${first}")
+    firstVariable.getPresentation.getPresentableText should equal("${first}")
     firstVariable.getChildren should have size 0
   }
 }

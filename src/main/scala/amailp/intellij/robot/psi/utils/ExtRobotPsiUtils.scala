@@ -15,8 +15,7 @@ trait ExtRobotPsiUtils {
   def psiManager = PsiManager.getInstance(utilsPsiElement.getProject)
 
   def createKeyword(name: String): Keyword = {
-    val dummyFile = shtg(
-      s"""
+    val dummyFile = shtg(s"""
           |*** Keywords ***
           |KeyDef
           |    $name
@@ -25,8 +24,7 @@ trait ExtRobotPsiUtils {
   }
 
   def createKeywordDefinition(name: String): KeywordDefinition = {
-    val dummyFile = shtg(
-      s"""
+    val dummyFile = shtg(s"""
           |*** Keywords ***
           |$name
         """)
@@ -34,18 +32,15 @@ trait ExtRobotPsiUtils {
   }
 
   def createVariableDefinition(name: String): VariableDefinition = {
-    val dummyFile = shtg(
-      s"""
+    val dummyFile = shtg(s"""
          |*** Variables ***
          |$name
         """)
     PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[VariableDefinition]).head
   }
 
-
   def createResourceValue(path: String): ResourceValue = {
-    val dummyFile = shtg(
-      s"""
+    val dummyFile = shtg(s"""
           |*** Settings ***
           |Resource    $path
         """)
@@ -53,6 +48,9 @@ trait ExtRobotPsiUtils {
   }
 
   def shtg(fileContent: String): RobotPsiFile = {
-    PsiFileFactory.getInstance(utilsPsiElement.getProject).createFileFromText("dummy", FileType, fileContent.stripMargin).asInstanceOf[RobotPsiFile]
+    PsiFileFactory
+      .getInstance(utilsPsiElement.getProject)
+      .createFileFromText("dummy", FileType, fileContent.stripMargin)
+      .asInstanceOf[RobotPsiFile]
   }
 }

@@ -19,7 +19,3 @@ class FindUsagesProvider extends com.intellij.lang.findUsages.FindUsagesProvider
   override def canFindUsagesFor(element: PsiElement): Boolean = element.isInstanceOf[UsageFindable]
   override def getWordsScanner: WordsScanner = new robot.findUsage.WordsScanner
 }
-
-
-
-

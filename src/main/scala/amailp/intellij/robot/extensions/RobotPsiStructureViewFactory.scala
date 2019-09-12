@@ -11,10 +11,7 @@ import amailp.intellij.robot.structureView.RobotTreeBasedStructureViewBuilder
 class RobotPsiStructureViewFactory extends PsiStructureViewFactory {
   def getStructureViewBuilder(psiFile: PsiFile): StructureViewBuilder = new StructureViewBuilder {
     def createStructureView(fileEditor: FileEditor, project: Project): StructureView =
-      new RobotTreeBasedStructureViewBuilder(psiFile.asInstanceOf[RobotPsiFile]).createStructureView(fileEditor, project)
+      new RobotTreeBasedStructureViewBuilder(psiFile.asInstanceOf[RobotPsiFile])
+        .createStructureView(fileEditor, project)
   }
 }
-
-
-
-

@@ -21,7 +21,7 @@ object RobotParser extends PsiParser {
       }
       tableType match {
         case Some(t) => tableMarker done t
-        case None => tableMarker drop()
+        case None => tableMarker drop ()
       }
     }
 
@@ -29,20 +29,18 @@ object RobotParser extends PsiParser {
       val headerMark = mark
       val headerType = currentType
       advanceLexer()
-      if(isHeader(headerType)) headerMark done headerType
+      if (isHeader(headerType)) headerMark done headerType
       else headerMark error "Table header expected"
       consumeLineTerminator()
       headerType
     }
 
     def parseTableItemsWithSubParser(subParser: SubParser) {
-      while(hasMoreTokens && !isHeader(currentType))
-        subParser.parse(robotBuilder)
+      while (hasMoreTokens && !isHeader(currentType)) subParser.parse(robotBuilder)
     }
 
     def parseTableItemsWith(parseItem: () => Unit) {
-      while(hasMoreTokens && !isHeader(currentType))
-        parseItem()
+      while (hasMoreTokens && !isHeader(currentType)) parseItem()
     }
 
     def parseTestCaseDefinition() {
@@ -54,16 +52,16 @@ object RobotParser extends PsiParser {
     }
 
     def parseMultilineDefinition(nameType: IElementType, definitionType: IElementType) {
-      if(currentIsSpace) error(s"$nameType expected, not space")
+      if (currentIsSpace) error(s"$nameType expected, not space")
       val definitionMark = mark
       parseCellOfType(nameType)
       consumeLineTerminator()
-      while(currentIsSeparator) {
+      while (currentIsSeparator) {
         advanceLexer()
         val rowMarker = mark
         currentType match {
           case TestCaseSetting => parseRowContent()
-          case ScalarVariable | ListVariable | DictionaryVariable  => parseRowContent() // Maybe parseVariableDefinition?
+          case ScalarVariable | ListVariable | DictionaryVariable => parseRowContent() // Maybe parseVariableDefinition?
           case Ellipsis => parseEllipsis(); parseRowContent()
           case _ => parseAction()
         }
@@ -76,9 +74,9 @@ object RobotParser extends PsiParser {
       val definitionMark = mark
       parseExpectedTypeCell(ast.VariableName, Set(ScalarVariable, ListVariable, DictionaryVariable))
       parseRemainingCells()
-      while(continuesInNextLine()) {
+      while (continuesInNextLine()) {
         consumeLineTerminator()
-        if(currentIsSpace) advanceLexer()
+        if (currentIsSpace) advanceLexer()
         parseEllipsis()
         parseRowContent(includingTerminator = false)
       }
@@ -90,8 +88,8 @@ object RobotParser extends PsiParser {
       val first = lookAhead(1)
       val second = lookAhead(2)
       (first == Ellipsis
-        || (first == Separator && second == Ellipsis)
-        || (first == Space && second == Ellipsis))
+      || (first == Separator && second == Ellipsis)
+      || (first == Space && second == Ellipsis))
     }
 
     def parseAction() {

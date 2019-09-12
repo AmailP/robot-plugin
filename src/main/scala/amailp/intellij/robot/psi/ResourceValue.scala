@@ -8,6 +8,3 @@ import amailp.intellij.robot.psi.reference.ResourceValueReference
 class ResourceValue(node: ASTNode) extends ASTWrapperPsiElement(node) {
   override def getReference: ResourceValueReference = new ResourceValueReference(this)
 }
-
-
-

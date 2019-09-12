@@ -6,7 +6,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiReference
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 
-
 class LibraryValue(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils with Library {
 
   def getType: String = "Library"

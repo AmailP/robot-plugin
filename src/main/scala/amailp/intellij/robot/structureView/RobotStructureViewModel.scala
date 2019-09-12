@@ -5,4 +5,4 @@ import com.intellij.openapi.editor.Editor
 import com.intellij.ide.structureView.{StructureViewModelBase, StructureViewTreeElement}
 
 class RobotStructureViewModel(file: RobotPsiFile, editor: Editor, element: StructureViewTreeElement)
-  extends StructureViewModelBase(file, editor, element)
+    extends StructureViewModelBase(file, editor, element)
