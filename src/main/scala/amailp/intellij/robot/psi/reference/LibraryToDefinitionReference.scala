@@ -1,5 +1,6 @@
 package amailp.intellij.robot.psi.reference
 
+import amailp.intellij.robot.psi.LibraryValue
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
 import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElementBuilder}
 import com.intellij.psi._
@@ -12,7 +13,7 @@ import com.jetbrains.python.psi.{PyElement, PyFile}
 import scala.collection.JavaConversions._
 import scala.collection.breakOut
 
-class LibraryToDefinitionReference(element: PsiElement)
+class LibraryToDefinitionReference(element: LibraryValue)
     extends PsiReferenceBase[PsiElement](element)
     with PsiPolyVariantReference
     with ExtRobotPsiUtils {
@@ -21,25 +22,25 @@ class LibraryToDefinitionReference(element: PsiElement)
     (for {
       lib <- currentRobotFile.getImportedLibraries
     } yield LookupElementBuilder
-      .create(lib.getText)
+      .create(lib.getName)
       .withCaseSensitivity(false)
       .withTypeText("Library", true)
       .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
       .asInstanceOf[AnyRef])(breakOut)
 
   override def multiResolve(incompleteCode: Boolean): Array[ResolveResult] = {
-    val qNameLast = QualifiedName.fromDottedString(element.getText).getLastComponent
+    val qNameLast = QualifiedName.fromDottedString(element.getName).getLastComponent
     def getClassIfHasSameName(file: PyFile): PyElement =
       Option(file.findTopLevelClass(qNameLast)).getOrElse(file)
 
     def findModuleOrClass(name: String) =
       PyModuleNameIndex
         .find(name, element.getProject, true)
-        .filter(PyElementPresentation.getPackageForFile(_) == element.getText)
+        .filter(PyElementPresentation.getPackageForFile(_) == element.getName)
         .map(getClassIfHasSameName) ++
         PyClassNameIndex
           .find(name, element.getProject, true)
-          .filter(QualifiedNameFinder.getQualifiedName(_) == element.getText)
+          .filter(QualifiedNameFinder.getQualifiedName(_) == element.getName)
 
     findModuleOrClass(qNameLast).map(new PsiElementResolveResult(_))(breakOut)
   }

@@ -1,22 +1,22 @@
 package amailp.intellij.robot.extensions
 
-import com.intellij.codeInsight.completion._
-import com.intellij.patterns.PlatformPatterns
-import com.intellij.util.{Processor, ProcessingContext}
-import com.intellij.codeInsight.lookup.{LookupElement, AutoCompletionPolicy, LookupElementBuilder}
 import amailp.intellij.robot.elements.RobotTokenTypes
-import amailp.intellij.robot.psi._
-import com.jetbrains.python.psi.stubs.{PyModuleNameIndex, PyClassNameIndex}
-import scala.collection.JavaConversions._
 import amailp.intellij.robot.file.Icons
-import icons.PythonIcons.Python.Python
+import amailp.intellij.robot.psi._
 import amailp.intellij.robot.psi.utils.ExtRobotPsiUtils
+import com.intellij.codeInsight.completion._
+import com.intellij.codeInsight.lookup.{AutoCompletionPolicy, LookupElement, LookupElementBuilder}
+import com.intellij.patterns.PlatformPatterns
 import com.intellij.psi.PsiElement
+import com.intellij.util.{ProcessingContext, Processor}
 import com.jetbrains.python.psi._
-import javax.swing.Icon
-import com.jetbrains.python.{PyNames, PythonFileType}
 import com.jetbrains.python.psi.impl.PyPsiUtils._
+import com.jetbrains.python.psi.stubs.PyModuleNameIndex
+import com.jetbrains.python.{PyNames, PythonFileType}
+import icons.PythonIcons.Python.Python
+import javax.swing.Icon
 
+import scala.collection.JavaConversions._
 import scala.collection.mutable
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
@@ -49,7 +49,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           def librariesInScope = psiUtils.originalRobotFile.getImportedLibraries
 
           def lookupElementsForLibrary(library: Library): Seq[LookupElement] = {
-            val libraryName = library.getText
+            val libraryName = library.getName
 
             object WithSameNameClass {
               def unapply(pyFile: PyFile): Option[PyClass] =
@@ -76,7 +76,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
             object LocalPythonFile {
               def unapply(library: LibraryValue): Option[PyFile] = {
                 for {
-                  virtualFile <- Option(library.currentDirectory.findFileByRelativePath(library.getText))
+                  virtualFile <- Option(library.currentDirectory.findFileByRelativePath(library.getName))
                   psiFile <- Option(psiUtils.psiManager.findFile(virtualFile))
                   if psiFile.getFileType == PythonFileType.INSTANCE
                 } yield psiFile.asInstanceOf[PyFile]
@@ -85,12 +85,12 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
             object InPathPythonFile {
               def unapply(library: LibraryValue): Option[PyFile] =
-                PyModuleNameIndex.find(library.getText, currentPsiElem.getProject, true).headOption
+                PyModuleNameIndex.find(library.getName, currentPsiElem.getProject, true).headOption
             }
 
             object ClassName {
               def unapply(library: LibraryValue): Option[String] =
-                Option(library.getText)
+                Option(library.getName)
             }
 
             def searchForClass(qName: String) =

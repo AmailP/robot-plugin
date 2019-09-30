@@ -22,6 +22,7 @@ SpaceChars = [\ \t\f]
 Separator = [\t\f] | {SpaceChars} {SpaceChars}+
 Comment = "#" .*
 Ellipsis = \.\.\.
+WithName = "WITH NAME"
 
 SettingsHeader = "*** Settings ***" | "*** Setting ***"
 TestCasesHeader  = "*** Test Cases ***" | "*** Test Case ***"
@@ -77,6 +78,7 @@ EnvironmentVariable = "%{" ~"}"
         {Word} | "$" | "@" | "&" | "%"  { yybegin(LINE); return RobotTokenTypes.Word; }
         {Space}                         { yybegin(LINE); return RobotTokenTypes.Space; }
         {Separator}                     { yybegin(LINE); return RobotTokenTypes.Separator; }
+        {WithName}                      { yybegin(LINE); return RobotTokenTypes.WithName; }
     }
 }
 

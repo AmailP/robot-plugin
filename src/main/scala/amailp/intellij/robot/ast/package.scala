@@ -13,6 +13,8 @@ package object ast {
   object ResourceValue extends RobotIElementType("ResourceValue")
   object LibraryKey extends RobotIElementType("LibraryKey")
   object LibraryValue extends RobotIElementType("LibraryValue")
+  object LibraryName extends RobotIElementType("LibraryName")
+  object LibraryAlias extends RobotIElementType("LibraryAlias")
 
   object TestCasesTable extends RobotIElementType("TestCasesTable")
   object TestCaseName extends RobotIElementType("TestCaseTitle")

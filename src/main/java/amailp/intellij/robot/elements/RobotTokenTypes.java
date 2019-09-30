@@ -30,6 +30,7 @@ public interface RobotTokenTypes {
     final IElementType IrrelevantSpaces = new RobotIElementType("IrrelevantSpaces");
     final IElementType BlankLine = new RobotIElementType("BlankLine");
     final IElementType Comment = new RobotIElementType("Comment");
+    final IElementType WithName = new RobotIElementType("LibraryAliasSeparator");
 
     final TokenSet WhitespacesTokens = TokenSet.create(IrrelevantSpaces, BlankLine);
     final TokenSet CommentsTokens = TokenSet.create(Comment);

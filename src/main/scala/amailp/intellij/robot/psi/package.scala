@@ -1,11 +1,12 @@
 package amailp.intellij.robot
 
-import com.intellij.extapi.psi.ASTWrapperPsiElement
-import com.intellij.lang.ASTNode
-import javax.swing.Icon
-import com.intellij.icons.AllIcons
-import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
+import amailp.intellij.robot.structureView.InStructureView
+import com.intellij.extapi.psi.ASTWrapperPsiElement
+import com.intellij.icons.AllIcons
+import com.intellij.lang.ASTNode
+import com.intellij.psi.util.QualifiedName
+import javax.swing.Icon
 
 package object psi {
   class Ellipsis(node: ASTNode) extends ASTWrapperPsiElement(node)
@@ -38,10 +39,14 @@ package object psi {
   }
 
   trait Library {
-    def getText: String
+    def getName: String
+    def getRobotName: String
+    def getQualifiedName: QualifiedName
   }
 
   object BuiltInLibrary extends Library {
-    def getText: String = "BuiltIn"
+    def getName: String = "BuiltIn"
+    def getRobotName: String = getName
+    def getQualifiedName: QualifiedName = QualifiedName.fromDottedString(getName)
   }
 }

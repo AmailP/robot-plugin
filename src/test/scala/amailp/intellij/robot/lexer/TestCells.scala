@@ -27,6 +27,11 @@ class TestCells extends BaseLexerTest {
     nextTokenIsType(RobotTokenTypes.Word)
   }
 
+  test("Library Alias Separator") {
+    scanString("WITH NAME")
+    nextTokenIsType(RobotTokenTypes.WithName)
+  }
+
   test("WordWithSymbols") {
     scanString("!IsThisAWord??.")
     nextTokenIsType(RobotTokenTypes.Word)
