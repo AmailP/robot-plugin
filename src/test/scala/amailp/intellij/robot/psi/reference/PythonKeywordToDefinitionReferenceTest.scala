@@ -109,4 +109,61 @@ class PythonKeywordToDefinitionReferenceTest extends RobotCodeInsightFixtureTest
       getResolvedPsisAtCaret
     }
   }
+
+  def testSynonymReferenceToKeyword(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/librarySynonyms/caret_inside_class_keyword.robot",
+        "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+    val resolvedPsis = getResolvedPsisAtCaret
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a[PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "action_one"
+  }
+
+  def testSynonymReferenceToKeywordWithLibraryPrefix(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/librarySynonyms/caret_inside_class_keyword_with_library_prefix.robot",
+        "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+    val resolvedPsis = getResolvedPsisAtCaret
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a[PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "action_one"
+  }
+
+  def testSynonymReferenceToKeywordWithLowercasePrefix(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/librarySynonyms/caret_inside_class_keyword_with_lowercase_prefix.robot",
+        "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+    val resolvedPsis = getResolvedPsisAtCaret
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a[PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "action_one"
+  }
+
+  def testSynonymReferenceToKeywordWithDottedPrefix(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/librarySynonyms/caret_inside_class_keyword_with_dotted_prefix.robot",
+        "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+    val resolvedPsis = getResolvedPsisAtCaret
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a[PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "action_one"
+  }
+
+  def testSynonymReferenceToMultipleDefinedMethods(): Unit = {
+    copyFilesToProjectSkipDir(
+        "PythonKeywordToDefinitionReferenceTest/librarySynonyms/caret_inside_class_keyword_multiple_defined.robot",
+        "PythonKeywordToDefinitionReferenceTest/module_a.py"
+    )
+    val resolvedPsis = getResolvedPsisAtCaret
+    resolvedPsis should have size 1
+    resolvedPsis.head.getElement shouldBe a[PyFunction]
+    resolvedPsis.head.getElement.asInstanceOf[PyFunction].getName shouldBe "multiple_defined"
+    resolvedPsis.head.getElement.getParent.getParent.asInstanceOf[PyClass].getName shouldBe "SampleClass"
+  }
+
 }

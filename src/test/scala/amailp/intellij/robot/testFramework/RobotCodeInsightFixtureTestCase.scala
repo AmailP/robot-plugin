@@ -2,6 +2,8 @@ package amailp.intellij.robot.testFramework
 
 import java.io.File
 
+import amailp.intellij.robot.psi.LibraryValue
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.{PsiPolyVariantReference, ResolveResult}
 import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase
 import org.junit.Ignore
@@ -28,5 +30,13 @@ class RobotCodeInsightFixtureTestCase
       .getParent
       .getReferences
       .flatMap(_.asInstanceOf[PsiPolyVariantReference].multiResolve(false))
+
+  def getResolvedLibraryPsisAtCaret: Array[ResolveResult] = {
+    val caretElement = myFixture.getFile.findElementAt(myFixture.getCaretOffset)
+    PsiTreeUtil
+      .getParentOfType(caretElement, classOf[LibraryValue])
+      .getReferences
+      .flatMap(_.asInstanceOf[PsiPolyVariantReference].multiResolve(false))
+  }
 
 }

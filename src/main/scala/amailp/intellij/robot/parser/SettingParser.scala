@@ -1,9 +1,8 @@
 package amailp.intellij.robot.parser
 
-import amailp.intellij.robot.elements.RobotTokenTypes._
-import com.intellij.lang.PsiBuilder.Marker
-import com.intellij.psi.tree.IElementType
 import amailp.intellij.robot.ast
+import amailp.intellij.robot.elements.RobotTokenTypes._
+import com.intellij.psi.tree.IElementType
 
 object SettingParser extends SubParser {
 
@@ -33,8 +32,29 @@ object SettingParser extends SubParser {
 
     def parseLibraryValueAndParameters() {
       consumeSeparator()
-      parseCellOfType(ast.LibraryValue)
-      parseRemainingCells()
+      val libraryValueMarker = mark
+      parseCellOfType(ast.LibraryName)
+      parseLibraryArgumentsIfPresent()
+      parseLibraryAliasIfPresent()
+      libraryValueMarker done ast.LibraryValue
+    }
+
+    def parseLibraryArgumentsIfPresent(): Unit = {
+      while (currentIsSeparator) {
+        consumeSeparator()
+        if (currentType == WithName)
+          return
+        parseCellOfType(ast.NonEmptyCell)
+        // TODO Add arguments parsing implementation
+      }
+    }
+
+    def parseLibraryAliasIfPresent(): Unit = {
+      if (currentType == WithName) {
+        advanceLexer()
+        consumeSeparator()
+        parseCellOfType(ast.LibraryAlias)
+      }
     }
 
     val settingMarker = mark
