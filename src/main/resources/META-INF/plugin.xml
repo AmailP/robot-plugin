@@ -50,7 +50,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Language support -->
         <annotator language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Annotator"/>
-        <fileTypeFactory implementation="amailp.intellij.robot.extensions.FileTypeFactory"/>
+        <fileType name="Robot file" extensions="robot" language="Robotframework" fieldName="MODULE$" implementationClass="amailp.intellij.robot.file.FileType$"/>
         <lang.commenter language="Robotframework" implementationClass="amailp.intellij.robot.extensions.Commenter"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.Keyword" implementationClass="amailp.intellij.robot.psi.manipulator.Keyword"/>
         <lang.elementManipulator forClass="amailp.intellij.robot.psi.ResourceValue" implementationClass="amailp.intellij.robot.psi.manipulator.ResourceValue"/>
