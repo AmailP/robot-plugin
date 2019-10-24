@@ -97,3 +97,9 @@ task generateLexer(dependsOn: downloadSkeleton, type: JavaExec) {
 }
 
 compileScala.dependsOn(generateLexer)
+
+test {
+    testLogging {
+        showStandardStreams = true
+    }
+}
