@@ -6,19 +6,23 @@ scala:
 jdk:
   - openjdk8
 
+# Intellij versions that are checked in CI:
+#
+# Usually the list contains least one for each major version between
+# "sinceBuild" and "untilBuild" (from build.gradle).
+
 env:
   - IDEA_VERSION=IC-2017.3.5
-  - IDEA_VERSION=IC-2018.1.6
   - IDEA_VERSION=IC-183.4284.36
-  - IDEA_VERSION=IC-191.6183.87
   - IDEA_VERSION=IC-192.5728.98
+  - IDEA_VERSION=IC-193.4778.7-EAP-SNAPSHOT
 
 script:
-  - ./gradlew --console plain check verifyPlugin
+  - ./gradlew --console=plain check verifyPlugin
 
 jobs:
   include:
     - stage: release
       if: tag IS present
       script:
-        - ./gradlew --console plain publishPlugin
+        - ./gradlew --console=plain publishPlugin
