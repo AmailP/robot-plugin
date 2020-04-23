@@ -12,8 +12,6 @@ jdk:
 # "sinceBuild" and "untilBuild" (from build.gradle).
 
 env:
-  - IDEA_VERSION=IC-2017.3.5
-  - IDEA_VERSION=IC-183.4284.36
   - IDEA_VERSION=IC-192.5728.98
   - IDEA_VERSION=IC-2020.1
 

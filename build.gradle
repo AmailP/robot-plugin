@@ -21,11 +21,6 @@ version = gitVersion()
 def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-2020.1")
 
 def pythonPluginForVersion = [
-        "IC-2017.3.5": "PythonCore:2017.3.173.4674.59",
-        "IC-2018.1.6": "PythonCore:2018.1.181.5087.50",
-        "IC-2018.2.4": "PythonCore:2018.2.182.4505.22",
-        "IC-183.4284.36": "PythonCore:2018.3.183.4284.36",
-        "IC-191.6183.87": "PythonCore:2019.1.191.6183.53",
         "IC-192.5728.98": "PythonCore:2019.2.192.5728.98",
         "IC-2020.1": "PythonCore:201.6668.9",
         "IC-193.4778.7-EAP-SNAPSHOT": "PythonCore:193.4778.7",
@@ -47,7 +42,7 @@ publishPlugin {
 }
 
 patchPluginXml {
-    sinceBuild "173"
+    sinceBuild "192"
     untilBuild "201.*"
 }
 
