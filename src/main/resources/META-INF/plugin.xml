@@ -23,14 +23,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
-      0.21 - October 24, 2019
-      <ul>
-      <li>Support for derived class methods and multiple defined methods from different classes or modules</li>
-      <li>Support ${/} for resource files paths</li>
-      <li>Support "WITH NAME" syntax for libraries</li>
-      <ul>Add support for 2019.3</ul>
-      </ul>
-      ]]>
+        0.22 - April 23, 2020
+        <ul>
+        <li>Add support for 2020.1</li>
+        </ul>
+        ]]>
     </change-notes>
 
     <!-- http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html -->

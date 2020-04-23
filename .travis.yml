@@ -15,7 +15,7 @@ env:
   - IDEA_VERSION=IC-2017.3.5
   - IDEA_VERSION=IC-183.4284.36
   - IDEA_VERSION=IC-192.5728.98
-  - IDEA_VERSION=IC-193.4778.7-EAP-SNAPSHOT
+  - IDEA_VERSION=IC-2020.1
 
 script:
   - ./gradlew --console=plain check verifyPlugin
