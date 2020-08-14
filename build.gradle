@@ -18,12 +18,13 @@ repositories {
 
 version = gitVersion()
 
-def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-2020.1")
+def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-2020.2")
 
 def pythonPluginForVersion = [
         "IC-192.5728.98": "PythonCore:2019.2.192.5728.98",
         "IC-2020.1": "PythonCore:201.6668.9",
-        "IC-193.4778.7-EAP-SNAPSHOT": "PythonCore:193.4778.7",
+        "IC-2020.2": "PythonCore:202.6397.124",
+//        "IC-193.4778.7-EAP-SNAPSHOT": "PythonCore:193.4778.7",
 ]
 
 intellij {
@@ -43,7 +44,7 @@ publishPlugin {
 
 patchPluginXml {
     sinceBuild "192"
-    untilBuild "201.*"
+    untilBuild "202.*"
 }
 
 apply plugin: 'scala'
