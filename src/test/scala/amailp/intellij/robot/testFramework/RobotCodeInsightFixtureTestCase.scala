@@ -7,8 +7,8 @@ import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.psi.{PsiPolyVariantReference, ResolveResult}
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.junit.Ignore
-import org.scalatest.Matchers
-import org.scalatest.junit.AssertionsForJUnit
+import org.scalatest.matchers.should.Matchers
+import org.scalatestplus.junit.AssertionsForJUnit
 
 @Ignore
 class RobotCodeInsightFixtureTestCase
