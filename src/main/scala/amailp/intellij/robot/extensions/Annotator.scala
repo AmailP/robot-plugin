@@ -1,6 +1,6 @@
 package amailp.intellij.robot.extensions
 
-import com.intellij.lang.annotation.AnnotationHolder
+import com.intellij.lang.annotation.{AnnotationHolder, HighlightSeverity}
 import com.intellij.psi.PsiElement
 import amailp.intellij.robot.psi._
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors
@@ -11,7 +11,7 @@ class Annotator extends com.intellij.lang.annotation.Annotator {
   def annotate(element: PsiElement, holder: AnnotationHolder) {
 
     def highlightAs(attr: TextAttributesKey) {
-      holder.createInfoAnnotation(element, null).setTextAttributes(attr)
+      holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(attr)
     }
 
     element match {
