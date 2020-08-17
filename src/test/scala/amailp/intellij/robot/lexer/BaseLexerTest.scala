@@ -1,13 +1,13 @@
 package amailp.intellij.robot.lexer
 
 import org.junit.runner.RunWith
-import org.scalatest.FunSuite
 import org.scalatest.BeforeAndAfter
 import com.intellij.psi.tree.IElementType
-import org.scalatest.junit.JUnitRunner
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatestplus.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
-class BaseLexerTest extends FunSuite with BeforeAndAfter {
+class BaseLexerTest extends AnyFunSuite with BeforeAndAfter {
   var robotLexer: RobotLexer = null
 
   before {

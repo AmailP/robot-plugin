@@ -4,7 +4,7 @@ import java.util.Scanner
 
 import amailp.intellij.robot.elements.RobotTokenTypes
 import org.junit.runner.RunWith
-import org.scalatest.junit.JUnitRunner
+import org.scalatestplus.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class TestCells extends BaseLexerTest {
   test("ScalarVariable") {
