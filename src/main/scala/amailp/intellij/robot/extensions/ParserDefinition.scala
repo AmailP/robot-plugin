@@ -32,9 +32,6 @@ class ParserDefinition extends com.intellij.lang.ParserDefinition {
   def createElement(node: ASTNode): PsiElement = new PsiElementBuilder(node).build()
 
   def createFile(viewProvider: FileViewProvider): PsiFile = new RobotPsiFile(viewProvider)
-
-  def spaceExistanceTypeBetweenTokens(left: ASTNode, right: ASTNode): SpaceRequirements =
-    SpaceRequirements.MAY
 }
 
 object ParserDefinition {
