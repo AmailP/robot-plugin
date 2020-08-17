@@ -60,9 +60,9 @@ sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.12.12'
-    testCompile 'org.scalatest:scalatest_2.12:3.2.1'
-    testCompile 'org.scalatestplus:junit-4-12_2.12:3.2.1.0'
+    implementation 'org.scala-lang:scala-library:2.12.12'
+    testImplementation 'org.scalatest:scalatest_2.12:3.2.1'
+    testImplementation 'org.scalatestplus:junit-4-12_2.12:3.2.1.0'
 }
 
 import de.undercouch.gradle.tasks.download.Download
@@ -91,6 +91,10 @@ task generateLexer(dependsOn: downloadSkeleton, type: JavaExec) {
            |${projectDir}/src/main/resources/amailp/intellij/robot/lexer/Robot.flex""".stripMargin().split('\n').toList()
     inputs.file "${projectDir}/src/main/resources/amailp/intellij/robot/lexer/Robot.flex"
     outputs.dir "${projectDir}/src/main/java-gen/amailp/intellij/robot/lexer"
+}
+
+tasks.named('wrapper') {
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 compileScala.dependsOn(generateLexer)
