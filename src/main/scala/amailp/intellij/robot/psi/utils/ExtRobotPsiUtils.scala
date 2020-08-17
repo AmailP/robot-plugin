@@ -4,7 +4,7 @@ import com.intellij.psi.{PsiFileFactory, PsiManager, PsiElement}
 import com.intellij.psi.util.PsiTreeUtil
 import amailp.intellij.robot.psi._
 import amailp.intellij.robot.file.FileType
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 trait ExtRobotPsiUtils {
   def utilsPsiElement: PsiElement
@@ -20,7 +20,7 @@ trait ExtRobotPsiUtils {
           |KeyDef
           |    $name
         """)
-    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[Keyword]).head
+    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[Keyword]).asScala.head
   }
 
   def createKeywordDefinition(name: String): KeywordDefinition = {
@@ -28,7 +28,7 @@ trait ExtRobotPsiUtils {
           |*** Keywords ***
           |$name
         """)
-    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[KeywordDefinition]).head
+    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[KeywordDefinition]).asScala.head
   }
 
   def createVariableDefinition(name: String): VariableDefinition = {
@@ -36,7 +36,7 @@ trait ExtRobotPsiUtils {
          |*** Variables ***
          |$name
         """)
-    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[VariableDefinition]).head
+    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[VariableDefinition]).asScala.head
   }
 
   def createResourceValue(path: String): ResourceValue = {
@@ -44,7 +44,7 @@ trait ExtRobotPsiUtils {
           |*** Settings ***
           |Resource    $path
         """)
-    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[ResourceValue]).head
+    PsiTreeUtil.findChildrenOfType(dummyFile.getNode.getPsi, classOf[ResourceValue]).asScala.head
   }
 
   def shtg(fileContent: String): RobotPsiFile = {

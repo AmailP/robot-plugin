@@ -10,7 +10,7 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.util.PsiTreeUtil
 
 import scala.annotation.tailrec
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.collection.immutable.Stream.Empty
 
 class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvider, RobotLanguage) {
@@ -24,6 +24,7 @@ class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvi
   private def getImportedRobotFiles: Stream[RobotPsiFile] = {
     PsiTreeUtil
       .findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
+      .asScala
       .toStream
       .flatMap(c => Option(c.getReference).flatMap(_.resolveReferenceValue()))
   }
@@ -34,7 +35,7 @@ class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvi
 
   private def getLocallyImportedLibraries: Iterable[Library] = {
     for {
-      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue])
+      lib: Library <- PsiTreeUtil.findChildrenOfType(getNode.getPsi, classOf[LibraryValue]).asScala
     } yield lib
   }
 
