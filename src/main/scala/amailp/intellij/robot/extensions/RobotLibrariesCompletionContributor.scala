@@ -16,7 +16,7 @@ import com.jetbrains.python.{PyNames, PythonFileType}
 import icons.PythonIcons.Python.Python
 import javax.swing.Icon
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.collection.mutable
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
@@ -42,7 +42,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
               for {
                 library: Library <- librariesInScope
                 lookupElements = lookupElementsForLibrary(library)
-              } completionResultSet.addAllElements(lookupElements)
+              } completionResultSet.addAllElements(lookupElements.asJava)
             case _ =>
           }
 
@@ -85,7 +85,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
             object InPathPythonFile {
               def unapply(library: LibraryValue): Option[PyFile] =
-                PyModuleNameIndex.find(library.getName, currentPsiElem.getProject, true).headOption
+                PyModuleNameIndex.find(library.getName, currentPsiElem.getProject, true).asScala.headOption
             }
 
             object ClassName {
@@ -139,7 +139,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
           def getFunctionsFrom__all__(pyFile: PyFile): Seq[PyFunction] = {
             val attributesNamedAll = getAttributeValuesFromFile(pyFile, PyNames.ALL).toArray(Array[PyExpression]())
             for {
-              functionName <- getStringValues(attributesNamedAll).toIndexedSeq
+              functionName <- getStringValues(attributesNamedAll).asScala.toIndexedSeq
             } yield Option(pyFile.findTopLevelFunction(functionName))
           }.flatten
 

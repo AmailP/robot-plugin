@@ -61,9 +61,9 @@ sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.12'
-    testCompile 'org.scalatest:scalatest_2.11:3.2.1'
-    testCompile 'org.scalatestplus:junit-4-12_2.11:3.2.1.0'
+    compile 'org.scala-lang:scala-library:2.12.12'
+    testCompile 'org.scalatest:scalatest_2.12:3.2.1'
+    testCompile 'org.scalatestplus:junit-4-12_2.12:3.2.1.0'
 }
 
 import de.undercouch.gradle.tasks.download.Download

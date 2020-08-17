@@ -12,7 +12,7 @@ import com.intellij.psi.util.{PsiTreeUtil, QualifiedName}
 import com.jetbrains.python.psi.stubs.{PyClassNameIndex, PyModuleNameIndex}
 import com.jetbrains.python.psi.{PyClass, PyFile, PyFunction}
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.language.reflectiveCalls
 
 class KeywordReference(reference: String) {
@@ -52,7 +52,7 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
     def findWith[T <: NavigationItem](index: find[T], find: (T, String) => Iterable[PsiElement]) =
       for {
         library <- libraries
-        elem <- index(library.getQualifiedName.getLastComponent, element.getProject, true)
+        elem <- index(library.getQualifiedName.getLastComponent, element.getProject, true).asScala
         if mmm(library.getQualifiedName, elem)
         psiElement <- find(elem, reference.keywordName)
       } yield psiElement
@@ -62,7 +62,7 @@ class PythonKeywordToDefinitionReference(element: PsiElement, textRange: TextRan
 
   private def findInPyFile(pyFile: PyFile, reference: String) =
     for {
-      keyword <- PsiTreeUtil.findChildrenOfType(pyFile, classOf[PyFunction])
+      keyword <- PsiTreeUtil.findChildrenOfType(pyFile, classOf[PyFunction]).asScala
       if Option(keyword.getContainingClass).isEmpty && pyElementMatches(keyword, reference)
     } yield keyword
 

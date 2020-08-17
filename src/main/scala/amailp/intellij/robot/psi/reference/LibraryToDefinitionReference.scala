@@ -10,7 +10,7 @@ import com.jetbrains.python.psi.resolve.QualifiedNameFinder
 import com.jetbrains.python.psi.stubs.{PyClassNameIndex, PyModuleNameIndex}
 import com.jetbrains.python.psi.{PyElement, PyFile}
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import scala.collection.breakOut
 
 class LibraryToDefinitionReference(element: LibraryValue)
@@ -36,10 +36,12 @@ class LibraryToDefinitionReference(element: LibraryValue)
     def findModuleOrClass(name: String) =
       PyModuleNameIndex
         .find(name, element.getProject, true)
+        .asScala
         .filter(PyElementPresentation.getPackageForFile(_) == element.getName)
         .map(getClassIfHasSameName) ++
         PyClassNameIndex
           .find(name, element.getProject, true)
+          .asScala
           .filter(QualifiedNameFinder.getQualifiedName(_) == element.getName)
 
     findModuleOrClass(qNameLast).map(new PsiElementResolveResult(_))(breakOut)
