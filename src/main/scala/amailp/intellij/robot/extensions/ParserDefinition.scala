@@ -19,7 +19,7 @@ import amailp.intellij.robot.lang.RobotLanguage
 class ParserDefinition extends com.intellij.lang.ParserDefinition {
   def createLexer(project: Project): Lexer = new RobotLexer
 
-  def getWhitespaceTokens: TokenSet = RobotTokenTypes.WhitespacesTokens
+  override def getWhitespaceTokens: TokenSet = RobotTokenTypes.WhitespacesTokens
 
   def getCommentTokens: TokenSet = RobotTokenTypes.CommentsTokens
 
