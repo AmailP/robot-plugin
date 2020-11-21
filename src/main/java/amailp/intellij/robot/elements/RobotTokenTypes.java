@@ -36,5 +36,5 @@ public interface RobotTokenTypes {
     final TokenSet WhitespacesTokens = TokenSet.create(IrrelevantSpaces, BlankLine);
     final TokenSet CommentsTokens = TokenSet.create(Comment);
     final TokenSet StringLiteralElements = TokenSet.EMPTY;
-    final TokenSet HeaderTokens = TokenSet.create(SettingsHeader, TestCasesHeader, KeywordsHeader, VariablesHeader, TasksHeader);
+    final TokenSet HeaderTokens = TokenSet.create(SettingsHeader, TestCasesHeader, KeywordsHeader, VariablesHeader, TasksHeader, CommentsHeader);
 }

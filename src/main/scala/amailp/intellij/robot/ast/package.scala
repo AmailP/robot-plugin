@@ -6,6 +6,7 @@ import com.intellij.psi.tree.TokenSet
 package object ast {
   object Tables extends RobotIElementType("Tables")
 
+  object CommentsTable extends RobotIElementType("CommentsTable")
   object SettingsTable extends RobotIElementType("SettingsTable")
   object Setting extends RobotIElementType("Setting")
   object SettingName extends RobotIElementType("SettingName")
