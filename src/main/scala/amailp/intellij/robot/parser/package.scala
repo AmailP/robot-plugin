@@ -18,6 +18,10 @@ package object parser {
     def currentType = getTokenType
     def currentText = getTokenText
 
+    def parserCommentLine(includingTerminator: Boolean = true): Unit = {
+
+    }
+
     def parseRowContent(includingTerminator: Boolean = true) {
       if (!currentIsSeparator) parseCellOfType(ast.NonEmptyCell)
       parseRemainingCells()
