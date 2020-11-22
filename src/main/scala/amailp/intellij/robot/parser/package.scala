@@ -19,7 +19,9 @@ package object parser {
     def currentText = getTokenText
 
     def parserCommentLine(includingTerminator: Boolean = true): Unit = {
-
+        while (currentType != SettingsHeader) {
+          parseRowContent()
+        }
     }
 
     def parseRowContent(includingTerminator: Boolean = true) {
