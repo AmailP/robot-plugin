@@ -32,6 +32,5 @@ package object ast {
   object TableRow extends RobotIElementType("TableRow")
   object NonEmptyCell extends RobotIElementType("NonEmptyCell")
 
-  val tableElementTypes = TokenSet.create(SettingsTable, TestCasesTable, KeywordsTable, VariablesTable)
-
+  val tableElementTypes = TokenSet.create(SettingsTable, TestCasesTable, KeywordsTable, VariablesTable, CommentsTable)
 }
