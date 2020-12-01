@@ -18,7 +18,7 @@ object RobotParser extends PsiParser {
         case TestCasesHeader | TasksHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
         case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(ast.KeywordsTable)
         case VariablesHeader => parseTableItemsWith(parseVariableDefinition); Some(ast.VariablesTable)
-        case CommentsHeader => parseTableItemsWithSubParser(CommentsTableParser); Some(ast.CommentsTable)
+        case CommentsHeader => parseTableItemsWith(parseCommentsTable); Some(ast.CommentsTable)
         case _ => None
       }
       tableType match {
@@ -27,6 +27,12 @@ object RobotParser extends PsiParser {
       }
     }
 
+    def parseCommentsTable(): Unit = {
+        while (!isHeader(currentType)) {
+          //val comments_line = currentText
+          advanceLexer()
+        }
+    }
 
     def parseHeaderRow(): IElementType = {
       val headerMark = mark
