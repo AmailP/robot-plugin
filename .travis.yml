@@ -13,8 +13,8 @@ jdk:
 # "sinceBuild" and "untilBuild" (from build.gradle).
 
 env:
-  - IDEA_VERSION=IC-2020.1
   - IDEA_VERSION=IC-2020.2
+  - IDEA_VERSION=IC-2020.3
 
 script:
   - ./gradlew --console=plain check verifyPlugin
