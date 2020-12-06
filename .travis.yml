@@ -5,6 +5,7 @@ scala:
 
 jdk:
   - openjdk8
+  - openjdk11
 
 # Intellij versions that are checked in CI:
 #
