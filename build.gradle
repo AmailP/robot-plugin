@@ -37,20 +37,21 @@ publishPlugin {
     username 'AmailP'
     token System.getenv().getOrDefault("INTELLIJ_PUBLISH_TOKEN", "")
 } doFirst {
-    def requiredVersion = JavaVersion.VERSION_1_8
+    def requiredVersion = JavaVersion.VERSION_11
     if(JavaVersion.current() != requiredVersion)
         throw new GradleException("The plugin should be published using JavaVersion $requiredVersion" )
 }
 
 patchPluginXml {
-    sinceBuild "201"
+    sinceBuild "203"
     untilBuild "203.*"
 }
 
 apply plugin: 'scala'
 apply plugin: 'org.jetbrains.intellij'
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 // Following two assignments are necessary to let the scala plugin handle both java and scala compilation
 sourceSets.main.java.srcDirs = []
