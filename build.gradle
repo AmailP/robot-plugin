@@ -21,8 +21,6 @@ version = gitVersion()
 def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-2020.3")
 
 def pythonPluginForVersion = [
-        "IC-2020.1": "PythonCore:201.6668.9",
-        "IC-2020.2": "PythonCore:202.6397.124",
         "IC-2020.3": "PythonCore:203.5981.165",
 //        "IC-193.4778.7-EAP-SNAPSHOT": "PythonCore:193.4778.7",
 ]
