@@ -5,6 +5,7 @@ import com.intellij.psi.tree.IElementType
 import amailp.intellij.robot.elements.RobotTokenTypes._
 import amailp.intellij.robot.ast
 
+
 object RobotParser extends PsiParser {
   def parse(root: IElementType, builder: PsiBuilder): ASTNode = {
     val robotBuilder = new RobotPsiBuilder(builder)
@@ -17,12 +18,20 @@ object RobotParser extends PsiParser {
         case TestCasesHeader | TasksHeader => parseTableItemsWith(parseTestCaseDefinition); Some(ast.TestCasesTable)
         case KeywordsHeader => parseTableItemsWith(parseKeywordDefinition); Some(ast.KeywordsTable)
         case VariablesHeader => parseTableItemsWith(parseVariableDefinition); Some(ast.VariablesTable)
+        case CommentsHeader => parseTableItemsWith(parseCommentsTable); Some(ast.CommentsTable)
         case _ => None
       }
       tableType match {
         case Some(t) => tableMarker done t
         case None => tableMarker drop ()
       }
+    }
+
+    def parseCommentsTable(): Unit = {
+        while (!isHeader(currentType)) {
+          //val comments_line = currentText
+          advanceLexer()
+        }
     }
 
     def parseHeaderRow(): IElementType = {

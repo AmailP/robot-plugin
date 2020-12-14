@@ -6,6 +6,7 @@ import com.intellij.psi.tree.TokenSet
 package object ast {
   object Tables extends RobotIElementType("Tables")
 
+  object CommentsTable extends RobotIElementType("CommentsTable")
   object SettingsTable extends RobotIElementType("SettingsTable")
   object Setting extends RobotIElementType("Setting")
   object SettingName extends RobotIElementType("SettingName")
@@ -31,6 +32,5 @@ package object ast {
   object TableRow extends RobotIElementType("TableRow")
   object NonEmptyCell extends RobotIElementType("NonEmptyCell")
 
-  val tableElementTypes = TokenSet.create(SettingsTable, TestCasesTable, KeywordsTable, VariablesTable)
-
+  val tableElementTypes = TokenSet.create(SettingsTable, TestCasesTable, KeywordsTable, VariablesTable, CommentsTable)
 }

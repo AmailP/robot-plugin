@@ -17,6 +17,7 @@ public interface RobotTokenTypes {
     final IElementType KeywordsHeader = new RobotIElementType("KeywordsHeader");
     final IElementType VariablesHeader = new RobotIElementType("VariablesHeader");
     final IElementType TasksHeader = new RobotIElementType("TasksHeader");
+    final IElementType CommentsHeader = new RobotIElementType("CommentsHeader");
 
     final IElementType Ellipsis = new RobotIElementType("Ellipsis");
     final IElementType ScalarVariable = new RobotIElementType("ScalarVariable");
@@ -35,5 +36,5 @@ public interface RobotTokenTypes {
     final TokenSet WhitespacesTokens = TokenSet.create(IrrelevantSpaces, BlankLine);
     final TokenSet CommentsTokens = TokenSet.create(Comment);
     final TokenSet StringLiteralElements = TokenSet.EMPTY;
-    final TokenSet HeaderTokens = TokenSet.create(SettingsHeader, TestCasesHeader, KeywordsHeader, VariablesHeader, TasksHeader);
+    final TokenSet HeaderTokens = TokenSet.create(SettingsHeader, TestCasesHeader, KeywordsHeader, VariablesHeader, TasksHeader, CommentsHeader);
 }

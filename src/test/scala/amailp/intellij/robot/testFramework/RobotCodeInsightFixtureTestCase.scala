@@ -11,10 +11,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.junit.AssertionsForJUnit
 
 @Ignore
-class RobotCodeInsightFixtureTestCase
-    extends BasePlatformTestCase
-    with Matchers
-    with AssertionsForJUnit {
+class RobotCodeInsightFixtureTestCase extends BasePlatformTestCase with Matchers with AssertionsForJUnit {
   override def getTestDataPath =
     new File(this.getClass.getClassLoader.getResource("complete.robot").toURI).getParent
 
