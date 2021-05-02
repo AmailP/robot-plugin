@@ -10,7 +10,7 @@ repositories {
     mavenCentral()
 }
 
-// Build number ranges:   http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
+// Build number ranges:   https://plugins.jetbrains.com/docs/intellij/build-number-ranges.html
 // Python CE plugin:      https://plugins.jetbrains.com/plugin/7322-python-community-edition
 // Python plugin:         https://plugins.jetbrains.com/plugin/631-python
 // Intellij repositories: https://www.jetbrains.com/intellij-repository/releases
