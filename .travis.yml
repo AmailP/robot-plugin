@@ -12,6 +12,7 @@ jdk:
 # "sinceBuild" and "untilBuild" (from build.gradle).
 
 env:
+  - IDEA_VERSION=IC-2021.1
   - IDEA_VERSION=IC-2020.3
 
 script:
