@@ -23,9 +23,10 @@ trait InStructureView extends RobotPsiElement {
       } yield child.structureTreeElement)(breakOut)
 
     def getPresentation: ItemPresentation = new ItemPresentation {
-      def getPresentableText: String = structureViewText
-      def getLocationString: String = null
-      def getIcon(unused: Boolean): Icon = structureViewIcon
+      override def getPresentableText: String = structureViewText
+      // TODO Remove as soon as 2020.3 is not supported
+      override def getLocationString: String = null
+      override def getIcon(unused: Boolean): Icon = structureViewIcon
     }
     def canNavigateToSource: Boolean = true
     def canNavigate: Boolean = getNavigatable.canNavigate
