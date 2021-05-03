@@ -14,10 +14,10 @@ import com.jetbrains.python.psi.impl.PyPsiUtils._
 import com.jetbrains.python.psi.stubs.PyModuleNameIndex
 import com.jetbrains.python.{PyNames, PythonFileType}
 import icons.PythonIcons.Python.Python
-import javax.swing.Icon
 
-import scala.collection.JavaConverters._
+import javax.swing.Icon
 import scala.collection.mutable
+import scala.jdk.CollectionConverters._
 
 class RobotLibrariesCompletionContributor extends CompletionContributor {
 
@@ -118,7 +118,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
 
           def lookupElementsFromMethods(libName: String, baseClass: PyClass, icon: Icon): Seq[LookupElement] = {
             class CollectLookupElementsIfPublic extends Processor[PyFunction] {
-              val lookupElements: mutable.MutableList[LookupElement] = mutable.MutableList()
+              val lookupElements: mutable.ArrayDeque[LookupElement] = mutable.ArrayDeque()
               override def process(method: PyFunction): Boolean = {
                 if (!method.getName.startsWith("_"))
                   lookupElements += createLookupElement(method, libName, drop = 1, icon)
@@ -127,7 +127,7 @@ class RobotLibrariesCompletionContributor extends CompletionContributor {
             }
             val processor = new CollectLookupElementsIfPublic()
             baseClass.visitMethods(processor, true, null)
-            processor.lookupElements
+            processor.lookupElements.toSeq
           }
 
           def lookupElementsFrom__all__(libName: String, pyFile: PyFile, icon: Icon): Seq[LookupElement] =

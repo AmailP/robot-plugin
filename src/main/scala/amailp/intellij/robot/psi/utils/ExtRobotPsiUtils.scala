@@ -4,7 +4,7 @@ import com.intellij.psi.{PsiFileFactory, PsiManager, PsiElement}
 import com.intellij.psi.util.PsiTreeUtil
 import amailp.intellij.robot.psi._
 import amailp.intellij.robot.file.FileType
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 trait ExtRobotPsiUtils {
   def utilsPsiElement: PsiElement

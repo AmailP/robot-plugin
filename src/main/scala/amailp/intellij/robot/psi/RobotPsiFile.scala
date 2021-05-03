@@ -10,8 +10,8 @@ import com.intellij.psi.FileViewProvider
 import com.intellij.psi.util.PsiTreeUtil
 
 import scala.annotation.tailrec
-import scala.collection.JavaConverters._
-import scala.collection.immutable.Stream.Empty
+import scala.jdk.CollectionConverters._
+import scala.collection.immutable.LazyList.#::
 
 class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvider, RobotLanguage) {
 
@@ -21,12 +21,13 @@ class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvi
 
   override def getIcon(flags: Int): Icon = super.getIcon(flags)
 
-  private def getImportedRobotFiles: Stream[RobotPsiFile] = {
+  private def getImportedRobotFiles: LazyList[RobotPsiFile] = {
     PsiTreeUtil
       .findChildrenOfType(getNode.getPsi, classOf[ResourceValue])
       .asScala
-      .toStream
+      .view
       .flatMap(c => Option(c.getReference).flatMap(_.resolveReferenceValue()))
+      .to(LazyList)
   }
 
   def getImportedLibraries: Iterable[Library] =
@@ -46,12 +47,12 @@ class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvi
     } yield lib
   }
 
-  def getRecursivelyImportedRobotFiles: Stream[RobotPsiFile] = {
+  def getRecursivelyImportedRobotFiles: LazyList[RobotPsiFile] = {
     @tailrec
-    def visit(toVisit: Stream[RobotPsiFile],
+    def visit(toVisit: LazyList[RobotPsiFile],
               visited: Set[RobotPsiFile],
               cumulated: Set[RobotPsiFile],
-              accumulator: Stream[RobotPsiFile]): Stream[RobotPsiFile] = {
+              accumulator: LazyList[RobotPsiFile]): LazyList[RobotPsiFile] = {
       toVisit match {
         case head #:: tail if visited.contains(head) =>
           visit(toVisit.tail, visited, cumulated, accumulator)
@@ -61,9 +62,9 @@ class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvi
                 visited + head,
                 cumulated ++ importedFromHead,
                 accumulator #::: importedFromHead.filterNot(cumulated.contains))
-        case Empty => accumulator
+        case LazyList() => accumulator
       }
     }
-    visit(Stream(this), Set(), Set(), Stream())
+    visit(LazyList(this), Set(), Set(), LazyList())
   }
 }

@@ -25,12 +25,12 @@ object SettingParser extends SubParser {
         }
     }
 
-    def parseResouceValue() {
+    def parseResouceValue(): Unit = {
       consumeSeparator()
       parseCellOfType(ast.ResourceValue)
     }
 
-    def parseLibraryValueAndParameters() {
+    def parseLibraryValueAndParameters(): Unit = {
       consumeSeparator()
       val libraryValueMarker = mark
       parseCellOfType(ast.LibraryName)

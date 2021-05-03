@@ -9,7 +9,7 @@ import com.intellij.util.ProcessingContext
 
 class PythonKeywordReferenceContributor extends PsiReferenceContributor {
 
-  override def registerReferenceProviders(registrar: PsiReferenceRegistrar) {
+  override def registerReferenceProviders(registrar: PsiReferenceRegistrar): Unit = {
     registrar.registerReferenceProvider(
         PlatformPatterns.psiElement(Keyword),
         new PsiReferenceProvider() {

@@ -10,7 +10,7 @@ object RobotParser extends PsiParser {
     val robotBuilder = new RobotPsiBuilder(builder)
     import robotBuilder._
 
-    def parseTable() {
+    def parseTable(): Unit = {
       val tableMarker = mark
       val tableType = parseHeaderRow() match {
         case SettingsHeader => parseTableItemsWithSubParser(SettingParser); Some(ast.SettingsTable)
@@ -21,7 +21,7 @@ object RobotParser extends PsiParser {
       }
       tableType match {
         case Some(t) => tableMarker done t
-        case None => tableMarker drop ()
+        case None => tableMarker.drop()
       }
     }
 
@@ -35,23 +35,23 @@ object RobotParser extends PsiParser {
       headerType
     }
 
-    def parseTableItemsWithSubParser(subParser: SubParser) {
+    def parseTableItemsWithSubParser(subParser: SubParser): Unit = {
       while (hasMoreTokens && !isHeader(currentType)) subParser.parse(robotBuilder)
     }
 
-    def parseTableItemsWith(parseItem: () => Unit) {
+    def parseTableItemsWith(parseItem: () => Unit): Unit = {
       while (hasMoreTokens && !isHeader(currentType)) parseItem()
     }
 
-    def parseTestCaseDefinition() {
+    def parseTestCaseDefinition(): Unit = {
       parseMultilineDefinition(ast.TestCaseName, ast.TestCaseDefinition)
     }
 
-    def parseKeywordDefinition() {
+    def parseKeywordDefinition(): Unit = {
       parseMultilineDefinition(ast.KeywordName, ast.KeywordDefinition)
     }
 
-    def parseMultilineDefinition(nameType: IElementType, definitionType: IElementType) {
+    def parseMultilineDefinition(nameType: IElementType, definitionType: IElementType): Unit = {
       if (currentIsSpace) error(s"$nameType expected, not space")
       val definitionMark = mark
       parseCellOfType(nameType)
@@ -70,7 +70,7 @@ object RobotParser extends PsiParser {
       definitionMark done definitionType
     }
 
-    def parseVariableDefinition() {
+    def parseVariableDefinition(): Unit = {
       val definitionMark = mark
       parseExpectedTypeCell(ast.VariableName, Set(ScalarVariable, ListVariable, DictionaryVariable))
       parseRemainingCells()
@@ -92,7 +92,7 @@ object RobotParser extends PsiParser {
       || (first == Space && second == Ellipsis))
     }
 
-    def parseAction() {
+    def parseAction(): Unit = {
       parseCellOfType(ast.Keyword)
       parseRowContent()
     }

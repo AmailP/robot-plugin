@@ -12,7 +12,7 @@ import com.intellij.psi.util.{PsiTreeUtil, QualifiedName}
 import com.jetbrains.python.psi.stubs.{PyClassNameIndex, PyModuleNameIndex}
 import com.jetbrains.python.psi.{PyClass, PyFile, PyFunction}
 
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.language.reflectiveCalls
 
 class KeywordReference(reference: String) {

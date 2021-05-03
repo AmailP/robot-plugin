@@ -11,14 +11,14 @@ import scala.language.implicitConversions
 package object parser {
 
   trait SubParser {
-    def parse(builder: RobotPsiBuilder)
+    def parse(builder: RobotPsiBuilder): Unit
   }
 
   implicit class RobotPsiBuilder(builder: PsiBuilder) extends PsiBuilderAdapter(builder) {
     def currentType = getTokenType
     def currentText = getTokenText
 
-    def parseRowContent(includingTerminator: Boolean = true) {
+    def parseRowContent(includingTerminator: Boolean = true): Unit = {
       if (!currentIsSeparator) parseCellOfType(ast.NonEmptyCell)
       parseRemainingCells()
       if (includingTerminator)
@@ -52,7 +52,7 @@ package object parser {
     type ParametricActionOnMarker = String => ActionOnMarker
     implicit def ignoreParameter(a: ActionOnMarker): ParametricActionOnMarker = s => a
 
-    def parseRemainingCells() {
+    def parseRemainingCells(): Unit = {
       while (currentIsSeparator) {
         consumeSeparator()
         parseCellOfType(ast.NonEmptyCell)
@@ -75,12 +75,12 @@ package object parser {
 
     def currentIsLineTerminator = currentType == LineTerminator || eof
 
-    def consumeSeparator() {
+    def consumeSeparator(): Unit = {
       if (!currentIsSeparator) error("Cell separator expected")
       advanceLexer()
     }
 
-    def consumeLineTerminator() {
+    def consumeLineTerminator(): Unit = {
       if (!currentIsLineTerminator && !eof) error("Line terminator expected")
       advanceLexer()
     }
