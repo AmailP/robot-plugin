@@ -22,7 +22,6 @@ def intellijVersion = System.getenv().getOrDefault("IDEA_VERSION", "IC-2021.1")
 
 def pythonPluginForVersion = [
         "IC-2021.1": "PythonCore:211.6693.119",
-        "IC-2020.3": "PythonCore:203.5981.165",
 //        "IC-193.4778.7-EAP-SNAPSHOT": "PythonCore:193.4778.7",
 ]
 
@@ -42,7 +41,7 @@ publishPlugin {
 }
 
 patchPluginXml {
-    sinceBuild "203"
+    sinceBuild "211"
     untilBuild "211.*"
 }
 
