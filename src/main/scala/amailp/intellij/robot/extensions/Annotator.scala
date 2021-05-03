@@ -8,9 +8,9 @@ import DefaultLanguageHighlighterColors._
 import com.intellij.openapi.editor.colors.TextAttributesKey
 
 class Annotator extends com.intellij.lang.annotation.Annotator {
-  def annotate(element: PsiElement, holder: AnnotationHolder) {
+  def annotate(element: PsiElement, holder: AnnotationHolder): Unit = {
 
-    def highlightAs(attr: TextAttributesKey) {
+    def highlightAs(attr: TextAttributesKey): Unit = {
       holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(attr)
     }
 

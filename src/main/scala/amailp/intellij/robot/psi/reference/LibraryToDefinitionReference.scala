@@ -10,23 +10,22 @@ import com.jetbrains.python.psi.resolve.QualifiedNameFinder
 import com.jetbrains.python.psi.stubs.{PyClassNameIndex, PyModuleNameIndex}
 import com.jetbrains.python.psi.{PyElement, PyFile}
 
-import scala.collection.JavaConverters._
-import scala.collection.breakOut
+import scala.jdk.CollectionConverters._
 
 class LibraryToDefinitionReference(element: LibraryValue)
     extends PsiReferenceBase[PsiElement](element)
     with PsiPolyVariantReference
     with ExtRobotPsiUtils {
 
-  override def getVariants =
+  override def getVariants: Array[AnyRef] =
     (for {
-      lib <- currentRobotFile.getImportedLibraries
+      lib <- currentRobotFile.getImportedLibraries.view
     } yield LookupElementBuilder
       .create(lib.getName)
       .withCaseSensitivity(false)
       .withTypeText("Library", true)
       .withAutoCompletionPolicy(AutoCompletionPolicy.GIVE_CHANCE_TO_OVERWRITE)
-      .asInstanceOf[AnyRef])(breakOut)
+      .asInstanceOf[AnyRef]).to(Array)
 
   override def multiResolve(incompleteCode: Boolean): Array[ResolveResult] = {
     val qNameLast = QualifiedName.fromDottedString(element.getName).getLastComponent
@@ -44,7 +43,7 @@ class LibraryToDefinitionReference(element: LibraryValue)
           .asScala
           .filter(QualifiedNameFinder.getQualifiedName(_) == element.getName)
 
-    findModuleOrClass(qNameLast).map(new PsiElementResolveResult(_))(breakOut)
+    findModuleOrClass(qNameLast).map(new PsiElementResolveResult(_)).to(Array)
   }
 
   override def resolve: PsiElement = multiResolve(false).headOption.map(_.getElement).orNull

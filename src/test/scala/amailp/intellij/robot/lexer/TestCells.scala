@@ -129,7 +129,7 @@ class TestCells extends BaseLexerTest {
       new Scanner(this.getClass.getClassLoader.getResourceAsStream("complete.robot")).useDelimiter("\\A").next
     scanString(s)
     while (robotLexer.getTokenType != null) {
-      System.out.println(robotLexer.getTokenType + "\t\t" + robotLexer.getTokenText)
+      System.out.println(robotLexer.getTokenType.toString + "\t\t" + robotLexer.getTokenText)
       robotLexer.advance()
     }
   }

@@ -8,7 +8,6 @@ import amailp.intellij.robot.lexer.RobotIElementType
 import amailp.intellij.robot.psi.RobotPsiElement
 import com.intellij.ide.util.PsiNavigationSupport
 import com.intellij.pom.Navigatable
-import scala.collection.breakOut
 
 trait InStructureView extends RobotPsiElement {
   def structureViewText: String
@@ -16,16 +15,12 @@ trait InStructureView extends RobotPsiElement {
   def structureViewChildrenTokenTypes: List[RobotIElementType]
 
   val structureTreeElement: StructureViewTreeElement = new StructureViewTreeElement {
+    //TODO Use PsiTreeUtil and get rid of intermediate class RobotPsiElement
     def getChildren: Array[TreeElement] =
-      (for {
-        //TODO Use PsiTreeUtil and get rid of intermediate class RobotPsiElement
-        child <- findChildrenByType[InStructureView](structureViewChildrenTokenTypes)
-      } yield child.structureTreeElement)(breakOut)
+      findChildrenByType[InStructureView](structureViewChildrenTokenTypes).view.map(_.structureTreeElement).to(Array)
 
     def getPresentation: ItemPresentation = new ItemPresentation {
       override def getPresentableText: String = structureViewText
-      // TODO Remove as soon as 2020.3 is not supported
-      override def getLocationString: String = null
       override def getIcon(unused: Boolean): Icon = structureViewIcon
     }
     def canNavigateToSource: Boolean = true

@@ -4,7 +4,7 @@ import amailp.intellij.robot.ast
 import com.intellij.lang.ASTNode
 import com.intellij.psi._
 import com.intellij.psi.util.PsiTreeUtil
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import amailp.intellij.robot.findUsage.UsageFindable
 import amailp.intellij.robot.structureView.InStructureView
 import amailp.intellij.robot.file.Icons
@@ -33,14 +33,14 @@ class KeywordDefinition(node: ASTNode)
 }
 
 object KeywordDefinition {
-  def findMatchingInFiles(files: Stream[RobotPsiFile], reference: String) = {
+  def findMatchingInFiles(files: LazyList[RobotPsiFile], reference: String) = {
     for {
       keywordDefinition <- findInFiles(files)
       if keywordDefinition.keywordName matches reference
     } yield keywordDefinition
   }
 
-  def findInFiles(files: Stream[RobotPsiFile]) = {
+  def findInFiles(files: LazyList[RobotPsiFile]) = {
     for {
       file <- files
       keywordDefinition <- findInFile(file)

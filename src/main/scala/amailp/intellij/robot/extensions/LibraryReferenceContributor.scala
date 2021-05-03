@@ -9,7 +9,7 @@ import com.intellij.util.ProcessingContext
 
 class LibraryReferenceContributor extends PsiReferenceContributor {
 
-  override def registerReferenceProviders(registrar: PsiReferenceRegistrar) {
+  override def registerReferenceProviders(registrar: PsiReferenceRegistrar): Unit = {
     registrar.registerReferenceProvider(
         PlatformPatterns.psiElement(LibraryValue),
         new PsiReferenceProvider() {

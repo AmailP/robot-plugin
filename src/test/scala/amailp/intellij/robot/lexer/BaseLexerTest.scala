@@ -19,16 +19,16 @@ class BaseLexerTest extends AnyFunSuite with BeforeAndAfter {
     checkAllWasLexed()
   }
 
-  def scanString(toBeScanned: String) {
+  def scanString(toBeScanned: String): Unit = {
     robotLexer.start(toBeScanned)
   }
 
-  def nextTokenIsType(elementType: IElementType) {
+  def nextTokenIsType(elementType: IElementType): Unit = {
     assert(elementType == robotLexer.getTokenType)
     robotLexer.advance()
   }
 
-  def nextTokenIs(text: String, elementType: IElementType) {
+  def nextTokenIs(text: String, elementType: IElementType): Unit = {
     assert(text == robotLexer.getTokenText)
     nextTokenIsType(elementType)
   }

@@ -59,11 +59,11 @@ sourceSets.main.scala.srcDir 'src/main/java'
 sourceSets.main.scala.srcDir 'src/main/java-gen'
 sourceSets.test.scala.srcDir 'src/test/java'
 
-def scalaVersion = System.getenv().getOrDefault('TRAVIS_SCALA_VERSION', '2.12.12')
+def scalaVersion = System.getenv().getOrDefault('TRAVIS_SCALA_VERSION', '2.13.3')
 dependencies {
     implementation "org.scala-lang:scala-library:$scalaVersion"
-    testImplementation 'org.scalatest:scalatest_2.12:3.2.1'
-    testImplementation 'org.scalatestplus:junit-4-12_2.12:3.2.1.0'
+    testImplementation 'org.scalatest:scalatest_2.13:3.2.1'
+    testImplementation 'org.scalatestplus:junit-4-12_2.13:3.2.1.0'
 }
 
 import de.undercouch.gradle.tasks.download.Download

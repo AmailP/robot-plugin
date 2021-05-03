@@ -5,7 +5,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.tree.TokenSet
 import amailp.intellij.robot.lexer.RobotIElementType
 import com.intellij.psi.PsiElement
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import amailp.intellij.robot.psi.utils.RobotPsiUtils
 
 abstract class RobotPsiElement(node: ASTNode) extends ASTWrapperPsiElement(node) with RobotPsiUtils {
