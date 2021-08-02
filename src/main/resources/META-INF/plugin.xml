@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>amailp.intellij.robot</id>
     <name>Robot Framework Support</name>
     <vendor email="amailp@gmail.com">Valerio Angelini</vendor>
