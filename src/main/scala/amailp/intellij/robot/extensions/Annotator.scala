@@ -11,7 +11,7 @@ class Annotator extends com.intellij.lang.annotation.Annotator {
   def annotate(element: PsiElement, holder: AnnotationHolder): Unit = {
 
     def highlightAs(attr: TextAttributesKey): Unit = {
-      holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(attr)
+      holder.newSilentAnnotation(HighlightSeverity.INFORMATION).textAttributes(attr).create()
     }
 
     element match {
