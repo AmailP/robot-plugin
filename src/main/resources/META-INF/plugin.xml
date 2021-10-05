@@ -24,7 +24,7 @@
 
     <change-notes><![CDATA[
         <ul>
-        <li>Add support for 2021.2</li>
+        <li>Fix highlight problem</li>
         </ul>
         ]]>
     </change-notes>
