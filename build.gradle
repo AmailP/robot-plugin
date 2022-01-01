@@ -40,6 +40,12 @@ publishPlugin {
         throw new GradleException("The plugin should be published using JavaVersion $requiredVersion" )
 }
 
+import org.jetbrains.intellij.tasks.RunPluginVerifierTask.FailureLevel
+runPluginVerifier {
+    ideVersions = [intellijVersion]
+    failureLevel = FailureLevel.ALL
+}
+
 patchPluginXml {
     sinceBuild = "211"
     untilBuild = "213.*"
