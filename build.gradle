@@ -83,9 +83,8 @@ task downloadSkeleton(dependsOn: downloadJFlex, type: Download) {
 }
 
 task generateLexer(dependsOn: downloadSkeleton, type: JavaExec) {
-    main '-jar'
-    args """${buildDir}/downloads/JFlex.jar
-           |--nobak
+    classpath files("${buildDir}/downloads/JFlex.jar")
+    args """--nobak
            |--skel
            |${buildDir}/downloads/idea-flex.skeleton
            |-d
