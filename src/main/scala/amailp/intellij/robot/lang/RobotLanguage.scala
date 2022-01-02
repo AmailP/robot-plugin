@@ -2,4 +2,8 @@ package amailp.intellij.robot.lang
 
 import com.intellij.lang.Language
 
-object RobotLanguage extends Language("Robotframework")
+class RobotLanguage private extends Language("Robotframework")
+
+object RobotLanguage {
+  val Instance = new RobotLanguage
+}
