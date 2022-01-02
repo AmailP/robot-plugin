@@ -1,6 +1,6 @@
 package amailp.intellij.robot.parser;
 
-import amailp.intellij.robot.lang.RobotLanguage$;
+import amailp.intellij.robot.lang.RobotLanguage;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiBuilder;
@@ -34,7 +34,7 @@ public class ParserTest extends ParsingTestCase {
         PsiBuilder builder = new PsiBuilderFactoryImpl().createBuilder(pd, pd.createLexer(null), robotTestCase);
         builder.setDebugMode(true);
         final PsiParser parser = RobotParser$.MODULE$;
-        IFileElementType fileElem = new IFileElementType(RobotLanguage$.MODULE$);
+        IFileElementType fileElem = new IFileElementType(RobotLanguage.Instance());
         ASTNode root = parser.parse(fileElem, builder);
 //        System.out.println(DebugUtil.treeToString(root, true));
     }

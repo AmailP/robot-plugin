@@ -13,9 +13,9 @@ import scala.annotation.tailrec
 import scala.jdk.CollectionConverters._
 import scala.collection.immutable.LazyList.#::
 
-class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvider, RobotLanguage) {
+class RobotPsiFile(viewProvider: FileViewProvider) extends PsiFileBase(viewProvider, RobotLanguage.Instance) {
 
-  def getFileType: FileType = robot.file.FileType
+  def getFileType: FileType = robot.file.FileType.INSTANCE
 
   override def toString: String = "RobotFile: " + getVirtualFile.getName
 

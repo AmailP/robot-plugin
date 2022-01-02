@@ -50,7 +50,7 @@ trait ExtRobotPsiUtils {
   def shtg(fileContent: String): RobotPsiFile = {
     PsiFileFactory
       .getInstance(utilsPsiElement.getProject)
-      .createFileFromText("dummy", FileType, fileContent.stripMargin)
+      .createFileFromText("dummy", FileType.INSTANCE, fileContent.stripMargin)
       .asInstanceOf[RobotPsiFile]
   }
 }

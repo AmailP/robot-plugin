@@ -9,13 +9,13 @@ import amailp.intellij.robot.file.FileType
 class NewRobotFileAction
     extends CreateFileFromTemplateAction("Robot File",
                                          "Creates a Robot file from the specified template",
-                                         FileType.getIcon) {
+                                         FileType.INSTANCE.getIcon) {
   override def getActionName(directory: PsiDirectory, newName: String, templateName: String): String =
     s"Create Robot file $newName"
 
   override def buildDialog(project: Project, directory: PsiDirectory, builder: Builder): Unit =
     builder
       .setTitle("New Robot file")
-      .addKind("Robot test suite", FileType.getIcon, "Robot Test Suite")
-      .addKind("Robot keywords", FileType.getIcon, "Robot Keywords")
+      .addKind("Robot test suite", FileType.INSTANCE.getIcon, "Robot Test Suite")
+      .addKind("Robot keywords", FileType.INSTANCE.getIcon, "Robot Keywords")
 }
