@@ -13,6 +13,7 @@ jdk: openjdk11
 env:
   - IDEA_VERSION=IC-2021.1
   - IDEA_VERSION=IC-2021.3
+  - IDEA_VERSION=IC-2022.1
 
 jobs:
   include:
